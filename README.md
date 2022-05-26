@@ -68,23 +68,23 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
-- [ ] Code the parsing.
-- [ ] Make a "rules struct" and initialize it.
 - [ ] Make a "philo" struct and initialize it.
   - Should contain a pointer to the rules struct.
 
 # To do
 - [x] Research lock order conditions
 - [x] Data races
-- [ ] Parsing of the arguments
+- [ ] Argument value check: check the tests made and the values that arguments can't be cf parameter_values_check
+  - I think none of them can be <= 0 but need to check if the optional one (min times they need to eat) can be 0.
+- [x] Parsing of the arguments
 - [ ] Initialize threads and print messages.
 - [ ] Think about how to check if a philo has died.
 
 # Error Checking
 
 **Parsing**
-- [ ] Number of philos is <= 0
-- [ ] Number of milliseconds is <=0 (= 0 aussi ?)
+- [x] Number of philos is <= 0
+- [x] Number of milliseconds is <=0 (= 0 aussi ?)
 
 # Notes
 

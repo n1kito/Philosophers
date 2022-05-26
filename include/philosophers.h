@@ -30,6 +30,7 @@ typedef struct s_philo
 
 typedef struct s_rules
 {
+	long int		nb_of_philos;
 	long int		time_to_die;
 	long int		time_to_eat;
 	long int		time_to_sleep;
@@ -39,6 +40,10 @@ typedef struct s_rules
 /* ########################################################################## */
 /* FUNCTIONS */
 
+/* errors.c */
+int			param_values_check(int argc, char *argv[]);
+int			param_char_check(int argc, char *argv[]);
+
 /* setup.c */
 int			setup_rules(t_rules *rules, char *argv[], int argc);
 
@@ -46,5 +51,6 @@ int			setup_rules(t_rules *rules, char *argv[], int argc);
 void		error_printer(char *error);
 int			ft_putstr_fd(char *str, int fd);
 long int	ft_atol(const char *nptr);
+int			ft_is_digit(char c);
 
 #endif

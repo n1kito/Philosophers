@@ -12,15 +12,6 @@
 
 #include "../include/philosophers.h"
 
-/* Prints an error message on stderr. */
-
-void	error_printer(char *error)
-{
-	ft_putstr_fd("Error\n> ", 2);
-	ft_putstr_fd(error, 2);
-	ft_putstr_fd(".\n", 2);
-}
-
 int	ft_putstr_fd(char *str, int fd)
 {
 	int	i;
@@ -57,4 +48,11 @@ long int	ft_atol(const char *nptr)
 		i++;
 	}
 	return (num * sign);
+}
+
+int	ft_is_digit(char c)
+{
+	if (c < '0' || c > '9')
+		return (0);
+	return (1);
 }

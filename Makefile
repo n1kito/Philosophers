@@ -37,7 +37,8 @@ END_COLOR	:= \033[0;39m
 # But it is super practical so I'm leaving it here anyway.
 SRC_FILES   :=	main\
 				setup\
-				utils
+				utils\
+				errors
 OBJ_FILES	:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 # **************************************************************************** #
