@@ -68,12 +68,14 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
-- [ ] Understand all key concepts of the program.
-- [ ] Start using the functions to understand them better.
+- [ ] Code the parsing.
+- [ ] Make a "rules struct" and initialize it.
+- [ ] Make a "philo" struct and initialize it.
+  - Should contain a pointer to the rules struct.
 
 # To do
-- [ ] Research lock order conditions
-- [ ] Data races
+- [x] Research lock order conditions
+- [x] Data races
 - [ ] Parsing of the arguments
 - [ ] Initialize threads and print messages.
 - [ ] Think about how to check if a philo has died.
@@ -105,7 +107,7 @@ a philosopher dies of starvation.
     - A stack register is a computer central processor register whose purpose is to keep track of a call stack (usually shortened to _the stack_).
 - [Race conditions](https://stackoverflow.com/questions/34510/what-is-a-race-condition)
     - They occur when two or more threads can access shared data and they try to change it at the same time. Because the thread scheduling algorithm can swap between threads at any time, we don't know the order in which the threads will attempt to access the shared data. Therefore, the result of the change in data is dependent on the thread scheduling algorithm (i.e. both threads are "racing" to access/change the data).
-    - Problems often occur when one thraed does a "check then act" (`check` if the value is `X`, then `act` to do something that depends on the value being `X`) and another thread does something to the value in between the `check` and the `act`.
+    - Problems often occur when one thread does a "check then act" (`check` if the value is `X`, then `act` to do something that depends on the value being `X`) and another thread does something to the value in between the `check` and the `act`.
     - Race conditions can be avoided by employing some sort of locking mechanism before the code that accesses the shared resource:
     ```C
     - for ( int i = 0; i < 10000000; i++ )
@@ -116,6 +118,16 @@ a philosopher dies of starvation.
     }
     ```
   - For more on locking, search for: **mutex**, **semaphore**, critical section, shared resource.
+
+
+- [Locking Order and Deadlocks](https://www.informit.com/articles/article.aspx?p=1626979&seqNum=4)
+    - The biggest issue wih using locks for synchronisation is _deadlock_. It basically happens when you have two bits of code, each of which holds one lock, but each one needs the other one's lock in order to proceed.
+    - If each bit of code needs only one lock at a time, deadlock will not occur, but unfortunately this is not always possible.
+    - The simplest way of avoiding deadlock when you need more than one lock is to enforce a locking order, in which you can acquire two locks only by doing so in a specified order.
+    - In this situation, if you acquire one lock and fail to acquire the other, then you  must release the first lock and try again. The problem with this plan is that it may not be possible to release the first lock safely. 
+    - Although this case is the simplest, it can become arbitrarily complex. One classic example is the "dining philosophers" problem. Each philosopher has a chopstick on either side of him and requires two to eat. They all start by picking up the chopstick on their right. Now they're deadlocked—no one can proceed until someone puts down his chopstick.
+    - You can also easily enter a livelock condition from here. If each philosopher puts down the chopstick on his right and tries to pick up the one on the left, then they're stuck that way. They may put the left one down and pick up the one on the right again, oscillating between two states without actually managing to eat.
+    - **This problem could be avoided if each chopstick had a number, and they all had to be picked up in order. In this case, all of the philosophers would try to pick up the one on their right, except for the one sitting between the chopsticks with the highest number on one side and the lowest number on the other side. He would have to wait until the person using the chopstick on his left had finished before he could pick up the one on his right. Or he would get there first. In both cases, at least one person would be able to pick up both chopsticks. Once he'd finished eating, at least one more person would be able to start.**
 
 
 - **Mutex**
@@ -152,6 +164,7 @@ a philosopher dies of starvation.
                  int tz_dsttime;         /* type of DST correction */
              };
       ```
+      - To have the time in milliseconds, I have to do tv_sec * 1000 and tv_usec / 1000.
     - **pthread_create**
         - `int pthread_create(pthread_t * thread, pthread_attr_t * attr, void * (*start_routine)(void *), void * arg);`
         - Creates a new thread and returns a thread identifier.
@@ -189,9 +202,7 @@ a philosopher dies of starvation.
 
 
 ## Resources
-
-- ⭐⭐ [link](address)
-- ⭐ [link](address)
+- ⭐ [GDoc cbarbit](https://docs.google.com/document/d/1EeAgXkygFQu8qNJby_PP6XO9jWEpMlHozX1fCX64Bvg/edit)
 - [Le dîner des philosophes](https://fr.wikipedia.org/wiki/D%C3%AEner_des_philosophes)
 - [Le problème des philosophes](https://perso.ens-lyon.fr/michael.rao/ASR2/cours_slides_8.pdf)
 
