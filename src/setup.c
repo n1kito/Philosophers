@@ -26,11 +26,14 @@ static int	init_and_assign_forks(t_rules *rules)
 	i = 0;
 	while (i < rules->nb_of_philos)
 	{
-		rules->philos[i]->left_fork = rules->forks[i];
+		rules->philos[i]->rules_ptr = rules;
+		rules->philos[i]->right_fork = rules->forks[i];
+		if (rules->nb_of_philos == 1)
+			break ;
 		if (i == 0)
 			rules->philos[i]->left_fork = rules->forks[rules->nb_of_philos - 1];
-		rules->philos[i]->right_fork = rules->forks[i];
-		rules->philos[i]->rules_ptr = rules;
+		else
+			rules->philos[i]->left_fork = rules->forks[i - 1];
 		i++;
 	}
 	return (1);

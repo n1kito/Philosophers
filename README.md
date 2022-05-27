@@ -72,6 +72,7 @@ a philosopher dies of starvation.
 - [x] Make a "philo" struct and initialize it.
   - Should contain a pointer to the rules_ptr struct.
   - Should have pointers to `left` and `right` forks.
+    - [x] Handle the case where there is only one philo
 
 # To do
 - [x] Research lock order conditions
