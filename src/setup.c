@@ -12,13 +12,15 @@
 
 #include "../include/philosophers.h"
 
-/* Initializes all the forks in the forks array then goes through each philo
+/* Sets up all the forks in the forks array then goes through each philo
  * structure and assigns their pointers to their left/right forks. */
 
 static int	init_and_assign_forks(t_rules *rules)
 {
 	int	i;
+	int	ph_nb;
 
+	ph_nb = (int)rules->nb_of_philos;
 	i = 0;
 	while (i < rules->nb_of_philos)
 		if (pthread_mutex_init(rules->forks[i++], NULL) != 0)
@@ -26,17 +28,17 @@ static int	init_and_assign_forks(t_rules *rules)
 	i = 0;
 	while (i < rules->nb_of_philos)
 	{
-		rules->philos[i]->right_fork = rules->forks[i];
+		rules->philos[i]->left_fork = rules->forks[i];
 		if (rules->nb_of_philos == 1)
 			break ;
-		if (i == 0)
-			rules->philos[i]->left_fork = rules->forks[rules->nb_of_philos - 1];
-		else
-			rules->philos[i]->left_fork = rules->forks[i - 1];
+		rules->philos[i]->right_fork = rules->forks[(i + 1) % ph_nb];
 		i++;
 	}
 	return (1);
 }
+
+/* Allocates memory to my structures, also initializing my philos to NULL to
+ * avoid segfaults if the free function is called */
 
 int	mem_alloc(t_rules *rules)
 {
@@ -57,10 +59,14 @@ int	mem_alloc(t_rules *rules)
 		rules->philos[i] = malloc(sizeof(t_philo) * rules->nb_of_philos);
 		if (rules->philos[i] == NULL)
 			return (print_err("Could not allocate memory for philo"), 0);
+		i++;
 	}
+	return (1);
 }
 
-int	init_philos(t_rules *rules)
+/* Initializes the basic values in each philosopher struct */
+
+void	init_philos(t_rules *rules)
 {
 	int	i;
 
@@ -95,6 +101,8 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	return (1);
 }
 
+/* Sets struct elements to NULL, helps avoid segfaults in freeing function */
+
 void	init_struct(t_rules *rules)
 {
 	rules->philos = NULL;
@@ -108,7 +116,8 @@ int	setup_rules(t_rules *rules, char *argv[], int argc)
 		return (print_err("./philo needs 4 or 5 arguments"), 0);
 	if (!param_char_check(argc, argv) || !param_values_check(argc, argv)
 		|| !init_rules(argv, argc, rules) || !mem_alloc(rules)
-		|| !init_and_assign_forks(rules) || !init_philos(rules))
+		|| !init_and_assign_forks(rules))
 		return (0);
+	init_philos(rules);
 	return (1);
 }
