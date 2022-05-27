@@ -136,6 +136,8 @@ a philosopher dies of starvation.
 >./philosophers 200 410 200 200 devrait normalement fonctionner si votre philo est correct (ajoutez  | xclip -selection C, ça vous copiera dans le presse-papiers les prints de votre philo)
 (Et oui, même sur les ordis de 42, le 400 410 200 200 passe)
 
+> jai une variable commune a tous les threads qui est is dead, donc quand elle passe a 1, ils sortent de ma fonction routine
+
 # Research
 
 <details><summary>(<i>+ click to open</i>)</summary>

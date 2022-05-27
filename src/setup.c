@@ -76,6 +76,7 @@ void	init_philos(t_rules *rules)
 		rules->philos[i]->rules_ptr = rules;
 		rules->philos[i]->nb_meals = 0;
 		rules->philos[i]->last_meal = 0;
+		rules->philos[i]->somebody_died_ptr = &(rules->somebody_died);
 		i++;
 	}
 }
@@ -92,6 +93,7 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	rules->t_to_eat = ft_atol(argv[3]);
 	rules->t_to_sleep = ft_atol(argv[4]);
 	rules->dinner_start_time = get_time();
+	rules->somebody_died = 0;
 	if (rules->dinner_start_time == -1)
 		return (0);
 	if (argc == 6)
