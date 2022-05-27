@@ -30,6 +30,7 @@ static int	init_and_assign_forks(t_rules *rules)
 		if (i == 0)
 			rules->philos[i]->left_fork = rules->forks[rules->nb_of_philos - 1];
 		rules->philos[i]->right_fork = rules->forks[i];
+		rules->philos[i]->rules_ptr = rules;
 		i++;
 	}
 	return (1);

@@ -25,7 +25,7 @@ You will see how to create threads and you will discover mutexes.
 - [ ] Each philosopher has a number ranging from 1 to `number_of_philosophers`.
 - [ ] Philosopher `number 1` sits next to philosopher number `number_of_philosophers`. Any other philosopher number `N` sits between philosopher number `N - 1` and philosopher number `N + 1`.
 
-**General rules**
+**General rules_ptr**
 
 - The philosophers alternatively eat, think, or sleep.
   - While they are eating, they are not thinking nor sleeping;
@@ -68,15 +68,15 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
-- [ ] Make a "philo" struct and initialize it.
-  - Should contain a pointer to the rules struct.
-  - Should have pointers to `left` and `right` forks.
 - [ ] Initialize all philos
+- [x] Make a "philo" struct and initialize it.
+  - Should contain a pointer to the rules_ptr struct.
+  - Should have pointers to `left` and `right` forks.
 
 # To do
 - [x] Research lock order conditions
 - [x] Data races
-- [ ] Argument value check: check the tests made and the values that arguments can't be cf parameter_values_check
+- [ ] Argument value check: check the tests made and the values that arguments can't be (_cf parameter_values_check_)
   - I think none of them can be <= 0 but need to check if the optional one (min times they need to eat) can be 0.
 - [x] Parsing of the arguments
 - [ ] Initialize threads and print messages.
@@ -88,8 +88,8 @@ a philosopher dies of starvation.
 2. Check and parse arguments
 3. Assign main t_rules variables with corresponding arguments.
 4. Initialize mutex.
-5. Correctly link the t_philo & t_rules structures (every t_philo node is indexed in t_rules, and all t_philos contain a link to rules)
-6. 
+5. Correctly link the t_philo & t_rules structures (every t_philo node is indexed in t_rules, and all t_philos contain a link to rules_ptr)
+6. Start routine.
 
 # Error Checking
 
@@ -120,6 +120,8 @@ a philosopher dies of starvation.
 - Think about how to check if a philo has died.
 
 # Research
+
+<details><summary>(<i>+ click to open</i>)</summary>
 
 - [Difference between a process and a thread](https://stackoverflow.com/questions/200469/what-is-the-difference-between-a-process-and-a-thread)
     - A thread is a subset of the process.
@@ -221,6 +223,7 @@ a philosopher dies of starvation.
         - `pthread_mutex_unlock` unlocks the given mutex. The mutex is assumed to be locked and owned by the  calling  thread  on entrance  to pthread_mutex_unlock.
         -  If the mutex is of the ``fast'' kind (etc...) ([see man for more](http://www.skrenta.com/rt/man/pthread_mutex_init.3.html))
 
+</details>
 
 ## Resources
 - ⭐ [GDoc cbarbit](https://docs.google.com/document/d/1EeAgXkygFQu8qNJby_PP6XO9jWEpMlHozX1fCX64Bvg/edit)
@@ -233,4 +236,11 @@ a philosopher dies of starvation.
 
 1. Wednesday, May 25th
    - Registered to the project.
-   - 
+2. Thursday, May 26th
+   - General setup
+   - Parsing & error handling
+3. Friday, May 27th
+   - Finished setting up structures
+   - Allocated memory
+   - Setup leak cleaning
+   - Assigned left/right forks to each philosopher node

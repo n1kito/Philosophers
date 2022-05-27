@@ -29,7 +29,7 @@ typedef struct s_philo
 	pthread_t		*philo;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
-	struct s_rules	*rules;
+	struct s_rules	*rules_ptr;
 }				t_philo;
 
 typedef struct s_rules

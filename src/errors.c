@@ -23,6 +23,8 @@ void	print_err(char *error)
 
 /* Checks for the value of all program arguments */
 // TODO: I don't know if all these error conditions are accurate
+// I think for the last one I don't put an error, if the value is negative I
+// just won't use it. But then again, why specify it since it's optional ?
 
 int	param_values_check(int argc, char *argv[])
 {
