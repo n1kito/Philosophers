@@ -51,7 +51,7 @@ $(NAME): $(OBJ_FILES)
 	@echo "$(GREEN)$(NAME) compiled :)$(END_COLOR)"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR)
-	@$(CC) -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
+	@$(CC) -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
 	@echo "$(BLUE)Compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):

@@ -14,7 +14,7 @@
 
 /* Prints an error message on stderr. */
 
-void	error_printer(char *error)
+void	print_err(char *error)
 {
 	ft_putstr_fd("Error\n> ", 2);
 	ft_putstr_fd(error, 2);
@@ -26,7 +26,7 @@ void	error_printer(char *error)
 
 int	param_values_check(int argc, char *argv[])
 {
-	int 	i;
+	int		i;
 
 	i = 1;
 	while (i < argc)
@@ -34,7 +34,7 @@ int	param_values_check(int argc, char *argv[])
 		if (ft_atol(argv[i]) <= 0)
 		{
 			ft_putstr_fd("Error\n", 2);
-			break;
+			break ;
 		}
 		i++;
 	}
@@ -45,11 +45,11 @@ int	param_values_check(int argc, char *argv[])
 	if (ft_atol(argv[2]) <= 0)
 		ft_putstr_fd("> [time_do_die] can't be negative or 0.\n", 2);
 	if (ft_atol(argv[3]) <= 0)
-		ft_putstr_fd("> [time_to_eat] can't be negative or 0.\n", 2);
+		ft_putstr_fd("> [t_to_eat] can't be negative or 0.\n", 2);
 	if (ft_atol(argv[4]) <= 0)
-		ft_putstr_fd("> [time_to_sleep] can't be negative or 0.\n", 2);
+		ft_putstr_fd("> [t_to_sleep] can't be negative or 0.\n", 2);
 	if (argc == 6 && ft_atol(argv[5]) <= 0)
-		ft_putstr_fd("> Philosophers need to eat at least once.\n", 2); // Todo: check this
+		ft_putstr_fd("> Philosophers need to eat at least once.\n", 2);
 	return (0);
 }
 
@@ -58,7 +58,7 @@ int	param_values_check(int argc, char *argv[])
 
 int	param_char_check(int argc, char *argv[])
 {
-	int i;
+	int	i;
 	int	j;
 
 	i = 1;
@@ -70,8 +70,8 @@ int	param_char_check(int argc, char *argv[])
 		while (argv[i][j])
 		{
 			if (!ft_is_digit(argv[i][j]))
-				return (error_printer("Arguments contain forbidden characters"), 0);
-			j ++;
+				return (print_err("Arguments contain forbidden characters"), 0);
+			j++;
 		}
 		i++;
 	}

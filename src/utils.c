@@ -12,6 +12,25 @@
 
 #include "../include/philosophers.h"
 
+void	freester(t_rules *rules)
+{
+	int	i;
+
+	if (rules->forks)
+		free(rules->forks);
+	i = 0;
+	if (rules->philos)
+	{
+		while (i < rules->nb_of_philos)
+		{
+			if (rules->philos[i])
+				free(rules->philos[i]);
+			i++;
+		}
+		free(rules->philos);
+	}
+}
+
 int	ft_putstr_fd(char *str, int fd)
 {
 	int	i;
