@@ -26,7 +26,6 @@ static int	init_and_assign_forks(t_rules *rules)
 	i = 0;
 	while (i < rules->nb_of_philos)
 	{
-		rules->philos[i]->rules_ptr = rules;
 		rules->philos[i]->right_fork = rules->forks[i];
 		if (rules->nb_of_philos == 1)
 			break ;
@@ -39,36 +38,10 @@ static int	init_and_assign_forks(t_rules *rules)
 	return (1);
 }
 
-long int	get_time()
-{
-	long int		time;
-	struct timeval	time_struct;
-
-	if (gettimeofday(&time_struct, NULL) == -1)
-		return (print_err("Could not get time of day"), -1);
-	time = (long int)time_struct.tv_sec * 1000
-		+ (long int)time_struct.tv_usec / 1000;
-	return (time);
-}
-
-/* Assigns parameter variables and allocates memories for the forks, philosopher
- * array and individual philosophers. Each philosopher pointer is set to NULL
- * before calling malloc() so I don't try to free an uninitialized value in case
- * of error. */
-
-static int	init_rules(char *argv[], int argc, t_rules *rules)
+int	mem_alloc(t_rules *rules)
 {
 	int	i;
 
-	rules->nb_of_philos = ft_atol(argv[1]);
-	rules->t_to_die = ft_atol(argv[2]);
-	rules->t_to_eat = ft_atol(argv[3]);
-	rules->t_to_sleep = ft_atol(argv[4]);
-	rules->dinner_start_time = get_time();
-	if (rules->dinner_start_time == -1)
-		return (0);
-	if (argc == 6)
-		rules->min_meals = ft_atol(argv[5]);
 	rules->forks = malloc(sizeof(pthread_mutex_t) * rules->nb_of_philos);
 	if (rules->forks == NULL)
 		return (print_err("Could not allocate memory for forks"), 0);
@@ -82,9 +55,43 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	while (i < rules->nb_of_philos)
 	{
 		rules->philos[i] = malloc(sizeof(t_philo) * rules->nb_of_philos);
-		if (rules->philos[i++] == NULL)
+		if (rules->philos[i] == NULL)
 			return (print_err("Could not allocate memory for philo"), 0);
 	}
+}
+
+int	init_philos(t_rules *rules)
+{
+	int	i;
+
+	i = 0;
+	while (i < rules->nb_of_philos)
+	{
+		rules->philos[i]->rules_ptr = rules;
+		rules->philos[i]->nb_meals = 0;
+		rules->philos[i]->last_meal = 0;
+		i++;
+	}
+}
+
+/* Assigns parameter variables and allocates memories for the forks, philosopher
+ * array and individual philosophers. Each philosopher pointer is set to NULL
+ * before calling malloc() so I don't try to free an uninitialized value in case
+ * of error. */
+
+static int	init_rules(char *argv[], int argc, t_rules *rules)
+{
+	rules->nb_of_philos = ft_atol(argv[1]);
+	rules->t_to_die = ft_atol(argv[2]);
+	rules->t_to_eat = ft_atol(argv[3]);
+	rules->t_to_sleep = ft_atol(argv[4]);
+	rules->dinner_start_time = get_time();
+	if (rules->dinner_start_time == -1)
+		return (0);
+	if (argc == 6)
+		rules->min_meals = ft_atol(argv[5]);
+	if (!mem_alloc(rules))
+		return (0);
 	return (1);
 }
 
@@ -100,7 +107,8 @@ int	setup_rules(t_rules *rules, char *argv[], int argc)
 	if (argc != 5 && argc != 6)
 		return (print_err("./philo needs 4 or 5 arguments"), 0);
 	if (!param_char_check(argc, argv) || !param_values_check(argc, argv)
-		|| !init_rules(argv, argc, rules) || !init_and_assign_forks(rules))
+		|| !init_rules(argv, argc, rules) || !mem_alloc(rules)
+		|| !init_and_assign_forks(rules) || !init_philos(rules))
 		return (0);
 	return (1);
 }

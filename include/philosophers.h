@@ -30,6 +30,8 @@ typedef struct s_philo
 	pthread_t		*philo;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	int				nb_meals;
+	long int		last_meal;
 	struct s_rules	*rules_ptr;
 }				t_philo;
 
@@ -62,5 +64,6 @@ int			ft_putstr_fd(char *str, int fd);
 long int	ft_atol(const char *nptr);
 int			ft_is_digit(char c);
 void		freester(t_rules *rules);
+long int	get_time();
 
 #endif

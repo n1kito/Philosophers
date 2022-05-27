@@ -75,3 +75,17 @@ int	ft_is_digit(char c)
 		return (0);
 	return (1);
 }
+
+/* Converts the values of gettimeofday() to milliseconds */
+
+long int	get_time()
+{
+	long int		time;
+	struct timeval	time_struct;
+
+	if (gettimeofday(&time_struct, NULL) == -1)
+		return (print_err("Could not get time of day"), -1);
+	time = (long int)time_struct.tv_sec * 1000
+		   + (long int)time_struct.tv_usec / 1000;
+	return (time);
+}
