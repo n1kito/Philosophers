@@ -20,6 +20,7 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <sys/time.h>
 
 /* ########################################################################## */
 /* STRUCTURES */
@@ -39,6 +40,7 @@ typedef struct s_rules
 	long int		t_to_eat;
 	long int		t_to_sleep;
 	long int		min_meals;
+	long int		dinner_start_time;
 	struct s_philo	**philos;
 	pthread_mutex_t	**forks;
 }				t_rules;

@@ -39,6 +39,18 @@ static int	init_and_assign_forks(t_rules *rules)
 	return (1);
 }
 
+long int	get_time()
+{
+	long int		time;
+	struct timeval	time_struct;
+
+	if (gettimeofday(&time_struct, NULL) == -1)
+		return (print_err("Could not get time of day"), -1);
+	time = (long int)time_struct.tv_sec * 1000
+		+ (long int)time_struct.tv_usec / 1000;
+	return (time);
+}
+
 /* Assigns parameter variables and allocates memories for the forks, philosopher
  * array and individual philosophers. Each philosopher pointer is set to NULL
  * before calling malloc() so I don't try to free an uninitialized value in case
@@ -52,6 +64,9 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	rules->t_to_die = ft_atol(argv[2]);
 	rules->t_to_eat = ft_atol(argv[3]);
 	rules->t_to_sleep = ft_atol(argv[4]);
+	rules->dinner_start_time = get_time();
+	if (rules->dinner_start_time == -1)
+		return (0);
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);
 	rules->forks = malloc(sizeof(pthread_mutex_t) * rules->nb_of_philos);

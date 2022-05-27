@@ -119,6 +119,9 @@ a philosopher dies of starvation.
 - _Hint: try launching philos by even/odd number_
 - Keep in mind the first and last philo that are usually trouble.
 - Think about how to check if a philo has died.
+- Converting time values:
+  - Milliseconds = seconds * 1000
+  - Milliseconds = microseconds / 1000 (or microseconds * 0.001)
 
 # Research
 
