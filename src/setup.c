@@ -31,7 +31,7 @@ static int	init_and_assign_forks(t_rules *rules)
 		rules->philos[i]->left_fork = rules->forks[i];
 		if (rules->nb_of_philos == 1)
 			break ;
-		rules->philos[i]->right_fork = rules->forks[(i + 1) % ph_nb];
+		rules->philos[i]->right_fork = rules->forks[(i + 1) % ph_nb]; // check that this is corret calculation
 		i++;
 	}
 	return (1);

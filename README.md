@@ -90,7 +90,12 @@ a philosopher dies of starvation.
 3. Assign main t_rules variables with corresponding arguments.
 4. Initialize mutex.
 5. Correctly link the t_philo & t_rules structures (every t_philo node is indexed in t_rules, and all t_philos contain a link to rules_ptr)
-6. Start routine.
+6. Start routine:
+   1. Philos with uneven ID pick up left fork.
+   2. Philos with uneven ID pick up right fork.
+      - Dans ce cas, comment on gere le dernier filo ? Le #5? Sa fork de droite est prise pas le #1.
+        - On dit que les philos impairs prennent leur fouchette de gauche d'abord, puis celle de droite.
+        - Les philos pairs prennent leur fourchette de droite d'abord, puis celle de gauche.
 
 # Error Checking
 
@@ -112,6 +117,7 @@ a philosopher dies of starvation.
 
 - Philos are basically structures.
 - The program needs to be compiled and linked with special flag: `-pthread` (see [man](http://manpagesfr.free.fr/man/man7/pthreads.7.html))
+- Dans discord ils parlent de `fsanitize=thread`
 - Toujours tester avec `valgrind --tools-lgrind` pour voir les data race
   - Mais aussi tester avec juste `valgrind` parce que avec `lgrind` les leaks n'apparaissent pas (ou pas pareil)
 - Ne jamais tester le fonctionnement du programme avec `valgrind` par contre, parce que ca met une plombe et que ca chie toutes les perfs. Il sert juste à checker les leaks.
@@ -122,6 +128,13 @@ a philosopher dies of starvation.
 - Converting time values:
   - Milliseconds = seconds * 1000
   - Milliseconds = microseconds / 1000 (or microseconds * 0.001)
+
+**Discord tips**
+
+> Pour le décalage de création de thread par le main thread tu peux bloquer un mutex dans ton main thread et le débloquer quand ta boucle de création est terminée pour que tous les philos commencent en même temps leur routine. (deso si c'est plus d'actualité)
+
+>./philosophers 200 410 200 200 devrait normalement fonctionner si votre philo est correct (ajoutez  | xclip -selection C, ça vous copiera dans le presse-papiers les prints de votre philo)
+(Et oui, même sur les ordis de 42, le 400 410 200 200 passe)
 
 # Research
 
