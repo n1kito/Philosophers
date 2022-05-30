@@ -19,22 +19,29 @@ void	*routine(void *philo_tmp)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_tmp;
-	if (pthread_mutex_lock(philo->left_fork) == 0)
-		printf("%ld %d has taken a fork\n",
+	int i = 3;
+	while (i--)
+	{
+		if (pthread_mutex_lock(philo->left_fork) == 0)
+			printf("%ld %d has taken a fork\n",
+				get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+		if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
+			printf("%ld %d has taken a fork\n",
+				get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+		printf("%ld %d is eating\n",
 			get_time() - philo->rules_ptr->start_time, philo->philo_nb);
-	if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
-		printf("%ld %d has taken a fork\n",
+		usleep(philo->rules_ptr->t_to_eat * 1000);
+		philo->nb_meals++;
+		philo->last_meal = get_time();
+		pthread_mutex_unlock(philo->left_fork); // check return here see above
+		pthread_mutex_unlock(philo->right_fork); // check return
+		printf("%ld %d is thinking\n",
 			get_time() - philo->rules_ptr->start_time, philo->philo_nb);
-	printf("%ld %d is eating\n",
-		get_time() - philo->rules_ptr->start_time, philo->philo_nb);
-	usleep(philo->rules_ptr->t_to_eat * 1000);
-//	usleep(5);
-	printf("%ld %d is thinking\n",
-		get_time() - philo->rules_ptr->start_time, philo->philo_nb);
-	printf("%ld %d is sleeping\n",
-		get_time() - philo->rules_ptr->start_time, philo->philo_nb);
-	usleep(philo->rules_ptr->t_to_sleep * 1000);
-	return (NULL);
+		printf("%ld %d is sleeping\n",
+			get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+		usleep(philo->rules_ptr->t_to_sleep * 1000);
+	}
+	return (0);
 }
 
 /* Starts philos/threads one at a time */
@@ -48,12 +55,27 @@ int	launch_philos(t_rules *rules)
 	i = 0;
 	while (i < philo_count)
 	{
-		if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
-			return (print_err("Failed to create philo"), 0);
+		if (i % 2 == 0)
+		{
+			printf("Initiate even philos\n");
+			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
+				return (print_err("Failed to create philo"), 0);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < philo_count)
+	{
+		if (i % 2 != 0)
+		{
+			printf("Initiate uneven philos\n");
+			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
+				return (print_err("Failed to create philo"), 0);
+		}
 		i++;
 	}
 	pthread_join(rules->philos[0]->philo, NULL); // je vais surement vouloir stocker le return quelque part !
-//	pthread_join(rules->philos[1]->philo, NULL); // je vais surement vouloir stocker le return quelque part !
+	pthread_join(rules->philos[1]->philo, NULL); // je vais surement vouloir stocker le return quelque part !
 	return (1);
 }
 
@@ -71,6 +93,7 @@ void	init_philos(t_rules *rules)
 		rules->philos[i]->last_meal = 0;
 		rules->philos[i]->somebody_died_ptr = &(rules->somebody_died);
 		rules->philos[i]->philo_nb = i + 1;
+//		rules->philos[i]->philo_nb = i;
 		i++;
 	}
 }

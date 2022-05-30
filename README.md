@@ -79,6 +79,7 @@ a philosopher dies of starvation.
 - [x] Parsing of the arguments
 - [ ] Initialize threads and print messages.
 - [ ] Think about how to check if a philo has died.
+- [ ] Create a monitoring thread that checks if one of them died and then stops the simulation ? Is that cheating ?
 
 # Process for this project
 
