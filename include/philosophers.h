@@ -57,6 +57,10 @@ void		print_err(char *error);
 int			param_values_check(int argc, char *argv[]);
 int			param_char_check(int argc, char *argv[]);
 
+/* philos.c */
+void		init_philos(t_rules *rules);
+int			init_and_assign_forks(t_rules *rules);
+
 /* setup.c */
 void		init_struct(t_rules *rules);
 int			setup_rules(t_rules *rules, char *argv[], int argc);
@@ -66,6 +70,6 @@ int			ft_putstr_fd(char *str, int fd);
 long int	ft_atol(const char *nptr);
 int			ft_is_digit(char c);
 void		freester(t_rules *rules);
-long int	get_time();
+long int	get_time(void);
 
 #endif

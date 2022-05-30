@@ -32,10 +32,8 @@ END_COLOR	:= \033[0;39m
 # **************************************************************************** #
 # SOURCES
 
-# This technique is norm-compliant at 42, as we are required to list source files.
-# SRC_FILES	:= $(notdir $(basename $(wildcard $(SRC_DIR)/*.c)))
-# But it is super practical so I'm leaving it here anyway.
 SRC_FILES   :=	main\
+				philos\
 				setup\
 				utils\
 				errors

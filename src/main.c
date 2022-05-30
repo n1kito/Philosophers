@@ -24,6 +24,7 @@ int	main(int argc, char *argv[])
 //		"Time to sleep: %ld\nMinimum meals: %ld\n",
 //		rules_ptr.nb_of_Zoiolooophilos, rules_ptr.t_to_die, rules_ptr.t_to_eat,
 //		rules_ptr.t_to_sleep, rules_ptr.min_meals);
+
 	long int time;
 	time = get_time();
 	printf("time: %ld\n", time);
