@@ -68,11 +68,8 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
-- [ ] Initialize all philos
-- [x] Make a "philo" struct and initialize it.
-  - Should contain a pointer to the rules_ptr struct.
-  - Should have pointers to `left` and `right` forks.
-    - [x] Handle the case where there is only one philo
+- [ ] Launch all philos
+- [ ] Improve freester to deal with killing threads.
 
 # To do
 - [x] Research lock order conditions
@@ -137,6 +134,19 @@ a philosopher dies of starvation.
 (Et oui, même sur les ordis de 42, le 400 410 200 200 passe)
 
 > jai une variable commune a tous les threads qui est is dead, donc quand elle passe a 1, ils sortent de ma fonction routine
+
+> Le pb d'alterner gauche et droite en premier sans usleep c'est qu'avec beaucoup de philos ya de bonne chances que le temps que les derniers philos se lancent il y ai tun decalage droitier gaucher.
+> Perso je devalais de time_to_eat histoire de laisser le temps aux premiers servis de manger.
+
+Quand on a un seul philo, il faut gerer:
+> Oui bah tu lock la seule fork, tu usleep time_to_die, tu unlock la fork et tu die, dans une fonction spécifique dans ta routine
+> En gros `./philo 1 300 100 100` ca donne un truc du genre:  
+> 
+> `0 #1 has taken a fork`  
+> `300 #1 died`
+
+Quand on rencontre une erreur:
+> Dans ton thread, dès que tu détectes que tu dois exit, tu dois unlock tout ce que tu as lock. C'est le thread qui a lock le mutex qui doit le delock.
 
 # Research
 

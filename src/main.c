@@ -25,10 +25,13 @@ int	main(int argc, char *argv[])
 //		rules_ptr.nb_of_Zoiolooophilos, rules_ptr.t_to_die, rules_ptr.t_to_eat,
 //		rules_ptr.t_to_sleep, rules_ptr.min_meals);
 
-	long int time;
-	time = get_time();
-	printf("time: %ld\n", time);
-	sleep(2);
-	printf("You waited %d seconds.\n", (int)((get_time() - time) / 1000));
-	return (freester(&rules), 0);
+//	long int time;
+//	time = get_time();
+//	printf("time: %ld\n", time);
+//	sleep(2);
+//	printf("You waited %d seconds.\n", (int)((get_time() - time) / 1000));
+//	return (freester(&rules), 0);
+
+	if (!launch_philos(&rules))
+		return (freester(&rules), 1);
 }

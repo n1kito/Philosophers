@@ -58,6 +58,7 @@ int			param_values_check(int argc, char *argv[]);
 int			param_char_check(int argc, char *argv[]);
 
 /* philos.c */
+int			launch_philos(t_rules *rules);
 void		init_philos(t_rules *rules);
 int			init_and_assign_forks(t_rules *rules);
 

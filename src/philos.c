@@ -12,6 +12,33 @@
 
 #include "../include/philosophers.h"
 
+/* Routine that each philo has to follow */
+
+void	*routine(void *rules_tmp)
+{
+	t_rules	*rules;
+
+	rules = (t_rules *)rules_tmp;
+
+}
+
+/* Starts philos/threads one at a time */
+
+int	launch_philos(t_rules *rules)
+{
+	int	i;
+	int	philo_count;
+
+	philo_count = rules->nb_of_philos;
+	i = 0;
+	while (i < philo_count)
+	{
+		if (pthread_create(rules->philos[i]->philo, NULL, &routine, rules) != 0)
+			return (print_err("Failed to create philo"), 0);
+		i++;
+	}
+}
+
 /* Initializes the basic values in each philosopher struct */
 
 void	init_philos(t_rules *rules)
