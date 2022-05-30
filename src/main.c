@@ -31,7 +31,7 @@ int	main(int argc, char *argv[])
 //	sleep(2);
 //	printf("You waited %d seconds.\n", (int)((get_time() - time) / 1000));
 //	return (freester(&rules), 0);
-
+	printf("%ld dinner started\n", get_time() - rules.start_time);
 	if (!launch_philos(&rules))
 		return (freester(&rules), 1);
 }

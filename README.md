@@ -82,6 +82,13 @@ a philosopher dies of starvation.
 
 # Process for this project
 
+```mermaid
+graph TD;
+    A([Eat])-->B([Think]);
+    B-->C([Sleep]);
+    C-->A;
+```
+
 1. Assign NULL to t_rules structure variables that will be malloc'd.
 2. Check and parse arguments
 3. Assign main t_rules variables with corresponding arguments.

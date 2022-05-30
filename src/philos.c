@@ -16,10 +16,24 @@
 
 void	*routine(void *philo_tmp)
 {
-	t_philo	*philosopher;
+	t_philo	*philo;
 
-	philosopher = (t_philo *)philo_tmp;
-	printf("%ld #%d has taken a fork\n", get_time() - philosopher->rules_ptr->dinner_start_time, philosopher->philo_nb);
+	philo = (t_philo *)philo_tmp;
+	if (pthread_mutex_lock(philo->left_fork) == 0)
+		printf("%ld %d has taken a fork\n",
+			get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+	if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
+		printf("%ld %d has taken a fork\n",
+			get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+	printf("%ld %d is eating\n",
+		get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+	usleep(philo->rules_ptr->t_to_eat * 1000);
+//	usleep(5);
+	printf("%ld %d is thinking\n",
+		get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+	printf("%ld %d is sleeping\n",
+		get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+	usleep(philo->rules_ptr->t_to_sleep * 1000);
 	return (NULL);
 }
 
@@ -39,6 +53,7 @@ int	launch_philos(t_rules *rules)
 		i++;
 	}
 	pthread_join(rules->philos[0]->philo, NULL); // je vais surement vouloir stocker le return quelque part !
+//	pthread_join(rules->philos[1]->philo, NULL); // je vais surement vouloir stocker le return quelque part !
 	return (1);
 }
 

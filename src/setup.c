@@ -63,9 +63,9 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	rules->t_to_die = ft_atol(argv[2]);
 	rules->t_to_eat = ft_atol(argv[3]);
 	rules->t_to_sleep = ft_atol(argv[4]);
-	rules->dinner_start_time = get_time();
+	rules->start_time = get_time();
 	rules->somebody_died = 0;
-	if (rules->dinner_start_time == -1)
+	if (rules->start_time == -1)
 		return (0);
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);

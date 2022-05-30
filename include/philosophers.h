@@ -44,7 +44,7 @@ typedef struct s_rules
 	long int		t_to_eat;
 	long int		t_to_sleep;
 	long int		min_meals;
-	long int		dinner_start_time;
+	long int		start_time;
 	int				somebody_died;
 	struct s_philo	**philos;
 	pthread_mutex_t	**forks;
