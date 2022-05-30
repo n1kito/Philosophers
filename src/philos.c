@@ -14,12 +14,13 @@
 
 /* Routine that each philo has to follow */
 
-void	*routine(void *rules_tmp)
+void	*routine(void *philo_tmp)
 {
-	t_rules	*rules;
+	t_philo	*philosopher;
 
-	rules = (t_rules *)rules_tmp;
-
+	philosopher = (t_philo *)philo_tmp;
+	printf("%ld #%d has taken a fork\n", get_time() - philosopher->rules_ptr->dinner_start_time, philosopher->philo_nb);
+	return (NULL);
 }
 
 /* Starts philos/threads one at a time */
@@ -29,14 +30,16 @@ int	launch_philos(t_rules *rules)
 	int	i;
 	int	philo_count;
 
-	philo_count = rules->nb_of_philos;
+	philo_count = (int)rules->nb_of_philos;
 	i = 0;
 	while (i < philo_count)
 	{
-		if (pthread_create(rules->philos[i]->philo, NULL, &routine, rules) != 0)
+		if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
 			return (print_err("Failed to create philo"), 0);
 		i++;
 	}
+	pthread_join(rules->philos[0]->philo, NULL); // je vais surement vouloir stocker le return quelque part !
+	return (1);
 }
 
 /* Initializes the basic values in each philosopher struct */
@@ -52,6 +55,7 @@ void	init_philos(t_rules *rules)
 		rules->philos[i]->nb_meals = 0;
 		rules->philos[i]->last_meal = 0;
 		rules->philos[i]->somebody_died_ptr = &(rules->somebody_died);
+		rules->philos[i]->philo_nb = i + 1;
 		i++;
 	}
 }
@@ -67,8 +71,11 @@ int	init_and_assign_forks(t_rules *rules)
 	ph_nb = (int)rules->nb_of_philos;
 	i = 0;
 	while (i < rules->nb_of_philos)
-		if (pthread_mutex_init(rules->forks[i++], NULL) != 0)
+	{
+		if (pthread_mutex_init(rules->forks[i], NULL) != 0)
 			return (print_err("Failed to initiate mutex"), 0);
+		i++;
+	}
 	i = 0;
 	while (i < rules->nb_of_philos)
 	{

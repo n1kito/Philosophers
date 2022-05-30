@@ -33,10 +33,10 @@ END_COLOR	:= \033[0;39m
 # SOURCES
 
 SRC_FILES   :=	main\
+				errors\
 				philos\
 				setup\
-				utils\
-				errors
+				utils
 OBJ_FILES	:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 # **************************************************************************** #
@@ -45,7 +45,7 @@ OBJ_FILES	:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 all: $(NAME)
 
 $(NAME): $(OBJ_FILES)
-	@$(CC) -o $(NAME) $(OBJ_FILES)
+	@$(CC) -pthread -o $(NAME) $(OBJ_FILES)
 	@echo "$(GREEN)$(NAME) compiled :)$(END_COLOR)"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR)

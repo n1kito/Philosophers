@@ -27,9 +27,10 @@
 
 typedef struct s_philo
 {
-	pthread_t		*philo;
+	pthread_t		philo;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	int				philo_nb;
 	int				nb_meals;
 	long int		last_meal;
 	int				*somebody_died_ptr;

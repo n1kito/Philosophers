@@ -12,6 +12,11 @@
 
 #include "../include/philosophers.h"
 
+// TODO Attention dans la fonction mem_alloc j'attribue de la memoire pour les
+// pointeurs sur forks and philos mais je n'attribue pas de memoire pour les forks
+// et philos eux meme... Je dois rajouter des boucles while() et leur filer de la
+// memoire un par un.
+
 /* Allocates memory to my structures, also initializing my philos to NULL to
  * avoid segfaults if the free function is called */
 
@@ -19,12 +24,20 @@ int	mem_alloc(t_rules *rules)
 {
 	int	i;
 
-	rules->forks = malloc(sizeof(pthread_mutex_t) * rules->nb_of_philos);
+	rules->forks = malloc(sizeof(pthread_mutex_t *) * rules->nb_of_philos);
 	if (rules->forks == NULL)
-		return (print_err("Could not allocate memory for forks"), 0);
+		return (print_err("Could not allocate memory for fork pointers"), 0);
 	rules->philos = malloc(sizeof(t_philo *) * rules->nb_of_philos);
 	if (rules->philos == NULL)
 		return (print_err("Could not allocate memory for philos"), 0);
+	i = 0;
+	while (i < rules->nb_of_philos)
+	{
+		rules->forks[i] = malloc(sizeof(pthread_mutex_t) * rules->nb_of_philos);
+		if (rules->forks[i] == NULL)
+			return (print_err("Could not allocate memory for fork"), 0);
+		i++;
+	}
 	i = 0;
 	while (i < rules->nb_of_philos)
 		rules->philos[i++] = NULL;
@@ -56,8 +69,8 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 		return (0);
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);
-	if (!mem_alloc(rules))
-		return (0);
+//	if (!mem_alloc(rules))
+//		return (0);
 	return (1);
 }
 
