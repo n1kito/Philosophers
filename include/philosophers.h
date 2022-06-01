@@ -30,7 +30,7 @@ typedef struct s_philo
 	pthread_t		philo;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
-	int				philo_nb;
+	int				philo_id;
 	int				nb_meals;
 	long int		last_meal;
 	int				*somebody_died_ptr;
@@ -45,7 +45,8 @@ typedef struct s_rules
 	long int		t_to_sleep;
 	long int		min_meals;
 	long int		start_time;
-	int				somebody_died;
+	int				somebody_died; //not sure I'm using this
+	int				total_meals; // not sure I'm using this either
 	struct s_philo	**philos;
 	pthread_mutex_t	**forks;
 }				t_rules;
@@ -68,6 +69,7 @@ void		init_struct(t_rules *rules);
 int			setup_rules(t_rules *rules, char *argv[], int argc);
 
 /* utils.c */
+void		*check_dead_philo(void *rules_tmp);
 int			ft_putstr_fd(char *str, int fd);
 long int	ft_atol(const char *nptr);
 int			ft_is_digit(char c);

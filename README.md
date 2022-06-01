@@ -68,18 +68,24 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
-- [ ] Launch all philos
 - [ ] Improve freester to deal with killing threads.
+- [ ] Implement the last optionnal argument.
+- [x] Think about how to check if a philo has died.
+    - [x] Create a monitoring thread that checks if one of them died and then stops the simulation ? Is that cheating ?
+    - Nope, that's what people do.
 
 # To do
 - [x] Research lock order conditions
 - [x] Data races
+- [ ] Est-ce que je peux genre ne commencer a manger que quand tous mes philos sont generes parce que sinon c'est la totale merde.
 - [ ] Argument value check: check the tests made and the values that arguments can't be (_cf parameter_values_check_)
   - I think none of them can be <= 0 but need to check if the optional one (min times they need to eat) can be 0.
 - [x] Parsing of the arguments
-- [ ] Initialize threads and print messages.
-- [ ] Think about how to check if a philo has died.
-- [ ] Create a monitoring thread that checks if one of them died and then stops the simulation ? Is that cheating ?
+- [x] Initialize threads and print messages.
+- [ ] Should even philos pick-up left fork first and uneven philos pickup right fork or something ?
+- [ ] Régler le segfault quand je n'ai qu'un seul philo
+- [ ] Faut-il proteger les ouputs puisqu'on a le droit d'utiliser printf qui utilise un buffer ?
+- [ ] Make sure that my philo_id is i + 1 before pushing, to respect the subject rules.
 
 # Process for this project
 

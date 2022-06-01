@@ -12,6 +12,59 @@
 
 #include "../include/philosophers.h"
 
+/* Check dead philo */
+
+void	*check_dead_philo(void *rules_tmp)
+{
+	t_rules	*rules;
+
+	rules = (t_rules *)rules_tmp;
+	int	i;
+
+	while (1)
+	{
+		i = 0;
+		while (i < rules->nb_of_philos)
+		{
+//			printf("\033[0;33m**checking for a dead cunt\n\033[0m");
+			if ((get_time() - rules->start_time) - rules->philos[i]->last_meal > rules->t_to_die)
+			{
+				printf("\033[0;31m** %ld %d DIED after waiting for %ld **\033[0m\n", get_time() - rules->start_time, rules->philos[i]->philo_id, (get_time() - rules->start_time) - rules->philos[i]->last_meal);
+				exit (1);
+			}
+			i++;
+//			else
+//				printf("\033[0;32m**No philo has died\n\033[0m");
+		}
+	}
+}
+
+/* Checks if each philo has eaten the max number of times they should have */
+
+void	check_number_of_meals(t_rules *rules)
+{
+	int	has_eaten_enough;
+	int	i;
+
+//	printf("\n********* checking MEALS BITCH *********\n");
+	has_eaten_enough = 0;
+	i = 0;
+	while (i < rules->nb_of_philos)
+	{
+//		printf("* philo %d ate %d times\n", i, rules->philos[i]->nb_meals);
+		if (rules->philos[i]->nb_meals == rules->min_meals)
+			has_eaten_enough++;
+		i++;
+	}
+//	printf("***************************************\n\n");
+	if (has_eaten_enough == rules->nb_of_philos)
+	{
+		printf("\033[0;32mDINNER'S OVER FUCKERS\033[0m ");
+		printf("(%d servings each)\n", (int)rules->min_meals);
+		exit (0); // I need to free shit here.
+	}
+}
+
 /* Routine that each philo has to follow */
 
 void	*routine(void *philo_tmp)
@@ -19,26 +72,29 @@ void	*routine(void *philo_tmp)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_tmp;
-	int i = 3;
-	while (i--)
+//	int i = 5;
+	while (1)
 	{
 		if (pthread_mutex_lock(philo->left_fork) == 0)
-			printf("%ld %d has taken a fork\n",
-				get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+			printf("%ld %d has taken a fork (left)\n",
+				get_time() - philo->rules_ptr->start_time, philo->philo_id);
 		if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
-			printf("%ld %d has taken a fork\n",
-				get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+			printf("%ld %d has taken a fork (right)\n",
+				get_time() - philo->rules_ptr->start_time, philo->philo_id);
 		printf("%ld %d is eating\n",
-			get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+			get_time() - philo->rules_ptr->start_time, philo->philo_id);
+		philo->last_meal = get_time();
 		usleep(philo->rules_ptr->t_to_eat * 1000);
 		philo->nb_meals++;
-		philo->last_meal = get_time();
+		check_number_of_meals(philo->rules_ptr);
 		pthread_mutex_unlock(philo->left_fork); // check return here see above
+		printf("%d unlocked left fork\n", philo->philo_id);
 		pthread_mutex_unlock(philo->right_fork); // check return
+		printf("%d unlocked right fork\n", philo->philo_id);
 		printf("%ld %d is thinking\n",
-			get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+			get_time() - philo->rules_ptr->start_time, philo->philo_id);
 		printf("%ld %d is sleeping\n",
-			get_time() - philo->rules_ptr->start_time, philo->philo_nb);
+			get_time() - philo->rules_ptr->start_time, philo->philo_id);
 		usleep(philo->rules_ptr->t_to_sleep * 1000);
 	}
 	return (0);
@@ -57,7 +113,7 @@ int	launch_philos(t_rules *rules)
 	{
 		if (i % 2 == 0)
 		{
-			printf("Initiate even philos\n");
+			printf("Initiate even philo %d\n", i);
 			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
 				return (print_err("Failed to create philo"), 0);
 		}
@@ -68,14 +124,15 @@ int	launch_philos(t_rules *rules)
 	{
 		if (i % 2 != 0)
 		{
-			printf("Initiate uneven philos\n");
+			printf("Initiate uneven philos %d\n", i);
 			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
 				return (print_err("Failed to create philo"), 0);
 		}
 		i++;
 	}
-	pthread_join(rules->philos[0]->philo, NULL); // je vais surement vouloir stocker le return quelque part !
-	pthread_join(rules->philos[1]->philo, NULL); // je vais surement vouloir stocker le return quelque part !
+	i = 0;
+	while (i < rules->nb_of_philos)
+		pthread_join(rules->philos[i++]->philo, NULL);
 	return (1);
 }
 
@@ -92,8 +149,8 @@ void	init_philos(t_rules *rules)
 		rules->philos[i]->nb_meals = 0;
 		rules->philos[i]->last_meal = 0;
 		rules->philos[i]->somebody_died_ptr = &(rules->somebody_died);
-		rules->philos[i]->philo_nb = i + 1;
-//		rules->philos[i]->philo_nb = i;
+//		rules->philos[i]->philo_id = i + 1; // I added +1 so my philos had the correct id
+		rules->philos[i]->philo_id = i;
 		i++;
 	}
 }
