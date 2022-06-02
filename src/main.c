@@ -32,7 +32,7 @@ int	main(int argc, char *argv[])
 //	printf("You waited %d seconds.\n", (int)((get_time() - time) / 1000));
 //	return (freester(&rules), 0);
 
-//	printf("%ld dinner started\n", get_time() - rules.start_time);
+	printf("%ld dinner started\n", get_time() - rules.start_time);
 	pthread_t monitor;
 	pthread_create(&monitor, NULL, &check_dead_philo, &rules);
 	if (!launch_philos(&rules))

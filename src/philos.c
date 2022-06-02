@@ -29,7 +29,7 @@ void	*check_dead_philo(void *rules_tmp)
 //			printf("\033[0;33m**checking for a dead cunt\n\033[0m");
 			if ((get_time() - rules->start_time) - rules->philos[i]->last_meal > rules->t_to_die)
 			{
-				printf("\033[0;31m** %ld %d DIED after waiting for %ld **\033[0m\n", get_time() - rules->start_time, rules->philos[i]->philo_id, (get_time() - rules->start_time) - rules->philos[i]->last_meal);
+				printf("\033[0;31m** %ld philo %d DIED after waiting for %ld **\033[0m\n", get_time() - rules->start_time, rules->philos[i]->philo_id, (get_time() - rules->start_time) - rules->philos[i]->last_meal);
 				exit (1);
 			}
 			i++;
@@ -73,9 +73,14 @@ void	*routine(void *philo_tmp)
 
 	philo = (t_philo *)philo_tmp;
 //	int i = 5;
+	if (philo->philo_id == 0 && philo->nb_meals) // tentative pour eviter au dernier de crever si le premier qui a deja mange lui pique sa fourchette
+	{
+		while (philo->rules_ptr->philos[4]->nb_meals != philo->nb_meals)
+			usleep(1);
+	}
 	while (1)
 	{
-		if (philo->nb_meals < philo->rules_ptr->min_meals)
+		if (philo->rules_ptr->min_meals == -1 || (philo->rules_ptr->min_meals && philo->nb_meals < philo->rules_ptr->min_meals))
 		{
 			if (philo->philo_id % 2 == 0)
 			{
@@ -108,7 +113,9 @@ void	*routine(void *philo_tmp)
 			philo->last_meal = get_time();
 			usleep(philo->rules_ptr->t_to_eat * 1000);
 			philo->nb_meals++;
-			check_number_of_meals(philo->rules_ptr);
+			printf("philo %d has eaten\n", philo->philo_id);
+			if (philo->rules_ptr->min_meals)
+				check_number_of_meals(philo->rules_ptr);
 			if (philo->philo_id % 2 == 0)
 			{
 				pthread_mutex_unlock(
@@ -148,7 +155,7 @@ int	launch_philos(t_rules *rules)
 	{
 		if (i % 2 == 0)
 		{
-			printf("Initiate even philo %d\n", i);
+			printf("%ld Initiate even philo %d\n", get_time() - rules->start_time, i);
 			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
 				return (print_err("Failed to create philo"), 0);
 		}
@@ -159,7 +166,7 @@ int	launch_philos(t_rules *rules)
 	{
 		if (i % 2 != 0)
 		{
-			printf("Initiate odd philo %d\n", i);
+			printf("%ld Initiate odd philo %d\n", get_time() - rules->start_time, i);
 			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
 				return (print_err("Failed to create philo"), 0);
 		}

@@ -87,6 +87,57 @@ a philosopher dies of starvation.
 - [ ] Faut-il proteger les ouputs puisqu'on a le droit d'utiliser printf qui utilise un buffer ?
 - [ ] Make sure that my philo_id is i + 1 before pushing, to respect the subject rules.
 
+- [ ] If I launch `./philo 5 210 100 100`, `Philo 4` only has time to pick up a left fork before `Philo 0` (who has already eaten) snags his left fork, and then `Philo 4` dies.
+
+```bash
+0 dinner started
+0 Initiate even philo 0
+0 Initiate even philo 2
+0 0 has taken a fork (left)
+0 0 has taken a fork (right)
+0 0 is eating
+0 Initiate even philo 4
+0 Initiate odd philo 1
+0 Initiate odd philo 3
+0 2 has taken a fork (left)
+1 2 has taken a fork (right)
+1 2 is eating
+0 3 has taken a fork (right)
+philo 0 has eaten
+0 unlocked left fork
+0 unlocked right fork
+100 0 is thinking
+100 0 is sleeping
+philo 2 has eaten
+2 unlocked left fork
+2 unlocked right fork
+101 2 is thinking
+101 2 is sleeping
+101 3 has taken a fork (left)
+101 3 is eating
+101 1 has taken a fork (right)
+101 1 has taken a fork (left)
+101 1 is eating
+200 0 has taken a fork (left)
+philo 3 has eaten
+3 unlocked right fork
+3 unlocked left fork
+philo 1 has eaten
+1 unlocked right fork
+1 unlocked left fork
+201 1 is thinking
+201 1 is sleeping
+201 3 is thinking
+201 3 is sleeping
+201 0 has taken a fork (right)
+201 0 is eating
+201 4 has taken a fork (left)
+201 2 has taken a fork (left)
+201 2 has taken a fork (right)
+201 2 is eating
+** 211 philo 4 DIED after waiting for 211 **
+```
+
 # Process for this project
 
 ```mermaid
