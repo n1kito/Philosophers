@@ -75,29 +75,62 @@ void	*routine(void *philo_tmp)
 //	int i = 5;
 	while (1)
 	{
-		if (pthread_mutex_lock(philo->left_fork) == 0)
-//			printf("%ld %d has taken a fork (left)\n",
-			printf("%ld %d has taken a fork\n",
-				get_time() - philo->rules_ptr->start_time, philo->philo_id);
-		if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
-//			printf("%ld %d has taken a fork (right)\n",
-			printf("%ld %d has taken a fork\n",
-				get_time() - philo->rules_ptr->start_time, philo->philo_id);
-		printf("%ld %d is eating\n",
-			get_time() - philo->rules_ptr->start_time, philo->philo_id);
-		philo->last_meal = get_time();
-		usleep(philo->rules_ptr->t_to_eat * 1000);
-		philo->nb_meals++;
-		check_number_of_meals(philo->rules_ptr);
-		pthread_mutex_unlock(philo->left_fork); // check return here see above
-//		printf("%d unlocked left fork\n", philo->philo_id);
-		pthread_mutex_unlock(philo->right_fork); // check return
-//		printf("%d unlocked right fork\n", philo->philo_id);
-		printf("%ld %d is thinking\n",
-			get_time() - philo->rules_ptr->start_time, philo->philo_id);
-		printf("%ld %d is sleeping\n",
-			get_time() - philo->rules_ptr->start_time, philo->philo_id);
-		usleep(philo->rules_ptr->t_to_sleep * 1000);
+		if (philo->nb_meals < philo->rules_ptr->min_meals)
+		{
+			if (philo->philo_id % 2 == 0)
+			{
+				if (pthread_mutex_lock(philo->left_fork) == 0)
+					printf("%ld %d has taken a fork (left)\n",
+//				printf("%ld %d has taken a fork\n",
+						   get_time() - philo->rules_ptr->start_time,
+						   philo->philo_id);
+				if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
+					printf("%ld %d has taken a fork (right)\n",
+//				printf("%ld %d has taken a fork\n",
+						   get_time() - philo->rules_ptr->start_time,
+						   philo->philo_id);
+			}
+			else
+			{
+				if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
+					printf("%ld %d has taken a fork (right)\n",
+//				printf("%ld %d has taken a fork\n",
+						   get_time() - philo->rules_ptr->start_time,
+						   philo->philo_id);
+				if (pthread_mutex_lock(philo->left_fork) == 0)
+					printf("%ld %d has taken a fork (left)\n",
+//				printf("%ld %d has taken a fork\n",
+						   get_time() - philo->rules_ptr->start_time,
+						   philo->philo_id);
+			}
+			printf("%ld %d is eating\n",
+				   get_time() - philo->rules_ptr->start_time, philo->philo_id);
+			philo->last_meal = get_time();
+			usleep(philo->rules_ptr->t_to_eat * 1000);
+			philo->nb_meals++;
+			check_number_of_meals(philo->rules_ptr);
+			if (philo->philo_id % 2 == 0)
+			{
+				pthread_mutex_unlock(
+						philo->left_fork); // check return here see above
+				printf("%d unlocked left fork\n", philo->philo_id);
+				pthread_mutex_unlock(philo->right_fork); // check return
+				printf("%d unlocked right fork\n", philo->philo_id);
+			}
+			else
+			{
+				pthread_mutex_unlock(philo->right_fork); // check return
+				printf("%d unlocked right fork\n", philo->philo_id);
+				pthread_mutex_unlock(
+						philo->left_fork); // check return here see above
+				printf("%d unlocked left fork\n", philo->philo_id);
+			}
+			printf("%ld %d is thinking\n",
+				   get_time() - philo->rules_ptr->start_time, philo->philo_id);
+			printf("%ld %d is sleeping\n",
+				   get_time() - philo->rules_ptr->start_time, philo->philo_id);
+			usleep(philo->rules_ptr->t_to_sleep * 1000);
+		}
 	}
 	return (0);
 }
@@ -115,7 +148,7 @@ int	launch_philos(t_rules *rules)
 	{
 		if (i % 2 == 0)
 		{
-//			printf("Initiate even philo %d\n", i);
+			printf("Initiate even philo %d\n", i);
 			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
 				return (print_err("Failed to create philo"), 0);
 		}
@@ -126,7 +159,7 @@ int	launch_philos(t_rules *rules)
 	{
 		if (i % 2 != 0)
 		{
-//			printf("Initiate uneven philos %d\n", i);
+			printf("Initiate odd philo %d\n", i);
 			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
 				return (print_err("Failed to create philo"), 0);
 		}
@@ -179,7 +212,7 @@ int	init_and_assign_forks(t_rules *rules)
 		rules->philos[i]->left_fork = rules->forks[i];
 		if (rules->nb_of_philos == 1)
 			break ;
-		rules->philos[i]->right_fork = rules->forks[(i + 1) % ph_nb]; // check that this is correct calculation
+		rules->philos[i]->right_fork = rules->forks[(i + 1) % ph_nb];
 		i++;
 	}
 	return (1);
