@@ -65,6 +65,10 @@ void	check_number_of_meals(t_rules *rules)
 	}
 }
 
+/* Recreating the usleep function to make it more precise */
+
+
+
 /* Routine that each philo has to follow */
 
 void	*routine(void *philo_tmp)
@@ -85,13 +89,13 @@ void	*routine(void *philo_tmp)
 			if (philo->philo_id % 2 == 0)
 			{
 				if (pthread_mutex_lock(philo->left_fork) == 0)
-//					printf("%ld %d has taken a fork (left)\n",
-					printf("%ld %d has taken a fork\n",
+					printf("%ld %d has taken a fork (left)\n",
+//					printf("%ld %d has taken a fork\n",
 						   get_time() - philo->rules_ptr->start_time,
 						   philo->philo_id);
 				if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
-//					printf("%ld %d has taken a fork (right)\n",
-					printf("%ld %d has taken a fork\n",
+					printf("%ld %d has taken a fork (right)\n",
+//					printf("%ld %d has taken a fork\n",
 						   get_time() - philo->rules_ptr->start_time,
 						   philo->philo_id);
 			}
@@ -119,16 +123,16 @@ void	*routine(void *philo_tmp)
 			if (philo->philo_id % 2 == 0)
 			{
 				pthread_mutex_unlock(philo->left_fork); // check return here see above
-//				printf("%ld %d unlocked left fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
+				printf("%ld %d unlocked left fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 				pthread_mutex_unlock(philo->right_fork); // check return
-//				printf("%ld %d unlocked right fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
+				printf("%ld %d unlocked right fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 			}
 			else
 			{
 				pthread_mutex_unlock(philo->right_fork); // check return
-//				printf("%ld %d unlocked right fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
+				printf("%ld %d unlocked right fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 				pthread_mutex_unlock(philo->left_fork); // check return here see above
-//				printf("%ld %d unlocked left fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
+				printf("%ld %d unlocked left fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 			}
 			printf("%ld %d is thinking\n",
 				get_time() - philo->rules_ptr->start_time, philo->philo_id);
@@ -160,6 +164,7 @@ int	launch_philos(t_rules *rules)
 		}
 		i++;
 	}
+	usleep(rules->t_to_eat * 1000 * 0.9);
 	i = 0;
 	while (i < philo_count)
 	{

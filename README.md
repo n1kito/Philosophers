@@ -84,12 +84,12 @@ a philosopher dies of starvation.
   - [ ] Il faut que j'essaye de faire comme ca je pense, surtout que sinon 
 - [ ] Argument value check: check the tests made and the values that arguments can't be (_cf parameter_values_check_)
   - I think none of them can be <= 0 but need to check if the optional one (min times they need to eat) can be 0.
-- [x] Parsing of the arguments
-- [x] Initialize threads and print messages.
 - [ ] Should even philos pick-up left fork first and uneven philos pickup right fork or something ?
 - [ ] Régler le segfault quand je n'ai qu'un seul philo
 - [ ] Faut-il proteger les ouputs puisqu'on a le droit d'utiliser printf qui utilise un buffer ?
 - [ ] Make sure that my philo_id is i + 1 before pushing, to respect the subject rules.
+- [ ] Des fois avec beaucoup de philos j'ai le message "Dinner over" qui s'affiche plusieurs fois, probablement parce que
+	plusieurs philos accedent a la fonction en meme temps. Est-ce qu'il faut que je protege le printf our carrement lappel a la fonction ?
 
 - [ ] If I launch `./philo 5 210 100 100`, `Philo 4` only has time to pick up a left fork before `Philo 0` (who has already eaten) snags his left fork, and then `Philo 4` dies.
 
