@@ -88,8 +88,9 @@ a philosopher dies of starvation.
 - [ ] Régler le segfault quand je n'ai qu'un seul philo
 - [ ] Faut-il proteger les ouputs puisqu'on a le droit d'utiliser printf qui utilise un buffer ?
 - [ ] Make sure that my philo_id is i + 1 before pushing, to respect the subject rules.
+- [ ] Je crois que j'ai mal pigé le sujet parce que sur le philo de bastien `./philo 5 130 60 60` meurt presque tout de suite mais pas chez moi, il tourne assez longtemps sans mourir.
 - [ ] Des fois avec beaucoup de philos j'ai le message "Dinner over" qui s'affiche plusieurs fois, probablement parce que
-	plusieurs philos accedent a la fonction en meme temps. Est-ce qu'il faut que je protege le printf our carrement lappel a la fonction ?
+    plusieurs philos accedent a la fonction en meme temps. Est-ce qu'il faut que je protege le printf our carrement lappel a la fonction ?
 
 - [ ] If I launch `./philo 5 210 100 100`, `Philo 4` only has time to pick up a left fork before `Philo 0` (who has already eaten) snags his left fork, and then `Philo 4` dies.
 
