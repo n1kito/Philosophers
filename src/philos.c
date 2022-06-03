@@ -60,7 +60,7 @@ void	check_number_of_meals(t_rules *rules)
 	if (has_eaten_enough == rules->nb_of_philos)
 	{
 		printf("\033[0;32mDINNER'S OVER FUCKERS\033[0m ");
-		printf("(%d servings each)\n", (int)rules->min_meals);
+		printf("(%d philos ate %d servings each)\n", has_eaten_enough, (int)rules->min_meals);
 		exit (0); // I need to free shit here.
 	}
 }
@@ -75,7 +75,7 @@ void	*routine(void *philo_tmp)
 //	int i = 5;
 	if (philo->philo_id == 0 && philo->nb_meals) // tentative pour eviter au dernier de crever si le premier qui a deja mange lui pique sa fourchette
 	{
-		while (philo->rules_ptr->philos[4]->nb_meals != philo->nb_meals)
+		while (philo->rules_ptr->philos[philo->rules_ptr->nb_of_philos - 1]->nb_meals != philo->nb_meals)
 			usleep(1);
 	}
 	while (1)
@@ -85,26 +85,26 @@ void	*routine(void *philo_tmp)
 			if (philo->philo_id % 2 == 0)
 			{
 				if (pthread_mutex_lock(philo->left_fork) == 0)
-					printf("%ld %d has taken a fork (left)\n",
-//				printf("%ld %d has taken a fork\n",
+//					printf("%ld %d has taken a fork (left)\n",
+					printf("%ld %d has taken a fork\n",
 						   get_time() - philo->rules_ptr->start_time,
 						   philo->philo_id);
 				if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
-					printf("%ld %d has taken a fork (right)\n",
-//				printf("%ld %d has taken a fork\n",
+//					printf("%ld %d has taken a fork (right)\n",
+					printf("%ld %d has taken a fork\n",
 						   get_time() - philo->rules_ptr->start_time,
 						   philo->philo_id);
 			}
 			else
 			{
 				if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
-					printf("%ld %d has taken a fork (right)\n",
-//				printf("%ld %d has taken a fork\n",
+//					printf("%ld %d has taken a fork (right)\n",
+					printf("%ld %d has taken a fork\n",
 						   get_time() - philo->rules_ptr->start_time,
 						   philo->philo_id);
 				if (pthread_mutex_lock(philo->left_fork) == 0)
-					printf("%ld %d has taken a fork (left)\n",
-//				printf("%ld %d has taken a fork\n",
+//					printf("%ld %d has taken a fork (left)\n",
+					printf("%ld %d has taken a fork\n",
 						   get_time() - philo->rules_ptr->start_time,
 						   philo->philo_id);
 			}
@@ -118,24 +118,23 @@ void	*routine(void *philo_tmp)
 				check_number_of_meals(philo->rules_ptr);
 			if (philo->philo_id % 2 == 0)
 			{
-				pthread_mutex_unlock(
-						philo->left_fork); // check return here see above
-				printf("%d unlocked left fork\n", philo->philo_id);
+				pthread_mutex_unlock(philo->left_fork); // check return here see above
+//				printf("%ld %d unlocked left fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 				pthread_mutex_unlock(philo->right_fork); // check return
-				printf("%d unlocked right fork\n", philo->philo_id);
+//				printf("%ld %d unlocked right fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 			}
 			else
 			{
 				pthread_mutex_unlock(philo->right_fork); // check return
-				printf("%d unlocked right fork\n", philo->philo_id);
-				pthread_mutex_unlock(
-						philo->left_fork); // check return here see above
-				printf("%d unlocked left fork\n", philo->philo_id);
+//				printf("%ld %d unlocked right fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
+				pthread_mutex_unlock(philo->left_fork); // check return here see above
+//				printf("%ld %d unlocked left fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 			}
 			printf("%ld %d is thinking\n",
-				   get_time() - philo->rules_ptr->start_time, philo->philo_id);
+				get_time() - philo->rules_ptr->start_time, philo->philo_id);
+			usleep(philo->rules_ptr->t_to_eat * 1000 * 0.9);
 			printf("%ld %d is sleeping\n",
-				   get_time() - philo->rules_ptr->start_time, philo->philo_id);
+				get_time() - philo->rules_ptr->start_time, philo->philo_id);
 			usleep(philo->rules_ptr->t_to_sleep * 1000);
 		}
 	}

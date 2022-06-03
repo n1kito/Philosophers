@@ -68,16 +68,20 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
-- [ ] Improve freester to deal with killing threads.
-- [ ] Implement the last optionnal argument.
-- [x] Think about how to check if a philo has died.
-    - [x] Create a monitoring thread that checks if one of them died and then stops the simulation ? Is that cheating ?
-    - Nope, that's what people do.
+- [ ] Clean up code so far.
 
 # To do
 - [x] Research lock order conditions
 - [x] Data races
-- [ ] Est-ce que je peux genre ne commencer a manger que quand tous mes philos sont generes parce que sinon c'est la totale merde.
+- [x] Corriger la formule du check_dead_philo:
+  - I think it's ok...
+- > time_to_die (in milliseconds): If a philosopher didn’t start eating time_to_die
+  milliseconds since the beginning of their last meal or the beginning of the sim-
+  ulation, they die.
+- [ ] Improve freester to deal with killing threads.
+- [ ] Aaaah mais en fait je les fais penser autant que je veux non ? Peut-etre que le `think` c'est pas 0 c'est plus long pour laisser aux autres le temps de bouffer.
+- [ ] Est-ce que je peux genre ne commencer a manger que quand tous mes philos sont generes parce que sinon c'est la totale merde?
+  - [ ] Il faut que j'essaye de faire comme ca je pense, surtout que sinon 
 - [ ] Argument value check: check the tests made and the values that arguments can't be (_cf parameter_values_check_)
   - I think none of them can be <= 0 but need to check if the optional one (min times they need to eat) can be 0.
 - [x] Parsing of the arguments
