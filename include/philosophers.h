@@ -59,6 +59,12 @@ void		print_err(char *error);
 int			param_values_check(int argc, char *argv[]);
 int			param_char_check(int argc, char *argv[]);
 
+/* optimization.c */
+void		fork_pickup(t_philo *philo);
+void		fork_putdown(t_philo *philo);
+void		stop_fork_stealing(t_philo *first_philo);
+long int	get_timestamp(t_philo *philo); // TODO this needs to go to a utils file
+
 /* philos.c */
 int			launch_philos(t_rules *rules);
 void		init_philos(t_rules *rules);

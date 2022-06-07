@@ -69,6 +69,7 @@ a philosopher dies of starvation.
 # Daily Goals
 
 - [ ] Clean up code so far.
+- [ ] Improve freester to deal with killing threads.
 
 # To do
 - [x] Research lock order conditions
@@ -78,7 +79,6 @@ a philosopher dies of starvation.
 - > time_to_die (in milliseconds): If a philosopher didn’t start eating time_to_die
   milliseconds since the beginning of their last meal or the beginning of the sim-
   ulation, they die.
-- [ ] Improve freester to deal with killing threads.
 - [ ] Aaaah mais en fait je les fais penser autant que je veux non ? Peut-etre que le `think` c'est pas 0 c'est plus long pour laisser aux autres le temps de bouffer.
 - [ ] Est-ce que je peux genre ne commencer a manger que quand tous mes philos sont generes parce que sinon c'est la totale merde?
   - [ ] Il faut que j'essaye de faire comme ca je pense, surtout que sinon 
@@ -90,9 +90,10 @@ a philosopher dies of starvation.
 - [ ] Make sure that my philo_id is i + 1 before pushing, to respect the subject rules.
 - [ ] Je crois que j'ai mal pigé le sujet parce que sur le philo de bastien `./philo 5 130 60 60` meurt presque tout de suite mais pas chez moi, il tourne assez longtemps sans mourir.
 - [ ] Des fois avec beaucoup de philos j'ai le message "Dinner over" qui s'affiche plusieurs fois, probablement parce que
-    plusieurs philos accedent a la fonction en meme temps. Est-ce qu'il faut que je protege le printf our carrement lappel a la fonction ?
-
+    plusieurs philos accedent a la fonction en meme temps.
+  - [ ] Est-ce qu'il faut que je protege le printf ou carrement lappel a la fonction ?
 - [ ] If I launch `./philo 5 210 100 100`, `Philo 4` only has time to pick up a left fork before `Philo 0` (who has already eaten) snags his left fork, and then `Philo 4` dies.
+  - [ ] Check that this is still the case.
 
 ```bash
 0 dinner started

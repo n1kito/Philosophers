@@ -34,6 +34,8 @@ END_COLOR	:= \033[0;39m
 
 SRC_FILES   :=	main\
 				errors\
+				init\
+				optimization\
 				philos\
 				setup\
 				utils

@@ -70,8 +70,6 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 		return (0);
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);
-//	if (!mem_alloc(rules))
-//		return (0);
 	return (1);
 }
 
