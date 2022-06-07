@@ -12,7 +12,7 @@
 
 #include "../include/philosophers.h"
 
-/* Check dead philo */
+/* Goes through all philos and checks if they've eaten recently enough. */
 
 void	*check_dead_philo(void *rules_tmp)
 {
@@ -61,14 +61,10 @@ void	check_number_of_meals(t_rules *rules)
 	if (has_eaten_enough == rules->nb_of_philos)
 	{
 //		printf("\033[0;32mDINNER'S OVER FUCKERS\033[0m ");
-//		printf("(%d philos ate %d servings each)\n", has_eaten_enough, (int)rules->min_meals);
+		printf("(%d philos ate %d servings each)\n", has_eaten_enough, (int)rules->min_meals);
 		exit (freester(rules, 0)); // I need to free shit here.
 	}
 }
-
-/* Recreating the usleep function to make it more precise */
-
-
 
 /* Routine that each philo has to follow */
 

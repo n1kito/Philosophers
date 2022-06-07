@@ -18,8 +18,6 @@ int	freester(t_rules *rules, int return_value)
 {
 	int	i;
 
-	if (rules->forks)
-		free(rules->forks);
 	i = 0;
 	if (rules->philos)
 	{
@@ -32,12 +30,19 @@ int	freester(t_rules *rules, int return_value)
 		free(rules->philos);
 	}
 	i = 0;
-	if (rules->forks)
+	if (rules->forks) // TODO fix this shit
 	{
 		while (i < rules->nb_of_philos)
+		{
 			if (rules->forks[i])
-				if (pthread_mutex_destroy(rules->forks[i++]) != 0)
-					exit (print_err("Could not destroy mutex", 1));
+			{
+				printf("%d\n", i);
+				pthread_mutex_unlock(rules->forks[i]);
+				if (pthread_mutex_destroy(rules->forks[i]) != 0)
+					exit(print_err("Could not destroy mutex", 1));
+			}
+			i++;
+		}
 		free(rules->forks);
 	}
 	return (return_value);

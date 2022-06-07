@@ -72,6 +72,8 @@ a philosopher dies of starvation.
 - [ ] Proteger ma fonction print.
 - [ ] Handle leaks when a philo dies
   - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
+    - [ ] Can't destroy all my mutexes because some of them are probably locked when I exit.
+      - I need to fix this.
 
 # To do
 - [ ] Corriger la formule du check_dead_philo:
@@ -83,6 +85,7 @@ a philosopher dies of starvation.
   - [ ] Il faut que j'essaye de faire comme ca je pense, surtout que sinon 
 - [ ] Régler le segfault quand je n'ai qu'un seul philo
 - [ ] Make sure that my philo_id is i + 1 before pushing, to respect the subject rules.
+- [ ] `[1]    410627 segmentation fault (core dumped)  ./philo 300 410 200 200 15`
 - [ ] Should the pthread be init as detachable ? [see man](http://manpagesfr.free.fr/man/man3/pthread_detach.3.html)
 
 # Process for this project
