@@ -68,7 +68,7 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
-- [ ] Improve freester to deal with killing threads.
+- [ ] Improve freester to deal with killing threads & mutexes
 - [ ] Proteger ma fonction print.
 - [ ] Handle leaks when a philo dies
   - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
@@ -83,6 +83,7 @@ a philosopher dies of starvation.
   - [ ] Il faut que j'essaye de faire comme ca je pense, surtout que sinon 
 - [ ] Régler le segfault quand je n'ai qu'un seul philo
 - [ ] Make sure that my philo_id is i + 1 before pushing, to respect the subject rules.
+- [ ] Should the pthread be init as detachable ? [see man](http://manpagesfr.free.fr/man/man3/pthread_detach.3.html)
 
 # Process for this project
 

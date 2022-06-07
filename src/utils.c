@@ -12,6 +12,8 @@
 
 #include "../include/philosophers.h"
 
+// Frees memory and destroys mutexes/forks if they've been initialized.
+
 int	freester(t_rules *rules, int return_value)
 {
 	int	i;
@@ -28,6 +30,15 @@ int	freester(t_rules *rules, int return_value)
 			i++;
 		}
 		free(rules->philos);
+	}
+	i = 0;
+	if (rules->forks)
+	{
+		while (i < rules->nb_of_philos)
+			if (rules->forks[i])
+				if (pthread_mutex_destroy(rules->forks[i++]) != 0)
+					exit (print_err("Could not destroy mutex", 1));
+		free(rules->forks);
 	}
 	return (return_value);
 }

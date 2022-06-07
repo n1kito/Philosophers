@@ -25,7 +25,6 @@ void	init_philos(t_rules *rules)
 		rules->philos[i]->rules_ptr = rules;
 		rules->philos[i]->nb_meals = 0;
 		rules->philos[i]->last_meal = 0;
-		rules->philos[i]->somebody_died_ptr = &(rules->somebody_died);
 		rules->philos[i]->philo_id = i;
 		i++;
 	}

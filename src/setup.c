@@ -61,7 +61,6 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	rules->start_time = get_time();
 	if (rules->start_time == -1)
 		return (0);
-	rules->somebody_died = 0;
 	rules->total_meals = 0;
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);
