@@ -14,11 +14,12 @@
 
 /* Prints an error message on stderr. */
 
-void	print_err(char *error)
+int	print_err(char *error, int return_value)
 {
 	ft_putstr_fd("Error\n> ", 2);
 	ft_putstr_fd(error, 2);
 	ft_putstr_fd(".\n", 2);
+	return (return_value);
 }
 
 /* Checks for the value of all program arguments */
@@ -72,7 +73,7 @@ int	param_char_check(int argc, char *argv[])
 		while (argv[i][j])
 		{
 			if (!ft_is_digit(argv[i][j]))
-				return (print_err("Arguments contain forbidden characters"), 0);
+				return (print_err("Arguments contain forbidden characters", 0));
 			j++;
 		}
 		i++;

@@ -27,14 +27,16 @@ BIN_DIR	:= bin
 GREEN		:= \033[0;92m
 YELLOW		:= \033[0;93m
 BLUE		:= \033[0;94m
+PURPLE		:= \033[0;35m
+IPURPLE		:= \033[3;35m
 END_COLOR	:= \033[0;39m
 
 # **************************************************************************** #
 # SOURCES
 
 SRC_FILES   :=	main\
-				errors\
 				init\
+				errors\
 				optimization\
 				philos\
 				setup\
@@ -48,15 +50,15 @@ all: $(NAME)
 
 $(NAME): $(OBJ_FILES)
 	@$(CC) -pthread -o $(NAME) $(OBJ_FILES)
-	@echo "$(GREEN)$(NAME) compiled :)$(END_COLOR)"
+	@echo "$(GREEN)$(NAME) compiled :) $(END_COLOR)"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR)
 	@$(CC) -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
-	@echo "$(BLUE)Compiling $(notdir $<)$(END_COLOR)"
+	@echo "$(BLUE)> compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
 	@mkdir $(BIN_DIR)
-	@echo "Created $(BIN_DIR)/ directory"
+	@echo "$(IPURPLE)Created $(BIN_DIR)/ directory$(END_COLOR)"
 
 clean:
 	@rm -rf $(BIN_DIR)
@@ -67,7 +69,7 @@ fclean: clean
 	@echo "$(YELLOW)$(NAME) executable file cleaned.$(END_COLOR)"
 
 re: fclean all
-	@echo "$(GREEN)Cleaned all and rebuilt $(NAME)!$(END_COLOR)"
+	@echo "Cleaned all and rebuilt $(NAME)!"
 
 -include $(OBJ_FILES:%.o=%.d)
 

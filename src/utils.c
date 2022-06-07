@@ -12,7 +12,7 @@
 
 #include "../include/philosophers.h"
 
-void	freester(t_rules *rules)
+int	freester(t_rules *rules, int return_value)
 {
 	int	i;
 
@@ -29,6 +29,7 @@ void	freester(t_rules *rules)
 		}
 		free(rules->philos);
 	}
+	return (return_value);
 }
 
 int	ft_putstr_fd(char *str, int fd)
@@ -84,7 +85,7 @@ long int	get_time(void)
 	struct timeval	time_struct;
 
 	if (gettimeofday(&time_struct, NULL) == -1)
-		return (print_err("Could not get time of day"), -1);
+		return (print_err("Could not get time of day", -1));
 	time = (long int)time_struct.tv_sec * 1000
 		+ (long int)time_struct.tv_usec / 1000;
 	return (time);

@@ -24,22 +24,26 @@ void	fork_pickup(t_philo *philo)
 	if (philo_id % 2 == 0)
 	{
 		if (pthread_mutex_lock(philo->left_fork) != 0)
-			exit();
+			exit(print_err("Failed to lock mutex", 1)
+				&& freester(philo->rules_ptr, 1));
 		printf("%ld %d has taken a fork (left)\n", get_timestamp(philo), philo_id);
 //		printf("%ld %d has taken a fork\n", get_timestamp(philo), philo_id);
-		if (philo->right_fork && pthread_mutex_lock(philo->right_fork) == 0)
-			exit();
+		if (philo->right_fork && pthread_mutex_lock(philo->right_fork) != 0)
+			exit(print_err("Failed to lock mutex", 1)
+				&& freester(philo->rules_ptr, 1));
 		printf("%ld %d has taken a fork (right)\n", get_timestamp(philo), philo_id);
 //		printf("%ld %d has taken a fork\n", get_timestamp(philo), philo_id);
 	}
 	else
 	{
 		if (philo->right_fork && pthread_mutex_lock(philo->right_fork) != 0)
-			exit();
+			exit(print_err("Failed to lock mutex", 1)
+				&& freester(philo->rules_ptr, 1));
 		printf("%ld %d has taken a fork (right)\n", get_timestamp(philo), philo_id);
 //		printf("%ld %d has taken a fork\n", get_timestamp(philo), philo_id);
 		if (pthread_mutex_lock(philo->left_fork) != 0)
-			exit();
+			exit(print_err("Failed to lock mutex", 1)
+				&& freester(philo->rules_ptr, 1));
 		printf("%ld %d has taken a fork (left)\n", get_timestamp(philo), philo_id);
 //		printf("%ld %d has taken a fork\n", get_timestamp(philo), philo_id);
 	}
@@ -48,7 +52,7 @@ void	fork_pickup(t_philo *philo)
 /* Puts down forks in a certain order depending on whether the philo_id is even
  * or odd. Even philos will put down their left fork first, odd philos will
  * put down their right fork first. */
-// TODO Fix exit strategy for when unlocking failes
+// TODO Fix exit strategy for when unlocking failed
 void	fork_putdown(t_philo *philo)
 {
 	int	philo_id;
@@ -57,35 +61,40 @@ void	fork_putdown(t_philo *philo)
 	if (philo->philo_id % 2 == 0)
 	{
 		if (pthread_mutex_unlock(philo->left_fork) != 0)
-			exit();
+			exit(print_err("Failed to unlock mutex", 1)
+				&& freester(philo->rules_ptr, 1));
 //		printf("%ld %d unlocked left fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 		if (pthread_mutex_unlock(philo->right_fork) != 0)
-			exit();
+			exit(print_err("Failed to unlock mutex", 1)
+				&& freester(philo->rules_ptr, 1));
 //		printf("%ld %d unlocked right fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 	}
 	else
 	{
 		if (pthread_mutex_unlock(philo->right_fork) != 0)
-			exit();
+			exit(print_err("Failed to unlock mutex", 1)
+				&& freester(philo->rules_ptr, 1));
 //		printf("%ld %d unlocked right fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 		if (pthread_mutex_unlock(philo->left_fork) != 0)
-			exit();
+			exit(print_err("Failed to unlock mutex", 1)
+				&& freester(philo->rules_ptr, 1));
 //		printf("%ld %d unlocked left fork\n", get_time() - philo->rules_ptr->start_time, philo->philo_id);
 	}
 }
 
-/* Keeps if the first first_philo has already eaten, it waits for the last one
+/* Keeps if the first philo has already eaten, it waits for the last one
  * to eat the same amount of times before eating again */
 
-void	stop_fork_stealing(t_philo *first_philo)
+void	save_last_philo(t_philo *philo)
 {
 	int		philo_count;
 	t_philo	*last_philo;
 
-	philo_count = (int)first_philo->rules_ptr->nb_of_philos;
-	last_philo = first_philo->rules_ptr->philos[philo_count - 1];
-	while (last_philo->nb_meals != first_philo->nb_meals)
-		usleep(1);
+	philo_count = (int)philo->rules_ptr->nb_of_philos;
+	last_philo = philo->rules_ptr->philos[philo_count - 1];
+	if (philo->philo_id == 0 && philo->nb_meals)
+		while (last_philo->nb_meals != philo->nb_meals)
+			usleep(1);
 }
 
 /* Returns current timestamp */

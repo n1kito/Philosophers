@@ -328,6 +328,7 @@ Quand on rencontre une erreur:
 ## Resources
 - ⭐ [GDoc cbarbit](https://docs.google.com/document/d/1EeAgXkygFQu8qNJby_PP6XO9jWEpMlHozX1fCX64Bvg/edit)
 - [Philo visualizer](https://nafuka11.github.io/philosophers-visualizer/)
+- [42 Project Tests](https://github.com/Kwevan/42-Tests)
 - [Git barodrig](https://github.com/BastienRodz/philosophers)
 - [Le dîner des philosophes](https://fr.wikipedia.org/wiki/D%C3%AEner_des_philosophes)
 - [Le problème des philosophes](https://perso.ens-lyon.fr/michael.rao/ASR2/cours_slides_8.pdf)

@@ -13,6 +13,7 @@
 #include "../include/philosophers.h"
 
 /* Initializes the basic values in each philosopher struct */
+// TODO Replace with the following : rules->philos[i]->philo_id = i + 1;
 
 void	init_philos(t_rules *rules)
 {
@@ -25,7 +26,6 @@ void	init_philos(t_rules *rules)
 		rules->philos[i]->nb_meals = 0;
 		rules->philos[i]->last_meal = 0;
 		rules->philos[i]->somebody_died_ptr = &(rules->somebody_died);
-//		rules->philos[i]->philo_id = i + 1; // I added +1 so my philos had the correct id
 		rules->philos[i]->philo_id = i;
 		i++;
 	}
@@ -44,7 +44,7 @@ int	init_and_assign_forks(t_rules *rules)
 	while (i < rules->nb_of_philos)
 	{
 		if (pthread_mutex_init(rules->forks[i], NULL) != 0)
-			return (print_err("Failed to initiate mutex"), 0);
+			return (print_err("Failed to initiate mutex", 0));
 		i++;
 	}
 	i = 0;

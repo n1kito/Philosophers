@@ -17,10 +17,9 @@
 void	*check_dead_philo(void *rules_tmp)
 {
 	t_rules	*rules;
-
-	rules = (t_rules *)rules_tmp;
 	int	i;
 
+	rules = (t_rules *)rules_tmp;
 	while (1)
 	{
 		i = 0;
@@ -30,10 +29,9 @@ void	*check_dead_philo(void *rules_tmp)
 			if ((get_time() - rules->start_time) - rules->philos[i]->last_meal > rules->t_to_die)
 			{
 //				printf("\033[0;31m** %ld philo %d DIED after waiting for %ld **\033[0m\n", get_time() - rules->start_time, rules->philos[i]->philo_id, (get_time() - rules->start_time) - rules->philos[i]->last_meal);
-				printf("%ld %d died\n", get_time() - rules->start_time, rules->philos[i]->philo_id);
-				// TODO add freeing function
-				freester(rules);
-				exit (1);
+				printf("%ld %d died\n", get_timestamp(rules->philos[i]),
+					rules->philos[i]->philo_id);
+				exit (freester(rules, 1));
 			}
 			i++;
 //			else
@@ -61,11 +59,11 @@ void	check_number_of_meals(t_rules *rules)
 	}
 //	printf("***************************************\n\n");
 	if (has_eaten_enough == rules->nb_of_philos)
-//	{
+	{
 //		printf("\033[0;32mDINNER'S OVER FUCKERS\033[0m ");
 //		printf("(%d philos ate %d servings each)\n", has_eaten_enough, (int)rules->min_meals);
 		exit (0); // I need to free shit here.
-//	}
+	}
 }
 
 /* Recreating the usleep function to make it more precise */
@@ -79,18 +77,14 @@ void	*routine(void *philo_tmp)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_tmp;
-//	int i = 5;
-
-	if (philo->philo_id == 0 && philo->nb_meals)
-		stop_fork_stealing(philo);
+	save_last_philo(philo);
 	while (1)
 	{
 		if (philo->rules_ptr->min_meals == -1 || (philo->rules_ptr->min_meals
 				&& philo->nb_meals < philo->rules_ptr->min_meals))
 		{
 			fork_pickup(philo);
-			printf("%ld %d is eating\n",
-				   get_time() - philo->rules_ptr->start_time, philo->philo_id);
+			printf("%ld %d is eating\n", get_timestamp(philo), philo->philo_id);
 			philo->last_meal = get_time();
 			usleep(philo->rules_ptr->t_to_eat * 1000);
 			philo->nb_meals++;
@@ -104,7 +98,6 @@ void	*routine(void *philo_tmp)
 			usleep(philo->rules_ptr->t_to_sleep * 1000);
 		}
 	}
-	return (0);
 }
 
 /* Starts philos/threads one at a time */
@@ -122,7 +115,7 @@ int	launch_philos(t_rules *rules)
 		{
 //			printf("%ld Initiate even philo %d\n", get_time() - rules->start_time, i);
 			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
-				return (print_err("Failed to create philo"), 0);
+				return (print_err("Failed to create philo", 0));
 		}
 		i++;
 	}
@@ -134,7 +127,7 @@ int	launch_philos(t_rules *rules)
 		{
 //			printf("%ld Initiate odd philo %d\n", get_time() - rules->start_time, i);
 			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
-				return (print_err("Failed to create philo"), 0);
+				return (print_err("Failed to create philo", 0));
 		}
 		i++;
 	}

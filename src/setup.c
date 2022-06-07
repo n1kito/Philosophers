@@ -12,11 +12,6 @@
 
 #include "../include/philosophers.h"
 
-// TODO Attention dans la fonction mem_alloc j'attribue de la memoire pour les
-// pointeurs sur forks and philos mais je n'attribue pas de memoire pour les forks
-// et philos eux meme... Je dois rajouter des boucles while() et leur filer de la
-// memoire un par un.
-
 /* Allocates memory to my structures, also initializing my philos to NULL to
  * avoid segfaults if the free function is called */
 
@@ -26,16 +21,16 @@ int	mem_alloc(t_rules *rules)
 
 	rules->forks = malloc(sizeof(pthread_mutex_t *) * rules->nb_of_philos);
 	if (rules->forks == NULL)
-		return (print_err("Could not allocate memory for fork pointers"), 0);
+		return (print_err("Could not allocate memory for fork pointers", 0));
 	rules->philos = malloc(sizeof(t_philo *) * rules->nb_of_philos);
 	if (rules->philos == NULL)
-		return (print_err("Could not allocate memory for philos"), 0);
+		return (print_err("Could not allocate memory for philos", 0));
 	i = 0;
 	while (i < rules->nb_of_philos)
 	{
 		rules->forks[i] = malloc(sizeof(pthread_mutex_t) * rules->nb_of_philos);
 		if (rules->forks[i] == NULL)
-			return (print_err("Could not allocate memory for fork"), 0);
+			return (print_err("Could not allocate memory for fork", 0));
 		i++;
 	}
 	i = 0;
@@ -46,7 +41,7 @@ int	mem_alloc(t_rules *rules)
 	{
 		rules->philos[i] = malloc(sizeof(t_philo) * rules->nb_of_philos);
 		if (rules->philos[i] == NULL)
-			return (print_err("Could not allocate memory for philo"), 0);
+			return (print_err("Could not allocate memory for philo", 0));
 		i++;
 	}
 	return (1);
@@ -64,10 +59,10 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	rules->t_to_eat = ft_atol(argv[3]);
 	rules->t_to_sleep = ft_atol(argv[4]);
 	rules->start_time = get_time();
-	rules->somebody_died = 0;
-	rules->total_meals = 0;
 	if (rules->start_time == -1)
 		return (0);
+	rules->somebody_died = 0;
+	rules->total_meals = 0;
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);
 	return (1);
@@ -85,7 +80,7 @@ void	init_struct(t_rules *rules)
 int	setup_rules(t_rules *rules, char *argv[], int argc)
 {
 	if (argc != 5 && argc != 6)
-		return (print_err("./philo needs 4 or 5 arguments"), 0);
+		return (print_err("./philo needs 4 or 5 arguments", 0));
 	if (!param_char_check(argc, argv) || !param_values_check(argc, argv)
 		|| !init_rules(argv, argc, rules) || !mem_alloc(rules)
 		|| !init_and_assign_forks(rules))

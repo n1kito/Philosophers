@@ -14,11 +14,12 @@
 
 int	main(int argc, char *argv[])
 {
-	t_rules	rules;
+	t_rules		rules;
+	pthread_t	monitor;
 
 	init_struct(&rules);
 	if (!setup_rules(&rules, argv, argc))
-		return (freester(&rules), 1);
+		return (freester(&rules, 1));
 
 //	printf("Rules:\n%ld philosophers\nTime to die: %ld\nTime to eat: %ld\n"
 //		"Time to sleep: %ld\nMinimum meals: %ld\n",
@@ -33,8 +34,7 @@ int	main(int argc, char *argv[])
 //	return (freester(&rules), 0);
 
 //	printf("%ld dinner started\n", get_time() - rules.start_time);
-	pthread_t monitor;
 	pthread_create(&monitor, NULL, &check_dead_philo, &rules);
 	if (!launch_philos(&rules))
-		return (freester(&rules), 1);
+		return (freester(&rules, 1));
 }
