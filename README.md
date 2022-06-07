@@ -68,81 +68,21 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
-- [ ] Clean up code so far.
 - [ ] Improve freester to deal with killing threads.
+- [ ] Proteger ma fonction print.
+- [ ] Handle leaks when a philo dies
+  - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
 
 # To do
-- [x] Research lock order conditions
-- [x] Data races
-- [x] Corriger la formule du check_dead_philo:
+- [ ] Corriger la formule du check_dead_philo:
   - I think it's ok...
 - > time_to_die (in milliseconds): If a philosopher didn’t start eating time_to_die
   milliseconds since the beginning of their last meal or the beginning of the sim-
   ulation, they die.
-- [ ] Aaaah mais en fait je les fais penser autant que je veux non ? Peut-etre que le `think` c'est pas 0 c'est plus long pour laisser aux autres le temps de bouffer.
 - [ ] Est-ce que je peux genre ne commencer a manger que quand tous mes philos sont generes parce que sinon c'est la totale merde?
   - [ ] Il faut que j'essaye de faire comme ca je pense, surtout que sinon 
-- [ ] Argument value check: check the tests made and the values that arguments can't be (_cf parameter_values_check_)
-  - I think none of them can be <= 0 but need to check if the optional one (min times they need to eat) can be 0.
-- [ ] Should even philos pick-up left fork first and uneven philos pickup right fork or something ?
 - [ ] Régler le segfault quand je n'ai qu'un seul philo
-- [ ] Faut-il proteger les ouputs puisqu'on a le droit d'utiliser printf qui utilise un buffer ?
 - [ ] Make sure that my philo_id is i + 1 before pushing, to respect the subject rules.
-- [ ] Je crois que j'ai mal pigé le sujet parce que sur le philo de bastien `./philo 5 130 60 60` meurt presque tout de suite mais pas chez moi, il tourne assez longtemps sans mourir.
-- [ ] Des fois avec beaucoup de philos j'ai le message "Dinner over" qui s'affiche plusieurs fois, probablement parce que
-    plusieurs philos accedent a la fonction en meme temps.
-  - [ ] Est-ce qu'il faut que je protege le printf ou carrement lappel a la fonction ?
-- [ ] If I launch `./philo 5 210 100 100`, `Philo 4` only has time to pick up a left fork before `Philo 0` (who has already eaten) snags his left fork, and then `Philo 4` dies.
-  - [ ] Check that this is still the case.
-
-```bash
-0 dinner started
-0 Initiate even philo 0
-0 Initiate even philo 2
-0 0 has taken a fork (left)
-0 0 has taken a fork (right)
-0 0 is eating
-0 Initiate even philo 4
-0 Initiate odd philo 1
-0 Initiate odd philo 3
-0 2 has taken a fork (left)
-1 2 has taken a fork (right)
-1 2 is eating
-0 3 has taken a fork (right)
-philo 0 has eaten
-0 unlocked left fork
-0 unlocked right fork
-100 0 is thinking
-100 0 is sleeping
-philo 2 has eaten
-2 unlocked left fork
-2 unlocked right fork
-101 2 is thinking
-101 2 is sleeping
-101 3 has taken a fork (left)
-101 3 is eating
-101 1 has taken a fork (right)
-101 1 has taken a fork (left)
-101 1 is eating
-200 0 has taken a fork (left)
-philo 3 has eaten
-3 unlocked right fork
-3 unlocked left fork
-philo 1 has eaten
-1 unlocked right fork
-1 unlocked left fork
-201 1 is thinking
-201 1 is sleeping
-201 3 is thinking
-201 3 is sleeping
-201 0 has taken a fork (right)
-201 0 is eating
-201 4 has taken a fork (left)
-201 2 has taken a fork (left)
-201 2 has taken a fork (right)
-201 2 is eating
-** 211 philo 4 DIED after waiting for 211 **
-```
 
 # Process for this project
 

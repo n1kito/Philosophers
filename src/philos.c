@@ -62,7 +62,7 @@ void	check_number_of_meals(t_rules *rules)
 	{
 //		printf("\033[0;32mDINNER'S OVER FUCKERS\033[0m ");
 //		printf("(%d philos ate %d servings each)\n", has_eaten_enough, (int)rules->min_meals);
-		exit (0); // I need to free shit here.
+		exit (freester(rules, 0)); // I need to free shit here.
 	}
 }
 
