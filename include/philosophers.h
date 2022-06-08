@@ -32,6 +32,7 @@ typedef struct s_philo
 	pthread_mutex_t	*right_fork;
 	int				philo_id;
 	int				nb_meals;
+	int				is_done_eating;
 	long int		last_meal;
 	struct s_rules	*rules_ptr;
 }				t_philo;
@@ -44,7 +45,10 @@ typedef struct s_rules
 	long int		t_to_sleep;
 	long int		min_meals;
 	long int		start_time;
+	int				someone_died;
+	int				full_dinners;
 	struct s_philo	**philos;
+	pthread_mutex_t	printer;
 	pthread_mutex_t	**forks;
 }				t_rules;
 
@@ -61,8 +65,8 @@ void		init_struct(t_rules *rules);
 int			init_and_assign_forks(t_rules *rules);
 
 /* optimization.c */
-void		fork_pickup(t_philo *philo);
-void		fork_putdown(t_philo *philo);
+int			fork_pickup(t_philo *philo);
+int			fork_putdown(t_philo *philo);
 void		save_last_philo(t_philo *philo);
 long int	get_timestamp(t_philo *philo); // TODO this needs to go to a utils file
 
@@ -80,5 +84,6 @@ long int	ft_atol(const char *nptr);
 int			ft_is_digit(char c);
 int			freester(t_rules *rules, int return_value);
 long int	get_time(void);
+int			print_status(char *status, t_philo *philo);
 
 #endif

@@ -46,7 +46,7 @@ a philosopher dies of starvation.
 **Rules for the mandatory part**
 
 - [ ] Each philosopher should be a thread.
-- [ ] There is one for between each pair of philosophers. Therefore, if there are several philisophers, each philosopher has a fork on their left side and a fork on their right side. If there is only one philosopher, there should be only one fork on the table.
+- [ ] There is one for between each pair of philosophers. Therefore, if there are several philosophers, each philosopher has a fork on their left side and a fork on their right side. If there is only one philosopher, there should be only one fork on the table.
 - [ ] To prevent philosophers from duplicating forks, you should protect the forks state with a mutex for each of them.
 
 **About the logs of the program**
@@ -70,6 +70,7 @@ a philosopher dies of starvation.
 
 - [ ] Improve freester to deal with killing threads & mutexes
 - [ ] Proteger ma fonction print.
+- [ ] Remove all uses of `exit`
 - [ ] Handle leaks when a philo dies
   - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
     - [ ] Can't destroy all my mutexes because some of them are probably locked when I exit.
@@ -83,10 +84,12 @@ a philosopher dies of starvation.
   ulation, they die.
 - [ ] Est-ce que je peux genre ne commencer a manger que quand tous mes philos sont generes parce que sinon c'est la totale merde?
   - [ ] Il faut que j'essaye de faire comme ca je pense, surtout que sinon 
-- [ ] Régler le segfault quand je n'ai qu'un seul philo
 - [ ] Make sure that my philo_id is i + 1 before pushing, to respect the subject rules.
 - [ ] `[1]    410627 segmentation fault (core dumped)  ./philo 300 410 200 200 15`
 - [ ] Should the pthread be init as detachable ? [see man](http://manpagesfr.free.fr/man/man3/pthread_detach.3.html)
+- [ ] `./philo 200 410 200 200 4` ne sort jamais du programme.
+- [ ] `./philo 4 310 200 100 20` est censé mourir mais je comprends pas trop pourquoi...
+  - J'ai un probleme de check de death time visiblement. Avec mon sleep time, c'est pas normal que mon philo creve pas.
 
 # Process for this project
 
@@ -162,6 +165,8 @@ Quand on a un seul philo, il faut gerer:
 
 Quand on rencontre une erreur:
 > Dans ton thread, dès que tu détectes que tu dois exit, tu dois unlock tout ce que tu as lock. C'est le thread qui a lock le mutex qui doit le delock.
+
+> Il n'y a pas forcement besoin de faire des micro usleep pour verifier si le philo meurt pendant qu'il dort, tu peux verifier avant de lancer le usleep si celui-ci va etre trop lon et que le philo va mourir pendant. Dans ce cas tu fais juste un usleep jusqu'au moment de mourir. Par contre pour verifier si un autre philo est mort entre temps, je ne fais ca qu'au moment de print quelque chose.
 
 # Research
 
@@ -271,6 +276,7 @@ Quand on rencontre une erreur:
 
 ## Resources
 - ⭐ [GDoc cbarbit](https://docs.google.com/document/d/1EeAgXkygFQu8qNJby_PP6XO9jWEpMlHozX1fCX64Bvg/edit)
+- ⭐ [A great checker](https://github.com/busshi/philo_checker)
 - [Philo visualizer](https://nafuka11.github.io/philosophers-visualizer/)
 - [42 Project Tests](https://github.com/Kwevan/42-Tests)
 - [Git barodrig](https://github.com/BastienRodz/philosophers)

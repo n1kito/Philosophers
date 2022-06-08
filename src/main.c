@@ -20,21 +20,17 @@ int	main(int argc, char *argv[])
 	init_struct(&rules);
 	if (!setup_rules(&rules, argv, argc))
 		return (freester(&rules, 1));
-
-//	printf("Rules:\n%ld philosophers\nTime to die: %ld\nTime to eat: %ld\n"
-//		"Time to sleep: %ld\nMinimum meals: %ld\n",
-//		rules.nb_of_philos, rules.t_to_die, rules.t_to_eat,
-//		rules.t_to_sleep, rules.min_meals);
-
-//	long int time;
-//	time = get_time();
-//	printf("time: %ld\n", time);
-//	sleep(2);
-//	printf("You waited %d seconds.\n", (int)((get_time() - time) / 1000));
-//	return (freester(&rules), 0);
-
 //	printf("%ld dinner started\n", get_time() - rules.start_time);
 	pthread_create(&monitor, NULL, &check_dead_philo, &rules);
 	if (!launch_philos(&rules))
 		return (freester(&rules, 1));
+	int i = 0;
+	while (i < rules.nb_of_philos)
+	{
+		pthread_join(rules.philos[i]->philo, NULL);
+		i++;
+	}
+	pthread_join(monitor, NULL);
+//	printf("***** did we get here ?\n");
+	return (freester(&rules, 0));
 }

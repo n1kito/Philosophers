@@ -59,10 +59,14 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	rules->t_to_eat = ft_atol(argv[3]);
 	rules->t_to_sleep = ft_atol(argv[4]);
 	rules->start_time = get_time();
+	rules->someone_died = 0;
+	rules->full_dinners = 0;
 	if (rules->start_time == -1)
 		return (0);
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);
+	if (pthread_mutex_init(&rules->printer, NULL) != 0)
+		return (print_err("Failed to initiate printer mutex", 0));
 	return (1);
 }
 

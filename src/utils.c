@@ -36,10 +36,15 @@ int	freester(t_rules *rules, int return_value)
 		{
 			if (rules->forks[i])
 			{
-				printf("%d\n", i);
-				pthread_mutex_unlock(rules->forks[i]);
+//				if (pthread_mutex_unlock(rules->forks[i]) != 0)
+//					printf("Could not unlock mutex %d.\n", i);
+//				else
+//					printf("Mutex %d unlocked\n", i);
 				if (pthread_mutex_destroy(rules->forks[i]) != 0)
-					exit(print_err("Could not destroy mutex", 1));
+					print_err("Could not destroy mutex", 0);
+//				else
+//					printf("Mutex %d destroyed.\n", i);
+				free(rules->forks[i]);
 			}
 			i++;
 		}
@@ -105,4 +110,34 @@ long int	get_time(void)
 	time = (long int)time_struct.tv_sec * 1000
 		+ (long int)time_struct.tv_usec / 1000;
 	return (time);
+}
+
+int	ft_strncmp(const char *first, const char *second, size_t length)
+{
+	size_t			i;
+	unsigned char	*c1;
+	unsigned char	*c2;
+
+	i = 0;
+	c1 = (unsigned char *)first;
+	c2 = (unsigned char *)second;
+	while (length--)
+	{
+		if (!c1[i] || !c2[i] || c1[i] != c2[i])
+			return (c1[i] - c2[i]);
+		i++;
+	}
+	return (0);
+}
+
+int	print_status(char *status, t_philo *philo)
+{
+	if (pthread_mutex_lock(&philo->rules_ptr->printer) != 0)
+		return (print_err("Could not lock printer mutex", 0));
+	if ((philo->rules_ptr->someone_died == 0 || !ft_strncmp(status, "died", 4))
+		&& philo->rules_ptr->full_dinners != philo->rules_ptr->nb_of_philos)
+		printf("%ld %d %s\n", get_timestamp(philo), philo->philo_id + 1, status);
+	if (pthread_mutex_unlock(&philo->rules_ptr->printer) != 0)
+		return (print_err("Could not unlock printer mutex", 0));
+	return (1);
 }
