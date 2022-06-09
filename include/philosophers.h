@@ -49,6 +49,7 @@ typedef struct s_rules
 	int				full_dinners;
 	struct s_philo	**philos;
 	pthread_mutex_t	printer;
+//	pthread_mutex_t	philo_init;
 	pthread_mutex_t	**forks;
 }				t_rules;
 

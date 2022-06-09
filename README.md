@@ -68,6 +68,7 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
+- [ ] Only start dinner once all philos have been generated ?
 - [ ] Improve freester to deal with killing threads & mutexes
 - [ ] Handle leaks when a philo dies
   - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
@@ -75,9 +76,13 @@ a philosopher dies of starvation.
       - I need to fix this.
 
 # To do
+- [ ] Gérer les overflows dans les arguments
+- [ ] Gérer les underflows dans les arguments
+- [ ] Gérer les min/max int dans les arguments
 - [ ] `[1]    410627 segmentation fault (core dumped)  ./philo 300 410 200 200 15`
   - Plus de segfault MAIS j'ai un philo qui meurt. Peut-etre que c'est le monitor qui me bouffe toutes mes ressources ?
 - [ ] Mettre un mutex autour de "someone died" puisque plusieurs threads essayent d'y acceder en meme temps.
+- [ ] Faire un `usleep` plus petit qui check regulierement s'il y a eu un mort ou pas.
 
 # Process for this project
 
@@ -154,7 +159,7 @@ Quand on a un seul philo, il faut gerer:
 Quand on rencontre une erreur:
 > Dans ton thread, dès que tu détectes que tu dois exit, tu dois unlock tout ce que tu as lock. C'est le thread qui a lock le mutex qui doit le delock.
 
-> Il n'y a pas forcement besoin de faire des micro usleep pour verifier si le philo meurt pendant qu'il dort, tu peux verifier avant de lancer le usleep si celui-ci va etre trop lon et que le philo va mourir pendant. Dans ce cas tu fais juste un usleep jusqu'au moment de mourir. Par contre pour verifier si un autre philo est mort entre temps, je ne fais ca qu'au moment de print quelque chose.
+> 💅 Il n'y a pas forcement besoin de faire des micro usleep pour verifier si le philo meurt pendant qu'il dort, tu peux verifier avant de lancer le usleep si celui-ci va etre trop lon et que le philo va mourir pendant. Dans ce cas tu fais juste un usleep jusqu'au moment de mourir. Par contre pour verifier si un autre philo est mort entre temps, je ne fais ca qu'au moment de print quelque chose.
 
 # Research
 
@@ -270,7 +275,8 @@ Quand on rencontre une erreur:
 - [Git barodrig](https://github.com/BastienRodz/philosophers)
 - [Le dîner des philosophes](https://fr.wikipedia.org/wiki/D%C3%AEner_des_philosophes)
 - [Le problème des philosophes](https://perso.ens-lyon.fr/michael.rao/ASR2/cours_slides_8.pdf)
-
+- [Plein de concepts intéressants; git amyplant](https://github.com/iciamyplant/Philosophers)
+- 
 # Project Timeline
 
 1. Wednesday, May 25th

@@ -67,6 +67,8 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 		rules->min_meals = ft_atol(argv[5]);
 	if (pthread_mutex_init(&rules->printer, NULL) != 0)
 		return (print_err("Failed to initiate printer mutex", 0));
+//	if (pthread_mutex_init(&rules->philo_init, NULL) != 0)
+//		return (print_err("Failed to initiate philo init mutex", 0));
 	return (1);
 }
 

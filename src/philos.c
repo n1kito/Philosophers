@@ -29,13 +29,14 @@ void	*check_dead_philo(void *rules_tmp)
 //			printf("\033[0;33m**checking for a dead cunt\n\033[0m");
 			if (get_timestamp(rules->philos[i]) - rules->philos[i]->last_meal > rules->t_to_die)
 			{
-//				printf("\033[0;31m** %ld philo %d DIED after waiting for %ld **\033[0m\n", get_time() - rules->start_time, rules->philos[i]->philo_id, (get_time() - rules->start_time) - rules->philos[i]->last_meal);
+//				printf("\033[0;31m** %ld philo %d DIED after waiting for %ld **\033[0m\n", get_time() - rules->start_time, i + 1, (get_time() - rules->start_time) - rules->philos[i]->last_meal);
 //				printf("%ld %d died\n", get_timestamp(rules->philos[i]),
 //					rules->philos[i]->philo_id);
 				print_status("died", rules->philos[i]);
 				rules->someone_died = 1;
 			}
 			i++;
+//			usleep(100000);
 //			else
 //				printf("\033[0;32m**No philo has died\n\033[0m");
 		}
@@ -117,11 +118,11 @@ void	*routine(void *philo_tmp)
 			print_status("is sleeping", philo);
 			usleep(philo->rules_ptr->t_to_sleep * 1000);
 			print_status("is thinking", philo);
+//			usleep(10000);
 			usleep(1000);
-//			usleep(1000);
 		}
 		else
-			break;
+			break ;
 	}
 //	print_status("is done", philo);
 //	printf("*philo %d is done\n", philo->philo_id);
@@ -129,7 +130,8 @@ void	*routine(void *philo_tmp)
 }
 
 /* Starts philos/threads one at a time */
-
+// TODO rajouter un mutex ici que je lock avant l'init et que j'unlock apres,
+// juste apres avoir sauvegarde le dinner start time.
 int	launch_philos(t_rules *rules)
 {
 	int	i;
@@ -147,7 +149,8 @@ int	launch_philos(t_rules *rules)
 		}
 		i++;
 	}
-	usleep(rules->t_to_eat * 1000 * 0.9);
+	usleep(10000);
+//	usleep(rules->t_to_eat * 1000 * 0.9);
 	i = 0;
 	while (i < philo_count)
 	{
