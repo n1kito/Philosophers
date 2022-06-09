@@ -69,27 +69,15 @@ a philosopher dies of starvation.
 # Daily Goals
 
 - [ ] Improve freester to deal with killing threads & mutexes
-- [ ] Proteger ma fonction print.
-- [ ] Remove all uses of `exit`
 - [ ] Handle leaks when a philo dies
   - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
     - [ ] Can't destroy all my mutexes because some of them are probably locked when I exit.
       - I need to fix this.
 
 # To do
-- [ ] Corriger la formule du check_dead_philo:
-  - I think it's ok...
-- > time_to_die (in milliseconds): If a philosopher didn’t start eating time_to_die
-  milliseconds since the beginning of their last meal or the beginning of the sim-
-  ulation, they die.
-- [ ] Est-ce que je peux genre ne commencer a manger que quand tous mes philos sont generes parce que sinon c'est la totale merde?
-  - [ ] Il faut que j'essaye de faire comme ca je pense, surtout que sinon 
-- [ ] Make sure that my philo_id is i + 1 before pushing, to respect the subject rules.
 - [ ] `[1]    410627 segmentation fault (core dumped)  ./philo 300 410 200 200 15`
-- [ ] Should the pthread be init as detachable ? [see man](http://manpagesfr.free.fr/man/man3/pthread_detach.3.html)
-- [ ] `./philo 200 410 200 200 4` ne sort jamais du programme.
-- [ ] `./philo 4 310 200 100 20` est censé mourir mais je comprends pas trop pourquoi...
-  - J'ai un probleme de check de death time visiblement. Avec mon sleep time, c'est pas normal que mon philo creve pas.
+  - Plus de segfault MAIS j'ai un philo qui meurt. Peut-etre que c'est le monitor qui me bouffe toutes mes ressources ?
+- [ ] Mettre un mutex autour de "someone died" puisque plusieurs threads essayent d'y acceder en meme temps.
 
 # Process for this project
 

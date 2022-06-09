@@ -17,17 +17,17 @@
 void	*check_dead_philo(void *rules_tmp)
 {
 	t_rules	*rules;
-	int	i;
+	int		i;
 
 	rules = (t_rules *)rules_tmp;
 	while (!rules->someone_died
 		&& rules->full_dinners != rules->nb_of_philos)
 	{
 		i = 0;
-		while (i < rules->nb_of_philos)
+		while (i < rules->nb_of_philos && !rules->someone_died)
 		{
 //			printf("\033[0;33m**checking for a dead cunt\n\033[0m");
-			if ((get_time() - rules->start_time) - rules->philos[i]->last_meal > rules->t_to_die)
+			if (get_timestamp(rules->philos[i]) - rules->philos[i]->last_meal > rules->t_to_die)
 			{
 //				printf("\033[0;31m** %ld philo %d DIED after waiting for %ld **\033[0m\n", get_time() - rules->start_time, rules->philos[i]->philo_id, (get_time() - rules->start_time) - rules->philos[i]->last_meal);
 //				printf("%ld %d died\n", get_timestamp(rules->philos[i]),
@@ -103,7 +103,7 @@ void	*routine(void *philo_tmp)
 				break ;
 			}
 			print_status("is eating", philo);
-			philo->last_meal = get_time();
+			philo->last_meal = get_timestamp(philo);
 			usleep(philo->rules_ptr->t_to_eat * 1000);
 			philo->nb_meals++;
 //			print_status("has eaten", philo);
@@ -114,10 +114,11 @@ void	*routine(void *philo_tmp)
 				if (philo->is_done_eating
 					&& philo->rules_ptr->full_dinners == philo->rules_ptr->nb_of_philos)
 					return (NULL);
-			print_status("is thinking", philo);
-			usleep(philo->rules_ptr->t_to_eat * 1000 * 0.9);
 			print_status("is sleeping", philo);
 			usleep(philo->rules_ptr->t_to_sleep * 1000);
+			print_status("is thinking", philo);
+			usleep(1000);
+//			usleep(1000);
 		}
 		else
 			break;
