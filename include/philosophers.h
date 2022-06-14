@@ -69,9 +69,8 @@ void		init_struct(t_rules *rules);
 int			init_and_assign_forks(t_rules *rules);
 
 /* optimization.c */
-int			fork_pickup(t_philo *philo);
-int			fork_putdown(t_philo *philo);
-void		save_last_philo(t_philo *philo);
+void		fork_pickup(t_philo *philo);
+void		fork_putdown(t_philo *philo);
 long int	get_timestamp(t_philo *philo); // TODO this needs to go to a utils file
 
 /* philos.c */

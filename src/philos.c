@@ -26,6 +26,7 @@ void	*check_dead_philo(void *rules_tmp)
 	{
 		pthread_mutex_unlock(&rules->full_dinners_m);
 		if (rules->nb_of_philos > 1)
+//			usleep(5);
 			usleep(rules->die_t * 1000 + 1);
 		i = 0;
 		while (i < rules->nb_of_philos && !rules->someone_died)
@@ -92,11 +93,9 @@ int	has_eaten_enough(t_philo *philo)
 	if (philo->nb_meals == philo->rules->min_meals)
 	{
 		philo->is_done_eating = 1;
-		if (pthread_mutex_lock(&philo->rules->full_dinners_m) != 0)
-			return (print_err("Failed to lock mutex", 0));
+		pthread_mutex_lock(&philo->rules->full_dinners_m);
 		philo->rules->full_dinners++;
-		if (pthread_mutex_unlock(&philo->rules->full_dinners_m) != 0)
-			return (print_err("Failed to unlock mutex", 0));
+		pthread_mutex_unlock(&philo->rules->full_dinners_m);
 		return (1);
 	}
 	return (0);
@@ -113,42 +112,17 @@ void	change_state(t_philo *philo, char *state, long int time)
 /* Philo eating routine */
 // TODO protect nb of meals variable
 
-int	eating(t_philo *philo)
+void	eating(t_philo *philo)
 {
-	if (pthread_mutex_lock(&philo->rules->last_meal_m) != 0)
-		return (print_err("Failed to lock mutex", 0));
+	pthread_mutex_lock(&philo->rules->last_meal_m);
 	philo->last_meal = get_timestamp(philo);
-	if (pthread_mutex_unlock(&philo->rules->last_meal_m) != 0)
-		return (print_err("Failed to unlock mutex", 0));
+	pthread_mutex_unlock(&philo->rules->last_meal_m);
 	change_state(philo, "is eating", philo->rules->eat_t * 1000);
 	philo->nb_meals++;
 //			print_status("has eaten", philo);
 //	if (!has_eaten_enough(philo))
 //		return (0);
-	return (1);
 }
-
-//int	everyone_is_done_eating(t_philo *philo)
-//{
-//	if (philo->rules->min_meals)
-//	{
-//		if (pthread_mutex_lock(&philo->rules->full_dinners_m) != 0)
-//			return (print_err("Failed to lock mutex", 1));
-//		if (philo->is_done_eating
-//			&& philo->rules->full_dinners == philo->rules->nb_of_philos) //peux pas faire ca je crois, il est pas cense savoir qui a termine de bouffer.
-//		{
-//			if (pthread_mutex_unlock(&philo->rules->full_dinners_m) != 0)
-//				return (print_err("Failed to unlock mutex", 1));
-//			return (1);
-//		}
-//		else
-//		{
-//			if (pthread_mutex_unlock(&philo->rules->full_dinners_m) != 0)
-//				return (print_err("Failed to unlock mutex", 1));
-//		}
-//	}
-//	return (0);
-//}
 
 /* Routine that each philo has to follow */
 
@@ -164,16 +138,11 @@ void	*routine(void *philo_tmp)
 		if (philo->rules->min_meals == -1 || (philo->rules->min_meals
 				&& philo->nb_meals < philo->rules->min_meals))
 		{
-			if (!fork_pickup(philo))
-				return (NULL);
-			if (!eating(philo))
-				return (NULL);
-			if (!fork_putdown(philo))
-				return (NULL);
+			fork_pickup(philo);
+			eating(philo);
+			fork_putdown(philo);
 			if (has_eaten_enough(philo))
 				return (NULL);
-//			if (everyone_is_done_eating(philo))
-//				return (NULL);
 			change_state(philo, "is sleeping", philo->rules->sleep_t * 1000);
 			change_state(philo, "is thinking", 1000);
 		}
