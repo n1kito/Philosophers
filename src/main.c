@@ -31,7 +31,8 @@ int	main(int argc, char *argv[])
 		i++;
 	}
 	pthread_join(monitor, NULL);
-	if (rules.min_meals && rules.full_dinners == rules.nb_of_philos)
+	if (!rules.someone_died && rules.min_meals
+		&& rules.full_dinners == rules.nb_of_philos)
 		printf("Everyone ate %ld times.\n", rules.min_meals);
 //	printf("***** did we get here ?\n");
 	return (freester(&rules, 0));

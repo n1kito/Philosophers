@@ -71,14 +71,13 @@ a philosopher dies of starvation.
 - [x] Divide routine function into several smaller ones.
 
 # To do
-- [ ] En nombre impaire je recupere pas ma ligne de commande quand ils crevent.
+- [ ] Si j'ai un seul philo et que je mets un `min meals` il creve tout de suite, mais si j'en mets pas il crevent au bout de `t_to_die` * 2
 - [ ] Chopper les cas d'erreur de tous mes mutex
 - [ ] Gérer les overflows dans les arguments
 - [ ] Gérer les underflows dans les arguments
 - [ ] Gérer les min/max int dans les arguments
 - [ ] `[1]    410627 segmentation fault (core dumped)  ./philo 300 410 200 200 15`
   - Plus de segfault MAIS j'ai un philo qui meurt. Peut-etre que c'est le monitor qui me bouffe toutes mes ressources ?
-- [ ] Mettre un mutex autour de "someone died" puisque plusieurs threads essayent d'y acceder en meme temps.
 - [ ] Faire un `usleep` plus petit qui check regulierement s'il y a eu un mort ou pas.
 - [ ] Improve freester to deal with killing threads & mutexes
 - [ ] Handle leaks when a philo dies
@@ -113,6 +112,8 @@ graph TD;
 - [x] Number of philos is <= 0
 - [x] Number of milliseconds is <=0 (= 0 aussi ?)
 - [x] Arguments contain forbidden characters
+- [ ] Argument overflow ( > `MAX_INT`)
+- [ ] Argument underflow (< `MIN_INT`)
 
 **Leaks**
 - [ ] Any of the parameters are incorrect
@@ -122,6 +123,7 @@ graph TD;
   - For any of the philo structs in the array
 - [ ] Mutex_init failed
 - [ ] Thread init failed
+- [ ] Any mutex lock/unlock failed
 
 # Notes
 

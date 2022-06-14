@@ -25,7 +25,8 @@ void	*check_dead_philo(void *rules_tmp)
 		&& rules->full_dinners != rules->nb_of_philos)
 	{
 		pthread_mutex_unlock(&rules->full_dinners_m);
-		usleep(rules->die_t * 1000 + 1);
+		if (rules->nb_of_philos > 1)
+			usleep(rules->die_t * 1000 + 1);
 		i = 0;
 		while (i < rules->nb_of_philos && !rules->someone_died)
 		{
@@ -127,27 +128,27 @@ int	eating(t_philo *philo)
 	return (1);
 }
 
-int	everyone_is_done_eating(t_philo *philo)
-{
-	if (philo->rules->min_meals)
-	{
-		if (pthread_mutex_lock(&philo->rules->full_dinners_m) != 0)
-			return (print_err("Failed to lock mutex", 1));
-		if (philo->is_done_eating
-			&& philo->rules->full_dinners == philo->rules->nb_of_philos) //peux pas faire ca je crois, il est pas cense savoir qui a termine de bouffer.
-		{
-			if (pthread_mutex_unlock(&philo->rules->full_dinners_m) != 0)
-				return (print_err("Failed to unlock mutex", 1));
-			return (1);
-		}
-		else
-		{
-			if (pthread_mutex_unlock(&philo->rules->full_dinners_m) != 0)
-				return (print_err("Failed to unlock mutex", 1));
-		}
-	}
-	return (0);
-}
+//int	everyone_is_done_eating(t_philo *philo)
+//{
+//	if (philo->rules->min_meals)
+//	{
+//		if (pthread_mutex_lock(&philo->rules->full_dinners_m) != 0)
+//			return (print_err("Failed to lock mutex", 1));
+//		if (philo->is_done_eating
+//			&& philo->rules->full_dinners == philo->rules->nb_of_philos) //peux pas faire ca je crois, il est pas cense savoir qui a termine de bouffer.
+//		{
+//			if (pthread_mutex_unlock(&philo->rules->full_dinners_m) != 0)
+//				return (print_err("Failed to unlock mutex", 1));
+//			return (1);
+//		}
+//		else
+//		{
+//			if (pthread_mutex_unlock(&philo->rules->full_dinners_m) != 0)
+//				return (print_err("Failed to unlock mutex", 1));
+//		}
+//	}
+//	return (0);
+//}
 
 /* Routine that each philo has to follow */
 
@@ -180,6 +181,7 @@ void	*routine(void *philo_tmp)
 			break ;
 		pthread_mutex_lock(&philo->rules->someone_died_m);
 	}
+	pthread_mutex_unlock(&philo->rules->someone_died_m);
 	return (NULL);
 }
 
