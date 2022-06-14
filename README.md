@@ -68,9 +68,10 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
-- [x] Divide routine function into several smaller ones.
 
 # To do
+- [ ] Changer usleep en ft_usleep et en profiter pour arreter la boucle s'il y en a un qui creve au milieu
+- [ ] Recalculer les usleep avec le [doc d'anthony](https://docs.google.com/spreadsheets/d/1F1s2lLTEK11EZLwWMTJy3xkg6BsN7vR-tJHPQ_W8kJE/edit#gid=627767135)
 - [ ] Si j'ai un seul philo et que je mets un `min meals` il creve tout de suite, mais si j'en mets pas il crevent au bout de `t_to_die` * 2
 - [ ] Chopper les cas d'erreur de tous mes mutex
 - [ ] Gérer les overflows dans les arguments
