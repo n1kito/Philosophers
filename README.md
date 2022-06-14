@@ -14,18 +14,18 @@ You will see how to create threads and you will discover mutexes.
 
 - [ ] Compile project using `cc`
 - [ ] Global variables are forbidden
-- [ ] Program should take the following arguments : `number_of_philosophers t_to_die t_to_eat t_to_sleep
+- [ ] Program should take the following arguments : `number_of_philosophers die_t eat_t sleep_t
   [number_of_times_each_philosopher_must_eat]`
   - `number_of_philosophers`: The number of philosophers and also the number
     of forks.
-  - `t_to_die` (in milliseconds): If a philosopher didn’t start eating t_to_die milliseconds since the beginning of their last meal or the beginning of the simulation, they die.
-  - `t_to_eat` (in milliseconds): The time it takes for a philosopher to eat. During that time, they will need to hold two forks.
-  - `t_to_sleep` (in milliseconds): The time a philosopher will spend sleeping.
+  - `die_t` (in milliseconds): If a philosopher didn’t start eating die_t milliseconds since the beginning of their last meal or the beginning of the simulation, they die.
+  - `eat_t` (in milliseconds): The time it takes for a philosopher to eat. During that time, they will need to hold two forks.
+  - `sleep_t` (in milliseconds): The time a philosopher will spend sleeping.
   - `number_of_times_each_philosopher_must_eat` (_optional argument_): If all philosophers have eaten at least `number_of_times_each_philosopher_must_eat` times, the simulation stops. If not specified, the simulation stops when a philosopher dies.
 - [ ] Each philosopher has a number ranging from 1 to `number_of_philosophers`.
 - [ ] Philosopher `number 1` sits next to philosopher number `number_of_philosophers`. Any other philosopher number `N` sits between philosopher number `N - 1` and philosopher number `N + 1`.
 
-**General rules_ptr**
+**General rules**
 
 - The philosophers alternatively eat, think, or sleep.
   - While they are eating, they are not thinking nor sleeping;
@@ -68,14 +68,11 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
-- [ ] Only start dinner once all philos have been generated ?
-- [ ] Improve freester to deal with killing threads & mutexes
-- [ ] Handle leaks when a philo dies
-  - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
-    - [ ] Can't destroy all my mutexes because some of them are probably locked when I exit.
-      - I need to fix this.
+- [x] Divide routine function into several smaller ones.
 
 # To do
+- [ ] En nombre impaire je recupere pas ma ligne de commande quand ils crevent.
+- [ ] Chopper les cas d'erreur de tous mes mutex
 - [ ] Gérer les overflows dans les arguments
 - [ ] Gérer les underflows dans les arguments
 - [ ] Gérer les min/max int dans les arguments
@@ -83,6 +80,11 @@ a philosopher dies of starvation.
   - Plus de segfault MAIS j'ai un philo qui meurt. Peut-etre que c'est le monitor qui me bouffe toutes mes ressources ?
 - [ ] Mettre un mutex autour de "someone died" puisque plusieurs threads essayent d'y acceder en meme temps.
 - [ ] Faire un `usleep` plus petit qui check regulierement s'il y a eu un mort ou pas.
+- [ ] Improve freester to deal with killing threads & mutexes
+- [ ] Handle leaks when a philo dies
+    - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
+        - [ ] Can't destroy all my mutexes because some of them are probably locked when I exit.
+            - I need to fix this.
 
 # Process for this project
 
@@ -97,7 +99,7 @@ graph TD;
 2. Check and parse arguments
 3. Assign main t_rules variables with corresponding arguments.
 4. Initialize mutex.
-5. Correctly link the t_philo & t_rules structures (every t_philo node is indexed in t_rules, and all t_philos contain a link to rules_ptr)
+5. Correctly link the t_philo & t_rules structures (every t_philo node is indexed in t_rules, and all t_philos contain a link to rules)
 6. Start routine:
    1. Philos with uneven ID pick up left fork.
    2. Philos with uneven ID pick up right fork.

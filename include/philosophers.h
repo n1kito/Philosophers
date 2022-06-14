@@ -34,21 +34,24 @@ typedef struct s_philo
 	int				nb_meals;
 	int				is_done_eating;
 	long int		last_meal;
-	struct s_rules	*rules_ptr;
+	struct s_rules	*rules;
 }				t_philo;
 
 typedef struct s_rules
 {
 	long int		nb_of_philos;
-	long int		t_to_die;
-	long int		t_to_eat;
-	long int		t_to_sleep;
+	long int		die_t;
+	long int		eat_t;
+	long int		sleep_t;
 	long int		min_meals;
 	long int		start_time;
 	int				someone_died;
 	int				full_dinners;
 	struct s_philo	**philos;
-	pthread_mutex_t	printer;
+	pthread_mutex_t	printer_m;
+	pthread_mutex_t	last_meal_m;
+	pthread_mutex_t	full_dinners_m;
+	pthread_mutex_t	someone_died_m;
 //	pthread_mutex_t	philo_init;
 	pthread_mutex_t	**forks;
 }				t_rules;

@@ -45,9 +45,9 @@ int	param_values_check(int argc, char *argv[])
 	if (ft_atol(argv[2]) <= 0)
 		ft_putstr_fd("> [time_do_die] can't be negative or 0.\n", 2);
 	if (ft_atol(argv[3]) <= 0)
-		ft_putstr_fd("> [t_to_eat] can't be negative or 0.\n", 2);
+		ft_putstr_fd("> [eat_t] can't be negative or 0.\n", 2);
 	if (ft_atol(argv[4]) <= 0)
-		ft_putstr_fd("> [t_to_sleep] can't be negative or 0.\n", 2);
+		ft_putstr_fd("> [sleep_t] can't be negative or 0.\n", 2);
 	if (argc == 6 && ft_atol(argv[5]) <= 0)
 		ft_putstr_fd("> Philosophers need to eat at least once.\n", 2);
 	return (0);

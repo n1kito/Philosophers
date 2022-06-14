@@ -130,14 +130,21 @@ int	ft_strncmp(const char *first, const char *second, size_t length)
 	return (0);
 }
 
+/* Protects my messages being printed and only prints if nobody died (except for
+ * the message that announced the death of a philo) and if all philos are not
+ * done eating. */
+// Je pense que je dois mutex someone_died ici aussi
+
 int	print_status(char *status, t_philo *philo)
 {
-	if (pthread_mutex_lock(&philo->rules_ptr->printer) != 0)
-		return (print_err("Could not lock printer mutex", 0));
-	if ((philo->rules_ptr->someone_died == 0 || !ft_strncmp(status, "died", 4))
-		&& philo->rules_ptr->full_dinners != philo->rules_ptr->nb_of_philos)
-		printf("%ld %d %s\n", get_timestamp(philo), philo->philo_id + 1, status);
-	if (pthread_mutex_unlock(&philo->rules_ptr->printer) != 0)
-		return (print_err("Could not unlock printer mutex", 0));
+	if (pthread_mutex_lock(&philo->rules->printer_m) != 0)
+		return (print_err("Could not lock printer_m mutex", 0));
+	pthread_mutex_lock(&philo->rules->full_dinners_m);
+	if ((philo->rules->someone_died == 0 || !ft_strncmp(status, "died", 4))
+		&& philo->rules->full_dinners != philo->rules->nb_of_philos)
+		printf("%ld %d %s\n", get_timestamp(philo), philo->philo_id + 1, status); // TODO replace with protected function
+	if (pthread_mutex_unlock(&philo->rules->printer_m) != 0)
+		return (print_err("Could not unlock printer_m mutex", 0));
+	pthread_mutex_unlock(&philo->rules->full_dinners_m);
 	return (1);
 }

@@ -18,31 +18,28 @@
 
 int	fork_pickup(t_philo *philo)
 {
-	int	philo_id;
-
-	philo_id = philo->philo_id;
-	if (philo_id % 2 == 0)
+	if (philo->philo_id % 2 == 0)
 	{
 		if (pthread_mutex_lock(philo->left_fork) != 0)
 			return (print_err("Failed to lock mutex", 0));
-//		print_status("has taken a fork (left)", philo);
 		print_status("has taken a fork", philo);
-		if (philo->rules_ptr->nb_of_philos == 1)
-			return (1);
+		if (philo->rules->nb_of_philos == 1)
+		{
+			if (pthread_mutex_unlock(philo->left_fork) != 0)
+				print_err("Failed to unlock mutex", 0);
+			return (0);
+		}
 		if (philo->right_fork && pthread_mutex_lock(philo->right_fork) != 0)
 			return (print_err("Failed to lock mutex", 0));
-//		print_status("has taken a fork (right)", philo);
 		print_status("has taken a fork", philo);
 	}
 	else
 	{
 		if (philo->right_fork && pthread_mutex_lock(philo->right_fork) != 0)
 			return (print_err("Failed to lock mutex", 0));
-//		print_status("has taken a fork (right)", philo);
 		print_status("has taken a fork", philo);
 		if (pthread_mutex_lock(philo->left_fork) != 0)
 			return (print_err("Failed to lock mutex", 0));
-//		print_status("has taken a fork (left)", philo);
 		print_status("has taken a fork", philo);
 	}
 	return (1);
@@ -54,9 +51,6 @@ int	fork_pickup(t_philo *philo)
 // TODO Fix exit strategy for when unlocking failed
 int	fork_putdown(t_philo *philo)
 {
-	int	philo_id;
-
-	philo_id = philo->philo_id;
 	if (philo->philo_id % 2 == 0)
 	{
 		if (pthread_mutex_unlock(philo->left_fork) != 0)
@@ -86,8 +80,8 @@ int	fork_putdown(t_philo *philo)
 //	long int		philo_count;
 //	t_philo			*last_philo;
 //
-//	philo_count = philo->rules_ptr->nb_of_philos;
-//	last_philo = philo->rules_ptr->philos[philo_count - 1];
+//	philo_count = philo->rules->nb_of_philos;
+//	last_philo = philo->rules->philos[philo_count - 1];
 //	if (philo->philo_id == 0 && philo->nb_meals)
 //		while (last_philo->nb_meals != philo->nb_meals)
 //			usleep(1);
@@ -97,5 +91,8 @@ int	fork_putdown(t_philo *philo)
 
 long int	get_timestamp(t_philo *philo)
 {
-	return (get_time() - philo->rules_ptr->start_time);
+	long int	timestamp;
+
+	timestamp = get_time() - philo->rules->start_time;
+	return (timestamp);
 }

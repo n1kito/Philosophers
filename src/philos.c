@@ -20,27 +20,40 @@ void	*check_dead_philo(void *rules_tmp)
 	int		i;
 
 	rules = (t_rules *)rules_tmp;
+	pthread_mutex_lock(&rules->full_dinners_m);
 	while (!rules->someone_died
 		&& rules->full_dinners != rules->nb_of_philos)
 	{
+		pthread_mutex_unlock(&rules->full_dinners_m);
+		usleep(rules->die_t * 1000 + 1);
 		i = 0;
 		while (i < rules->nb_of_philos && !rules->someone_died)
 		{
 //			printf("\033[0;33m**checking for a dead cunt\n\033[0m");
-			if (get_timestamp(rules->philos[i]) - rules->philos[i]->last_meal > rules->t_to_die)
+			pthread_mutex_lock(&rules->last_meal_m);
+			if (get_timestamp(rules->philos[i])
+				- rules->philos[i]->last_meal > rules->die_t)
 			{
+				pthread_mutex_unlock(&rules->last_meal_m);
 //				printf("\033[0;31m** %ld philo %d DIED after waiting for %ld **\033[0m\n", get_time() - rules->start_time, i + 1, (get_time() - rules->start_time) - rules->philos[i]->last_meal);
 //				printf("%ld %d died\n", get_timestamp(rules->philos[i]),
 //					rules->philos[i]->philo_id);
 				print_status("died", rules->philos[i]);
+				pthread_mutex_lock(&rules->someone_died_m);
 				rules->someone_died = 1;
+				pthread_mutex_unlock(&rules->someone_died_m);
 			}
+			else
+				pthread_mutex_unlock(&rules->last_meal_m);
 			i++;
 //			usleep(100000);
 //			else
 //				printf("\033[0;32m**No philo has died\n\033[0m");
 		}
+		pthread_mutex_lock(&rules->full_dinners_m);
 	}
+	if (rules->someone_died == 1 || rules->full_dinners == rules->nb_of_philos)
+		pthread_mutex_unlock(&rules->full_dinners_m);
 	return (NULL);
 }
 
@@ -72,14 +85,68 @@ void	*check_dead_philo(void *rules_tmp)
 //}
 
 /* Checks if each philo has eaten the max number of times they should have */
-
-void	has_eaten_enough(t_philo *philo)
+// TODO protect data races
+int	has_eaten_enough(t_philo *philo)
 {
-	if (philo->nb_meals == philo->rules_ptr->min_meals)
+	if (philo->nb_meals == philo->rules->min_meals)
 	{
 		philo->is_done_eating = 1;
-		philo->rules_ptr->full_dinners++;
+		if (pthread_mutex_lock(&philo->rules->full_dinners_m) != 0)
+			return (print_err("Failed to lock mutex", 0));
+		philo->rules->full_dinners++;
+		if (pthread_mutex_unlock(&philo->rules->full_dinners_m) != 0)
+			return (print_err("Failed to unlock mutex", 0));
+		return (1);
 	}
+	return (0);
+}
+
+/* Changes state of philo and waits for a set amount of time */
+
+void	change_state(t_philo *philo, char *state, long int time)
+{
+	print_status(state, philo);
+	usleep(time);
+}
+
+/* Philo eating routine */
+// TODO protect nb of meals variable
+
+int	eating(t_philo *philo)
+{
+	if (pthread_mutex_lock(&philo->rules->last_meal_m) != 0)
+		return (print_err("Failed to lock mutex", 0));
+	philo->last_meal = get_timestamp(philo);
+	if (pthread_mutex_unlock(&philo->rules->last_meal_m) != 0)
+		return (print_err("Failed to unlock mutex", 0));
+	change_state(philo, "is eating", philo->rules->eat_t * 1000);
+	philo->nb_meals++;
+//			print_status("has eaten", philo);
+//	if (!has_eaten_enough(philo))
+//		return (0);
+	return (1);
+}
+
+int	everyone_is_done_eating(t_philo *philo)
+{
+	if (philo->rules->min_meals)
+	{
+		if (pthread_mutex_lock(&philo->rules->full_dinners_m) != 0)
+			return (print_err("Failed to lock mutex", 1));
+		if (philo->is_done_eating
+			&& philo->rules->full_dinners == philo->rules->nb_of_philos) //peux pas faire ca je crois, il est pas cense savoir qui a termine de bouffer.
+		{
+			if (pthread_mutex_unlock(&philo->rules->full_dinners_m) != 0)
+				return (print_err("Failed to unlock mutex", 1));
+			return (1);
+		}
+		else
+		{
+			if (pthread_mutex_unlock(&philo->rules->full_dinners_m) != 0)
+				return (print_err("Failed to unlock mutex", 1));
+		}
+	}
+	return (0);
 }
 
 /* Routine that each philo has to follow */
@@ -89,49 +156,35 @@ void	*routine(void *philo_tmp)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_tmp;
-//	save_last_philo(philo); // j'ai pas le droit de faire ca en fait, puisqu'ils ont pas le droit de se parler entre eux
-	while (philo->rules_ptr->someone_died == 0) // j'ai pas le droit de faire ca non plus je crois
+	pthread_mutex_lock(&philo->rules->someone_died_m);
+	while (philo->rules->someone_died == 0)
 	{
-		if (philo->rules_ptr->min_meals == -1 || (philo->rules_ptr->min_meals
-				&& philo->nb_meals < philo->rules_ptr->min_meals))
+		pthread_mutex_unlock(&philo->rules->someone_died_m);
+		if (philo->rules->min_meals == -1 || (philo->rules->min_meals
+				&& philo->nb_meals < philo->rules->min_meals))
 		{
 			if (!fork_pickup(philo))
 				return (NULL);
-			if (philo->rules_ptr->nb_of_philos == 1)
-			{
-				if (pthread_mutex_unlock(philo->left_fork) != 0)
-					print_err("Failed to unlock mutex", 0);
-				break ;
-			}
-			print_status("is eating", philo);
-			philo->last_meal = get_timestamp(philo);
-			usleep(philo->rules_ptr->t_to_eat * 1000);
-			philo->nb_meals++;
-//			print_status("has eaten", philo);
-			has_eaten_enough(philo);
+			if (!eating(philo))
+				return (NULL);
 			if (!fork_putdown(philo))
 				return (NULL);
-			if (philo->rules_ptr->min_meals)
-				if (philo->is_done_eating
-					&& philo->rules_ptr->full_dinners == philo->rules_ptr->nb_of_philos)
-					return (NULL);
-			print_status("is sleeping", philo);
-			usleep(philo->rules_ptr->t_to_sleep * 1000);
-			print_status("is thinking", philo);
-//			usleep(10000);
-			usleep(1000);
+			if (has_eaten_enough(philo))
+				return (NULL);
+//			if (everyone_is_done_eating(philo))
+//				return (NULL);
+			change_state(philo, "is sleeping", philo->rules->sleep_t * 1000);
+			change_state(philo, "is thinking", 1000);
 		}
 		else
 			break ;
+		pthread_mutex_lock(&philo->rules->someone_died_m);
 	}
-//	print_status("is done", philo);
-//	printf("*philo %d is done\n", philo->philo_id);
 	return (NULL);
 }
 
 /* Starts philos/threads one at a time */
-// TODO rajouter un mutex ici que je lock avant l'init et que j'unlock apres,
-// juste apres avoir sauvegarde le dinner start time.
+
 int	launch_philos(t_rules *rules)
 {
 	int	i;
@@ -142,25 +195,19 @@ int	launch_philos(t_rules *rules)
 	while (i < philo_count)
 	{
 		if (i % 2 == 0)
-		{
-//			printf("%ld Initiate even philo %d\n", get_time() - rules->start_time, i);
-			if (pthread_create(&rules->philos[i]->philo, NULL, &routine, rules->philos[i]) != 0)
+			if (pthread_create(&rules->philos[i]->philo,
+					NULL, &routine, rules->philos[i]) != 0)
 				return (print_err("Failed to create philo", 0));
-		}
 		i++;
 	}
 	usleep(10000);
-//	usleep(rules->t_to_eat * 1000 * 0.9);
 	i = 0;
 	while (i < philo_count)
 	{
 		if (i % 2 != 0)
-		{
-//			printf("%ld Initiate odd philo %d\n", get_time() - rules->start_time, i);
 			if (pthread_create(&rules->philos[i]->philo,
 					NULL, &routine, rules->philos[i]) != 0)
 				return (print_err("Failed to create philo", 0));
-		}
 		i++;
 	}
 	return (1);
