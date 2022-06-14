@@ -72,7 +72,6 @@ a philosopher dies of starvation.
 # To do
 - [ ] Changer usleep en ft_usleep et en profiter pour arreter la boucle s'il y en a un qui creve au milieu
 - [ ] Recalculer les usleep avec le [doc d'anthony](https://docs.google.com/spreadsheets/d/1F1s2lLTEK11EZLwWMTJy3xkg6BsN7vR-tJHPQ_W8kJE/edit#gid=627767135)
-- [ ] Virer toutes les protections de mes mutex.
 - [ ] Si j'ai un seul philo et que je mets un `min meals` il creve tout de suite, mais si j'en mets pas il crevent au bout de `t_to_die` * 2
 - [ ] Chopper les cas d'erreur de tous mes mutex
 - [ ] Gérer les overflows dans les arguments
@@ -80,7 +79,6 @@ a philosopher dies of starvation.
 - [ ] Gérer les min/max int dans les arguments
 - [ ] `[1]    410627 segmentation fault (core dumped)  ./philo 300 410 200 200 15`
   - Plus de segfault MAIS j'ai un philo qui meurt. Peut-etre que c'est le monitor qui me bouffe toutes mes ressources ?
-- [ ] Faire un `usleep` plus petit qui check regulierement s'il y a eu un mort ou pas.
 - [ ] Improve freester to deal with killing threads & mutexes
 - [ ] Handle leaks when a philo dies
     - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
@@ -126,6 +124,9 @@ graph TD;
 - [ ] Mutex_init failed
 - [ ] Thread init failed
 - [ ] Any mutex lock/unlock failed
+- [ ] Philo dies
+- [ ] Single philo dies
+- [ ] Odd number of philo dies
 
 # Notes
 
