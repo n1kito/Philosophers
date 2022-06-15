@@ -279,6 +279,7 @@ Quand on rencontre une erreur:
 </details>
 
 ## Resources
+- [My visualizer](https://docs.google.com/spreadsheets/d/15RSW4PujBhPOjuWHYS8JGjtafWilYjCEcoSwhd1DWW8/edit#gid=0)
 - ⭐ [GDoc cbarbit](https://docs.google.com/document/d/1EeAgXkygFQu8qNJby_PP6XO9jWEpMlHozX1fCX64Bvg/edit)
 - ⭐ [A great checker](https://github.com/busshi/philo_checker)
 - [Philo visualizer](https://nafuka11.github.io/philosophers-visualizer/)
