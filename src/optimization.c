@@ -25,7 +25,7 @@ void	fork_pickup(t_philo *philo)
 		if (philo->rules->nb_of_philos == 1)
 		{
 			pthread_mutex_unlock(philo->left_fork);
-			return (0);
+			return ;
 		}
 		if (philo->right_fork)
 			pthread_mutex_lock(philo->right_fork);
@@ -39,7 +39,6 @@ void	fork_pickup(t_philo *philo)
 		pthread_mutex_lock(philo->left_fork);
 		print_status("has taken a fork", philo);
 	}
-	return (1);
 }
 
 /* Puts down forks in a certain order depending on whether the philo_id is even
@@ -62,7 +61,6 @@ void	fork_putdown(t_philo *philo)
 		pthread_mutex_unlock(philo->left_fork);
 //		print_status("unlocked a fork (left)", philo);
 	}
-	return (1);
 }
 
 /* Returns current timestamp */

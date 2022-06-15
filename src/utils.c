@@ -137,14 +137,25 @@ int	ft_strncmp(const char *first, const char *second, size_t length)
 
 int	print_status(char *status, t_philo *philo)
 {
-	if (pthread_mutex_lock(&philo->rules->printer_m) != 0)
-		return (print_err("Could not lock printer_m mutex", 0));
+	pthread_mutex_lock(&philo->rules->printer_m);
 	pthread_mutex_lock(&philo->rules->full_dinners_m);
 	if ((philo->rules->someone_died == 0 || !ft_strncmp(status, "died", 4))
 		&& philo->rules->full_dinners != philo->rules->nb_of_philos)
 		printf("%ld %d %s\n", get_timestamp(philo), philo->philo_id + 1, status); // TODO replace with protected function
-	if (pthread_mutex_unlock(&philo->rules->printer_m) != 0)
-		return (print_err("Could not unlock printer_m mutex", 0));
+	pthread_mutex_unlock(&philo->rules->printer_m);
 	pthread_mutex_unlock(&philo->rules->full_dinners_m);
 	return (1);
+}
+
+void	philo_sleep(t_philo *philo, long int time)
+{
+	long int	start_time;
+
+	start_time = get_timestamp(philo);
+	while ((get_timestamp(philo) - start_time) < time && !philo->rules->someone_died)
+	{
+//		printf("%ld sleeping since %ld \n", get_timestamp(philo), (get_timestamp(philo) - start_time));
+		usleep(600);
+	}
+//	printf("philo sleep done\n");
 }

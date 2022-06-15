@@ -43,16 +43,18 @@ typedef struct s_rules
 	long int		die_t;
 	long int		eat_t;
 	long int		sleep_t;
+	long int		think_t;
 	long int		min_meals;
 	long int		start_time;
 	int				someone_died;
 	int				full_dinners;
+	int 			dinner_is_over;
 	struct s_philo	**philos;
 	pthread_mutex_t	printer_m;
 	pthread_mutex_t	last_meal_m;
 	pthread_mutex_t	full_dinners_m;
 	pthread_mutex_t	someone_died_m;
-//	pthread_mutex_t	philo_init;
+	pthread_mutex_t	philo_init;
 	pthread_mutex_t	**forks;
 }				t_rules;
 
@@ -74,7 +76,7 @@ void		fork_putdown(t_philo *philo);
 long int	get_timestamp(t_philo *philo); // TODO this needs to go to a utils file
 
 /* philos.c */
-int			launch_philos(t_rules *rules);
+int			launch_philos(t_rules *rules, pthread_t *monitor);
 void		init_philos(t_rules *rules);
 
 /* setup.c */
@@ -88,5 +90,6 @@ int			ft_is_digit(char c);
 int			freester(t_rules *rules, int return_value);
 long int	get_time(void);
 int			print_status(char *status, t_philo *philo);
+void		philo_sleep(t_philo *philo, long int time);
 
 #endif

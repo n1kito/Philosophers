@@ -55,14 +55,19 @@ int	mem_alloc(t_rules *rules)
 static int	init_rules(char *argv[], int argc, t_rules *rules)
 {
 	rules->nb_of_philos = ft_atol(argv[1]);
+	rules->dinner_is_over = 0;
 	rules->die_t = ft_atol(argv[2]);
 	rules->eat_t = ft_atol(argv[3]);
 	rules->sleep_t = ft_atol(argv[4]);
-	rules->start_time = get_time(); // moved to launch philos function
+	if (rules->eat_t <= rules->sleep_t)
+		rules->think_t = 1 / 10;
+	else
+		rules->think_t = rules->eat_t - rules->sleep_t;
+//	rules->start_time = get_time(); // moved to launch philos function
 	rules->someone_died = 0;
 	rules->full_dinners = 0;
-	if (rules->start_time == -1)
-		return (0);
+//	if (rules->start_time == -1)
+//		return (0);
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);
 	if (pthread_mutex_init(&rules->printer_m, NULL) != 0)
@@ -72,6 +77,8 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	if (pthread_mutex_init(&rules->full_dinners_m, NULL) != 0)
 		return (print_err("Failed to initiate full_dinners_m mutex", 0));
 	if (pthread_mutex_init(&rules->someone_died_m, NULL) != 0)
+		return (print_err("Failed to initiate someone_died_m mutex", 0));
+	if (pthread_mutex_init(&rules->philo_init, NULL) != 0)
 		return (print_err("Failed to initiate someone_died_m mutex", 0));
 	return (1);
 }

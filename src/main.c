@@ -21,8 +21,8 @@ int	main(int argc, char *argv[])
 	init_struct(&rules);
 	if (!setup_rules(&rules, argv, argc))
 		return (freester(&rules, 1));
-	pthread_create(&monitor, NULL, &check_dead_philo, &rules);
-	if (!launch_philos(&rules))
+//	pthread_create(&monitor, NULL, &check_dead_philo, &rules);
+	if (!launch_philos(&rules, &monitor))
 		return (freester(&rules, 1));
 	i = 0;
 	while (i < rules.nb_of_philos)
@@ -33,7 +33,7 @@ int	main(int argc, char *argv[])
 	pthread_join(monitor, NULL);
 	if (!rules.someone_died && rules.min_meals
 		&& rules.full_dinners == rules.nb_of_philos)
-		printf("Everyone ate %ld times.\n", rules.min_meals);
+		printf("\033[0;92mEveryone ate \033[1m%ld\033[0;92m times.\033[0;39m\n", rules.min_meals);
 //	printf("***** did we get here ?\n");
 	return (freester(&rules, 0));
 }

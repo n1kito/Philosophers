@@ -68,6 +68,10 @@ a philosopher dies of starvation.
 
 # Daily Goals
 
+- [ ] Implementer ft_usleep
+- [ ] Implementer le calcul du think time.
+  - If `t_to_eat` <= `t_to_sleep` then `t_to_think` = 0.1
+  - If `t_to_eat` > `t_to_sleep` then `t_to_think` = `t_to_eat` - `t_to_sleep`
 
 # To do
 - [ ] Changer usleep en ft_usleep et en profiter pour arreter la boucle s'il y en a un qui creve au milieu
