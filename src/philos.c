@@ -20,8 +20,8 @@ void	*check_dead_philo(void *rules_tmp)
 	int		i;
 
 	rules = (t_rules *)rules_tmp;
-//	pthread_mutex_lock(&rules->philo_init);
-//	pthread_mutex_unlock(&rules->philo_init);
+	pthread_mutex_lock(&rules->philo_init);
+	pthread_mutex_unlock(&rules->philo_init);
 	philo_sleep(rules->philos[0], rules->die_t);
 	pthread_mutex_lock(&rules->full_dinners_m);
 	while (!rules->someone_died
@@ -93,14 +93,17 @@ void	*routine(void *philo_tmp)
 ////		printf("0 %d is thinking\n", philo->philo_id + 1);
 //		usleep(philo->rules->eat_t);
 //	}
-//	pthread_mutex_lock(&philo->rules->philo_init);
-//	pthread_mutex_unlock(&philo->rules->philo_init);
 //	if (philo->rules->nb_of_philos % 2 != 0 && philo->philo_id == 0)
 //		philo_sleep(philo, philo->rules->eat_t);
-	pthread_mutex_lock(&philo->rules->someone_died_m);
-	if (philo->rules->nb_of_philos % 2 != 0 && philo->philo_id == 0)
+	pthread_mutex_lock(&philo->rules->philo_init);
+	pthread_mutex_unlock(&philo->rules->philo_init);
+	if (philo->philo_id % 2 != 0)
+//		philo_sleep(philo, philo->rules->eat_t);
+		usleep(1000);
+	if (philo->rules->nb_of_philos % 2 != 0 && philo->philo_id == philo->rules->nb_of_philos - 1)
 //		philo_sleep(philo, 610);
 		usleep(1000);
+	pthread_mutex_lock(&philo->rules->someone_died_m);
 	while (philo->rules->someone_died == 0
 		&& philo->rules->full_dinners != philo->rules->nb_of_philos)
 	{
@@ -111,7 +114,9 @@ void	*routine(void *philo_tmp)
 		eating(philo);
 		fork_putdown(philo);
 		change_state(philo, SLEEPING, philo->rules->sleep_t);
-		change_state(philo, THINKING, philo->rules->think_t);
+//		change_state(philo, THINKING, philo->rules->think_t);
+		print_status(THINKING, philo);
+		usleep(philo->rules->think_t);
 		pthread_mutex_lock(&philo->rules->someone_died_m);
 	}
 	pthread_mutex_unlock(&philo->rules->someone_died_m);
@@ -126,12 +131,8 @@ int	launch_philos(t_rules *rules, pthread_t *monitor)
 	int	philo_count;
 
 	philo_count = (int)rules->nb_of_philos;
-//	pthread_mutex_lock(&rules->philo_init);
-	rules->start_time = get_time();
-	if (rules->start_time == -1)
-		return (0);
+	pthread_mutex_lock(&rules->philo_init);
 	i = 0;
-	pthread_create(monitor, NULL, &check_dead_philo, rules);
 	while (i < philo_count)
 	{
 //		if (i % 2 == 0)
@@ -142,6 +143,10 @@ int	launch_philos(t_rules *rules, pthread_t *monitor)
 //			printf("++ Created philo %d\n", rules->philos[i]->philo_id + 1);
 		i++;
 	}
+	rules->start_time = get_time();
+	if (rules->start_time == -1)
+		return (0);
+	pthread_create(monitor, NULL, &check_dead_philo, rules);
 //	philo_sleep(rules->philos[0], rules->eat_t);
 //	i = 0;
 //	while (i < philo_count)
@@ -154,7 +159,7 @@ int	launch_philos(t_rules *rules, pthread_t *monitor)
 ////			printf("++ Created philo %d\n", rules->philos[i]->philo_id + 1);
 //		i++;
 //	}
-//	pthread_mutex_unlock(&rules->philo_init);
+	pthread_mutex_unlock(&rules->philo_init);
 	return (1);
 }
 
