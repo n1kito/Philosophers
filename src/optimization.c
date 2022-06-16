@@ -50,15 +50,15 @@ void	fork_putdown(t_philo *philo)
 	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_unlock(philo->left_fork);
-//		print_status("unlocked a fork (left)", philo);
 		pthread_mutex_unlock(philo->right_fork);
+//		print_status("unlocked a fork (left)", philo);
 //		print_status("unlocked a fork (right)", philo);
 	}
 	else
 	{
 		pthread_mutex_unlock(philo->right_fork);
-//		print_status("unlocked a fork (right)", philo);
 		pthread_mutex_unlock(philo->left_fork);
+//		print_status("unlocked a fork (right)", philo);
 //		print_status("unlocked a fork (left)", philo);
 	}
 }

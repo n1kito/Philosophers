@@ -166,7 +166,7 @@ void	philo_sleep(t_philo *philo, long int time)
 	pthread_mutex_unlock(&philo->rules->someone_died_m);
 }
 
-/* Returns current timestamp */
+/* Returns current timestamp in ms */
 
 long int	get_timestamp(t_philo *philo)
 {

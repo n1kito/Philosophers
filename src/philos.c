@@ -98,6 +98,9 @@ void	*routine(void *philo_tmp)
 //	if (philo->rules->nb_of_philos % 2 != 0 && philo->philo_id == 0)
 //		philo_sleep(philo, philo->rules->eat_t);
 	pthread_mutex_lock(&philo->rules->someone_died_m);
+	if (philo->rules->nb_of_philos % 2 != 0 && philo->philo_id == 0)
+//		philo_sleep(philo, 610);
+		usleep(1000);
 	while (philo->rules->someone_died == 0
 		&& philo->rules->full_dinners != philo->rules->nb_of_philos)
 	{
@@ -131,7 +134,7 @@ int	launch_philos(t_rules *rules, pthread_t *monitor)
 	pthread_create(monitor, NULL, &check_dead_philo, rules);
 	while (i < philo_count)
 	{
-		if (i % 2 == 0)
+//		if (i % 2 == 0)
 			if (pthread_create(&rules->philos[i]->philo,
 					NULL, &routine, rules->philos[i]) != 0)
 				return (print_err("Failed to create philo", 0));
@@ -139,18 +142,18 @@ int	launch_philos(t_rules *rules, pthread_t *monitor)
 //			printf("++ Created philo %d\n", rules->philos[i]->philo_id + 1);
 		i++;
 	}
-	philo_sleep(rules->philos[0], rules->eat_t);
-	i = 0;
-	while (i < philo_count)
-	{
-		if (i % 2 != 0)
-			if (pthread_create(&rules->philos[i]->philo,
-					NULL, &routine, rules->philos[i]) != 0)
-				return (print_err("Failed to create philo", 0));
+//	philo_sleep(rules->philos[0], rules->eat_t);
+//	i = 0;
+//	while (i < philo_count)
+//	{
 //		if (i % 2 != 0)
-//			printf("++ Created philo %d\n", rules->philos[i]->philo_id + 1);
-		i++;
-	}
+//			if (pthread_create(&rules->philos[i]->philo,
+//					NULL, &routine, rules->philos[i]) != 0)
+//				return (print_err("Failed to create philo", 0));
+////		if (i % 2 != 0)
+////			printf("++ Created philo %d\n", rules->philos[i]->philo_id + 1);
+//		i++;
+//	}
 //	pthread_mutex_unlock(&rules->philo_init);
 	return (1);
 }

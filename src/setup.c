@@ -59,7 +59,7 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	rules->eat_t = ft_atol(argv[3]);
 	rules->sleep_t = ft_atol(argv[4]);
 	if (rules->eat_t <= rules->sleep_t)
-		rules->think_t = 1000;
+		rules->think_t = 1;
 	else
 		rules->think_t = rules->eat_t - rules->sleep_t;
 //	rules->start_time = get_time(); // moved to launch philos function

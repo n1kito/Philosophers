@@ -53,7 +53,7 @@ $(NAME): $(OBJ_FILES)
 	@echo "$(GREEN)$(NAME) compiled ✨ $(END_COLOR)"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile | $(BIN_DIR)
-	@$(CC) -D BORING=1 -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
+	@$(CC) -D BORING -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
 	@echo "$(BLUE)> compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
