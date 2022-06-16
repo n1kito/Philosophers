@@ -50,10 +50,10 @@ all: $(NAME)
 
 $(NAME): $(OBJ_FILES)
 	@$(CC) -pthread -o $(NAME) $(OBJ_FILES)
-	@echo "$(GREEN)$(NAME) compiled :) $(END_COLOR)"
+	@echo "$(GREEN)$(NAME) compiled ✨ $(END_COLOR)"
 
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR)
-	@$(CC) -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile | $(BIN_DIR)
+	@$(CC) -D BORING=1 -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
 	@echo "$(BLUE)> compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
@@ -69,7 +69,7 @@ fclean: clean
 	@echo "$(YELLOW)$(NAME) executable file cleaned.$(END_COLOR)"
 
 re: fclean all
-	@echo "Cleaned all and rebuilt $(NAME)!"
+	@echo "Cleaned all and rebuilt $(NAME)! ✔️"
 
 -include $(OBJ_FILES:%.o=%.d)
 

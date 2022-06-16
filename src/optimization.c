@@ -21,23 +21,23 @@ void	fork_pickup(t_philo *philo)
 	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->left_fork);
-		print_status("has taken a fork", philo);
+		print_status(FORK, philo);
 		if (philo->rules->nb_of_philos == 1)
 		{
 			pthread_mutex_unlock(philo->left_fork);
 			return ;
 		}
-		if (philo->right_fork)
+//		if (philo->right_fork) //TODO PK G MIS CA ?
 			pthread_mutex_lock(philo->right_fork);
-		print_status("has taken a fork", philo);
+		print_status(FORK, philo);
 	}
 	else
 	{
-		if (philo->right_fork)
+//		if (philo->right_fork) //TODO PK G MIS CA ?
 			pthread_mutex_lock(philo->right_fork);
-		print_status("has taken a fork", philo);
+		print_status(FORK, philo);
 		pthread_mutex_lock(philo->left_fork);
-		print_status("has taken a fork", philo);
+		print_status(FORK, philo);
 	}
 }
 

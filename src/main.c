@@ -32,7 +32,10 @@ int	main(int argc, char *argv[])
 	pthread_join(monitor, NULL);
 	if (!rules.someone_died && rules.min_meals
 		&& rules.full_dinners == rules.nb_of_philos)
-		printf("\033[0;92mEveryone ate \033[1m%ld\033[0;92m times.\033[0;39m\n",
+	{
+		printf(OK_SYMBOL);
+		printf("Everyone ate \033[1m%ld\033[0;92m time(s).\033[0;39m\n",
 			rules.min_meals);
+	}
 	return (freester(&rules, 0));
 }

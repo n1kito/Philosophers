@@ -141,7 +141,8 @@ int	print_status(char *status, t_philo *philo)
 	pthread_mutex_lock(&philo->rules->someone_died_m);
 	if ((philo->rules->someone_died == 0 || !ft_strncmp(status, "died", 4))
 		&& philo->rules->full_dinners != philo->rules->nb_of_philos)
-		printf("%ld %d %s\n", get_timestamp(philo), philo->philo_id + 1, status);
+		printf(STATUS, get_timestamp(philo),
+			philo->philo_id + 1, status);
 	pthread_mutex_unlock(&philo->rules->printer_m);
 	pthread_mutex_unlock(&philo->rules->full_dinners_m);
 	pthread_mutex_unlock(&philo->rules->someone_died_m);

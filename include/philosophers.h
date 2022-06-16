@@ -13,6 +13,24 @@
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
+# ifndef BORING
+#  define FORK "\U0001F374 has taken a fork"
+#  define EATING "\U0001F35D \033[0;33mis eating\033[0m"
+#  define SLEEPING "\U0001F4A4 \033[0;34mis sleeping\033[0m"
+#  define THINKING "\U0001F4AD \033[0;35mis thinking\033[0m"
+#  define DEAD "\U0000274C \033[1;31mdied\033[0m"
+#  define STATUS "\x1b[1m%ld\x1b[0m\t[%d]\t%s\n"
+#  define OK_SYMBOL "\U0001F60A \033[0;92m "
+# else
+#  define FORK "has taken a fork"
+#  define EATING "is eating"
+#  define SLEEPING "is sleeping"
+#  define THINKING "is thinking"
+#  define DEAD "died"
+#  define STATUS "%ld %d %s\n"
+#  define OK_SYMBOL "\033[0;92m"
+# endif
+
 /* ########################################################################## */
 /* INCLUDES */
 

@@ -69,6 +69,7 @@ a philosopher dies of starvation.
 # Daily Goals
 
 - [ ] is there a mutex to protect that a philo dies and starts eating at the same time ?
+- `./philo 3 610 200 200` fail
 
 # To do
 - [ ] Changer usleep en ft_usleep et en profiter pour arreter la boucle s'il y en a un qui creve au milieu

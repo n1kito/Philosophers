@@ -36,7 +36,7 @@ void	*check_dead_philo(void *rules_tmp)
 				- rules->philos[i]->last_meal > rules->die_t)
 			{
 				pthread_mutex_unlock(&rules->last_meal_m);
-				print_status("died", rules->philos[i]);
+				print_status(DEAD, rules->philos[i]);
 				pthread_mutex_lock(&rules->someone_died_m);
 				rules->someone_died = 1;
 				pthread_mutex_unlock(&rules->someone_died_m);
@@ -70,7 +70,7 @@ void	eating(t_philo *philo)
 //	if (!philo->rules->someone_died)
 //	{
 //		pthread_mutex_unlock(&philo->rules->someone_died_m);
-		change_state(philo, "is eating", philo->rules->eat_t);
+		change_state(philo, EATING, philo->rules->eat_t);
 //	}
 	philo->nb_meals++;
 	if (philo->nb_meals == philo->rules->min_meals)
@@ -95,6 +95,8 @@ void	*routine(void *philo_tmp)
 //	}
 //	pthread_mutex_lock(&philo->rules->philo_init);
 //	pthread_mutex_unlock(&philo->rules->philo_init);
+//	if (philo->rules->nb_of_philos % 2 != 0 && philo->philo_id == 0)
+//		philo_sleep(philo, philo->rules->eat_t);
 	pthread_mutex_lock(&philo->rules->someone_died_m);
 	while (philo->rules->someone_died == 0
 		&& philo->rules->full_dinners != philo->rules->nb_of_philos)
@@ -105,8 +107,8 @@ void	*routine(void *philo_tmp)
 			return (NULL);
 		eating(philo);
 		fork_putdown(philo);
-		change_state(philo, "is sleeping", philo->rules->sleep_t);
-		change_state(philo, "is thinking", philo->rules->think_t);
+		change_state(philo, SLEEPING, philo->rules->sleep_t);
+		change_state(philo, THINKING, philo->rules->think_t);
 		pthread_mutex_lock(&philo->rules->someone_died_m);
 	}
 	pthread_mutex_unlock(&philo->rules->someone_died_m);
