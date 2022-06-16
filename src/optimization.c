@@ -62,13 +62,3 @@ void	fork_putdown(t_philo *philo)
 //		print_status("unlocked a fork (left)", philo);
 	}
 }
-
-/* Returns current timestamp */
-
-long int	get_timestamp(t_philo *philo)
-{
-	long int	timestamp;
-
-	timestamp = get_time() - philo->rules->start_time;
-	return (timestamp);
-}

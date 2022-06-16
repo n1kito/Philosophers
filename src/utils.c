@@ -107,8 +107,7 @@ long int	get_time(void)
 
 	if (gettimeofday(&time_struct, NULL) == -1)
 		return (print_err("Could not get time of day", -1));
-	time = (long int)time_struct.tv_sec * 1000
-		+ (long int)time_struct.tv_usec / 1000;
+	time = time_struct.tv_sec * 1000 + time_struct.tv_usec / 1000;
 	return (time);
 }
 
@@ -139,11 +138,13 @@ int	print_status(char *status, t_philo *philo)
 {
 	pthread_mutex_lock(&philo->rules->printer_m);
 	pthread_mutex_lock(&philo->rules->full_dinners_m);
+	pthread_mutex_lock(&philo->rules->someone_died_m);
 	if ((philo->rules->someone_died == 0 || !ft_strncmp(status, "died", 4))
 		&& philo->rules->full_dinners != philo->rules->nb_of_philos)
-		printf("%ld %d %s\n", get_timestamp(philo), philo->philo_id + 1, status); // TODO replace with protected function
+		printf("%ld %d %s\n", get_timestamp(philo), philo->philo_id + 1, status);
 	pthread_mutex_unlock(&philo->rules->printer_m);
 	pthread_mutex_unlock(&philo->rules->full_dinners_m);
+	pthread_mutex_unlock(&philo->rules->someone_died_m);
 	return (1);
 }
 
@@ -152,10 +153,21 @@ void	philo_sleep(t_philo *philo, long int time)
 	long int	start_time;
 
 	start_time = get_timestamp(philo);
-	while ((get_timestamp(philo) - start_time) < time && !philo->rules->someone_died)
+	pthread_mutex_lock(&philo->rules->someone_died_m);
+	while ((get_timestamp(philo) - start_time) < time
+		&& !philo->rules->someone_died
+		&& philo->rules->full_dinners < philo->rules->nb_of_philos)
 	{
-//		printf("%ld sleeping since %ld \n", get_timestamp(philo), (get_timestamp(philo) - start_time));
+		pthread_mutex_unlock(&philo->rules->someone_died_m);
 		usleep(600);
+		pthread_mutex_lock(&philo->rules->someone_died_m);
 	}
-//	printf("philo sleep done\n");
+	pthread_mutex_unlock(&philo->rules->someone_died_m);
+}
+
+/* Returns current timestamp */
+
+long int	get_timestamp(t_philo *philo)
+{
+	return (get_time() - philo->rules->start_time);
 }

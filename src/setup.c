@@ -55,7 +55,6 @@ int	mem_alloc(t_rules *rules)
 static int	init_rules(char *argv[], int argc, t_rules *rules)
 {
 	rules->nb_of_philos = ft_atol(argv[1]);
-	rules->dinner_is_over = 0;
 	rules->die_t = ft_atol(argv[2]);
 	rules->eat_t = ft_atol(argv[3]);
 	rules->sleep_t = ft_atol(argv[4]);
