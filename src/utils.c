@@ -110,7 +110,7 @@ long int	get_time(void)
 	time = time_struct.tv_sec * 1000 + time_struct.tv_usec / 1000;
 	return (time);
 }
-
+// je crois que celle ci ne sert plus a rien du coup
 int	ft_strncmp(const char *first, const char *second, size_t length)
 {
 	size_t			i;
@@ -129,6 +129,28 @@ int	ft_strncmp(const char *first, const char *second, size_t length)
 	return (0);
 }
 
+char	*ft_strstr(char *str, char *to_find)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	if (to_find[i] == '\0')
+		return (&str[i]);
+	while (str[i])
+	{
+		j = 0;
+		while (str[i + j] == to_find[j])
+		{
+			if (to_find[j + 1] == '\0')
+				return (&str[i]);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
 /* Protects my messages being printed and only prints if nobody died (except for
  * the message that announced the death of a philo) and if all philos are not
  * done eating. */
@@ -139,13 +161,16 @@ int	print_status(char *status, t_philo *philo)
 	pthread_mutex_lock(&philo->rules->printer_m);
 	pthread_mutex_lock(&philo->rules->full_dinners_m);
 	pthread_mutex_lock(&philo->rules->someone_died_m);
-	if ((philo->rules->someone_died == 0 || !ft_strncmp(status, "died", 4))
-		&& philo->rules->full_dinners != philo->rules->nb_of_philos)
+	if ((philo->rules->someone_died == 0 || ft_strstr(status, "died"))
+		&& philo->rules->full_dinners < philo->rules->nb_of_philos)
 		printf(STATUS, get_timestamp(philo),
 			philo->philo_id, status);
 	pthread_mutex_unlock(&philo->rules->printer_m);
 	pthread_mutex_unlock(&philo->rules->full_dinners_m);
 	pthread_mutex_unlock(&philo->rules->someone_died_m);
+//	if (!ft_strncmp(status, "died", 4))
+//		printf(STATUS, get_timestamp(philo),
+//			   philo->philo_id, status);
 	return (1);
 }
 
@@ -154,15 +179,19 @@ void	philo_sleep(t_philo *philo, long int time)
 	long int	start_time;
 
 	start_time = get_timestamp(philo);
+	pthread_mutex_lock(&philo->rules->full_dinners_m);
 	pthread_mutex_lock(&philo->rules->someone_died_m);
-	while ((get_timestamp(philo) - start_time) < time
-		&& !philo->rules->someone_died
+	while (!philo->rules->someone_died
+		&& (get_timestamp(philo) - start_time) < time
 		&& philo->rules->full_dinners < philo->rules->nb_of_philos)
 	{
+		pthread_mutex_unlock(&philo->rules->full_dinners_m);
 		pthread_mutex_unlock(&philo->rules->someone_died_m);
-		usleep(600);
+		usleep(500);
+		pthread_mutex_lock(&philo->rules->full_dinners_m);
 		pthread_mutex_lock(&philo->rules->someone_died_m);
 	}
+	pthread_mutex_unlock(&philo->rules->full_dinners_m);
 	pthread_mutex_unlock(&philo->rules->someone_died_m);
 }
 

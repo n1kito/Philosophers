@@ -18,7 +18,7 @@
 
 void	fork_pickup(t_philo *philo)
 {
-	if (philo->philo_id % 2 == 0)
+	if (philo->philo_id % 2 != 0)
 	{
 		pthread_mutex_lock(philo->left_fork);
 		print_status(FORK, philo);
@@ -28,13 +28,13 @@ void	fork_pickup(t_philo *philo)
 			return ;
 		}
 //		if (philo->right_fork) //TODO PK G MIS CA ?
-			pthread_mutex_lock(philo->right_fork);
+		pthread_mutex_lock(philo->right_fork);
 		print_status(FORK, philo);
 	}
 	else
 	{
 //		if (philo->right_fork) //TODO PK G MIS CA ?
-			pthread_mutex_lock(philo->right_fork);
+		pthread_mutex_lock(philo->right_fork);
 		print_status(FORK, philo);
 		pthread_mutex_lock(philo->left_fork);
 		print_status(FORK, philo);
@@ -47,7 +47,7 @@ void	fork_pickup(t_philo *philo)
 // TODO Fix exit strategy for when unlocking failed
 void	fork_putdown(t_philo *philo)
 {
-	if (philo->philo_id % 2 == 0)
+	if (philo->philo_id % 2 != 0)
 	{
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);

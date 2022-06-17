@@ -69,14 +69,10 @@ a philosopher dies of starvation.
 # Daily Goals
 
 - [ ] is there a mutex to protect that a philo dies and starts eating at the same time ?
-- `./philo 3 610 200 200 50` fail
 - `./philo 200 450 200 200 50` fail assez souvent
-- `./philo 610 200 200 50` fail et en plus des fois j'ai des messages qui s'affichent apres qu'il dead.
+- `./philo 199 610 200 200 50` fail et en plus des fois j'ai des messages qui s'affichent apres qu'il dead.
 
 # To do
-- [ ] Changer usleep en ft_usleep et en profiter pour arreter la boucle s'il y en a un qui creve au milieu
-- [ ] Recalculer les usleep avec le [doc d'anthony](https://docs.google.com/spreadsheets/d/1F1s2lLTEK11EZLwWMTJy3xkg6BsN7vR-tJHPQ_W8kJE/edit#gid=627767135)
-- [ ] Si j'ai un seul philo et que je mets un `min meals` il creve tout de suite, mais si j'en mets pas il crevent au bout de `t_to_die` * 2
 - [ ] Chopper les cas d'erreur de tous mes mutex
 - [ ] Gérer les overflows dans les arguments
 - [ ] Gérer les underflows dans les arguments
@@ -91,10 +87,29 @@ a philosopher dies of starvation.
 
 # Tested cases
 
-🟩 `199 620 200 200 50`
-🟩 `199 610 200 200 50`
-🟩 `200 420 200 200 50`
-🔸`200 410 200 200 50`
+⭐	The case has also been tested for leaks and data races.  
+💧	The case has leaks.  
+💢	The case has data races.  
+
+# Correction
+🟩 ⭐ `1 800 200 200` should die  
+🟩 ⭐ `5 800 200 200` should go on forever  _(mine lasts for > 1 minute)_  
+🟩 ⭐ `5 800 200 200 7` simulation should stop after eating 7 times  
+🟩 ⭐ `4 410 200 200` should go on forever   _(mine lasts for > 1 minute)_  
+🟩 ⭐ `4 310 200 100` should die _(dies in ok time)_
+
+# Impairs
+🟩 `199 620 200 200 50`  
+🟩 `199 610 200 200 50`  
+🟩 `199 600 200 200 50`  
+
+# Pairs
+🟥 `200 450 200 200 50`  marchait mais marche plus
+🟥 `200 440 200 200 50`  
+🟥 `200 420 200 200 50`  
+🟥 `200 410 200 200 50`  il tient meme pas 5 secondes c'est nimp
+
+# sleep > eat
 
 # Process for this project
 
