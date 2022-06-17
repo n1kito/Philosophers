@@ -45,6 +45,7 @@ void	*check_dead_philo(void *rules_tmp)
 				pthread_mutex_unlock(&rules->last_meal_m);
 			i++;
 		}
+		philo_sleep(rules->philos[0], rules->die_t * 0.9);
 		pthread_mutex_lock(&rules->full_dinners_m);
 	}
 	pthread_mutex_unlock(&rules->full_dinners_m);
@@ -95,12 +96,22 @@ void	*routine(void *philo_tmp)
 //	}
 //	if (philo->rules->nb_of_philos % 2 != 0 && philo->philo_id == 0)
 //		philo_sleep(philo, philo->rules->eat_t);
+//	if (philo->philo_id % 2 == 0)
+//	{
+//		usleep(philo->rules->eat_t * 1000 / 2);
+//		printf("0 %d is sleeping\n", philo->philo_id);
+//	}
+////		change_state(philo, THINKING, philo->rules->think_t);
+////		philo_sleep(philo, philo->rules->eat_t);
+////		usleep(1000);
 	pthread_mutex_lock(&philo->rules->philo_init);
 	pthread_mutex_unlock(&philo->rules->philo_init);
-	if (philo->philo_id % 2 != 0)
+	if (philo->philo_id % 2 == 0)
+		change_state(philo, THINKING, philo->rules->eat_t / 2);
 //		philo_sleep(philo, philo->rules->eat_t);
-		usleep(1000);
-	if (philo->rules->nb_of_philos % 2 != 0 && philo->philo_id == philo->rules->nb_of_philos - 1)
+//		usleep(1000);
+	if (philo->rules->nb_of_philos % 2 != 0 && philo->philo_id == philo->rules->nb_of_philos)
+//	if (philo->philo_id == philo->rules->nb_of_philos - 1)
 //		philo_sleep(philo, 610);
 		usleep(1000);
 	pthread_mutex_lock(&philo->rules->someone_died_m);
@@ -114,9 +125,9 @@ void	*routine(void *philo_tmp)
 		eating(philo);
 		fork_putdown(philo);
 		change_state(philo, SLEEPING, philo->rules->sleep_t);
-//		change_state(philo, THINKING, philo->rules->think_t);
-		print_status(THINKING, philo);
-		usleep(philo->rules->think_t);
+		change_state(philo, THINKING, philo->rules->think_t);
+//		print_status(THINKING, philo);
+//		usleep(philo->rules->think_t);
 		pthread_mutex_lock(&philo->rules->someone_died_m);
 	}
 	pthread_mutex_unlock(&philo->rules->someone_died_m);

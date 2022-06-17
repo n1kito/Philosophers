@@ -69,7 +69,9 @@ a philosopher dies of starvation.
 # Daily Goals
 
 - [ ] is there a mutex to protect that a philo dies and starts eating at the same time ?
-- `./philo 3 610 200 200` fail
+- `./philo 3 610 200 200 50` fail
+- `./philo 200 450 200 200 50` fail assez souvent
+- `./philo 610 200 200 50` fail et en plus des fois j'ai des messages qui s'affichent apres qu'il dead.
 
 # To do
 - [ ] Changer usleep en ft_usleep et en profiter pour arreter la boucle s'il y en a un qui creve au milieu
@@ -86,6 +88,13 @@ a philosopher dies of starvation.
     - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
         - [ ] Can't destroy all my mutexes because some of them are probably locked when I exit.
             - I need to fix this.
+
+# Tested cases
+
+🟩 `199 620 200 200 50`
+🟩 `199 610 200 200 50`
+🟩 `200 420 200 200 50`
+🔸`200 410 200 200 50`
 
 # Process for this project
 

@@ -54,6 +54,7 @@ $(NAME): $(OBJ_FILES)
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile | $(BIN_DIR)
 	@$(CC) -D BORING -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
+	@#$(CC) -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
 	@echo "$(BLUE)> compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
