@@ -102,14 +102,15 @@ int	ft_is_digit(char c)
 
 long int	get_time(void)
 {
-	long int		time;
 	struct timeval	time_struct;
+	long int		time_in_ms;
 
 	if (gettimeofday(&time_struct, NULL) == -1)
 		return (print_err("Could not get time of day", -1));
-	time = time_struct.tv_sec * 1000 + time_struct.tv_usec / 1000;
-	return (time);
+	time_in_ms = (time_struct.tv_sec * 1000) + (time_struct.tv_usec / 1000);
+	return (time_in_ms);
 }
+
 // je crois que celle ci ne sert plus a rien du coup
 int	ft_strncmp(const char *first, const char *second, size_t length)
 {
@@ -165,13 +166,22 @@ int	print_status(char *status, t_philo *philo)
 		&& philo->rules->full_dinners < philo->rules->nb_of_philos)
 		printf(STATUS, get_timestamp(philo),
 			philo->philo_id, status);
-	pthread_mutex_unlock(&philo->rules->printer_m);
 	pthread_mutex_unlock(&philo->rules->full_dinners_m);
 	pthread_mutex_unlock(&philo->rules->someone_died_m);
+	pthread_mutex_unlock(&philo->rules->printer_m);
 //	if (!ft_strncmp(status, "died", 4))
 //		printf(STATUS, get_timestamp(philo),
 //			   philo->philo_id, status);
 	return (1);
+}
+
+void	opti_sleep(long int time)
+{
+	long int	start_time;
+
+	start_time = get_time();
+	while (get_time() - start_time < time)
+		usleep(time / 10);
 }
 
 void	philo_sleep(t_philo *philo, long int time)

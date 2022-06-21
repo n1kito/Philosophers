@@ -65,6 +65,7 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 //	rules->start_time = get_time(); // moved to launch philos function
 	rules->someone_died = 0;
 	rules->full_dinners = 0;
+	rules->dinner_is_over = 0;
 //	if (rules->start_time == -1)
 //		return (0);
 	if (argc == 6)

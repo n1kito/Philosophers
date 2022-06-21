@@ -26,7 +26,8 @@
 #  define EATING "is eating"
 #  define SLEEPING "is sleeping"
 #  define THINKING "is thinking"
-#  define DEAD "\033[1;31mdied\033[0m"
+//#  define DEAD "\033[1;31mdied\033[0m"
+#  define DEAD "died"
 #  define STATUS "%ld %d %s\n"
 #  define OK_SYMBOL "\033[0;92m"
 # endif
@@ -50,6 +51,7 @@ typedef struct s_philo
 	pthread_mutex_t	*right_fork;
 	int				philo_id;
 	int				nb_meals;
+	int				is_dead;
 	long int		last_meal;
 	struct s_rules	*rules;
 }				t_philo;
@@ -65,6 +67,7 @@ typedef struct s_rules
 	long int		start_time;
 	int				someone_died;
 	int				full_dinners;
+	int				dinner_is_over;
 	struct s_philo	**philos;
 	pthread_mutex_t	printer_m;
 	pthread_mutex_t	last_meal_m;
@@ -107,5 +110,8 @@ long int	get_time(void);
 int			print_status(char *status, t_philo *philo);
 void		philo_sleep(t_philo *philo, long int time);
 long int	get_timestamp(t_philo *philo);
+
+void		opti_sleep(long int time);
+
 
 #endif
