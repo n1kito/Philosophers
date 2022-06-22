@@ -12,9 +12,9 @@ You will see how to create threads and you will discover mutexes.
 <details>
 <summary><i>(+ click to expand)</i></summary>
 
-- [ ] Compile project using `cc`
-- [ ] Global variables are forbidden
-- [ ] Program should take the following arguments : `number_of_philosophers die_t eat_t sleep_t
+- [x] Compile project using `cc`
+- [x] Global variables are forbidden
+- [x] Program should take the following arguments : `number_of_philosophers die_t eat_t sleep_t
   [number_of_times_each_philosopher_must_eat]`
   - `number_of_philosophers`: The number of philosophers and also the number
     of forks.
@@ -22,8 +22,8 @@ You will see how to create threads and you will discover mutexes.
   - `eat_t` (in milliseconds): The time it takes for a philosopher to eat. During that time, they will need to hold two forks.
   - `sleep_t` (in milliseconds): The time a philosopher will spend sleeping.
   - `number_of_times_each_philosopher_must_eat` (_optional argument_): If all philosophers have eaten at least `number_of_times_each_philosopher_must_eat` times, the simulation stops. If not specified, the simulation stops when a philosopher dies.
-- [ ] Each philosopher has a number ranging from 1 to `number_of_philosophers`.
-- [ ] Philosopher `number 1` sits next to philosopher number `number_of_philosophers`. Any other philosopher number `N` sits between philosopher number `N - 1` and philosopher number `N + 1`.
+- [x] Each philosopher has a number ranging from 1 to `number_of_philosophers`.
+- [x] Philosopher `number 1` sits next to philosopher number `number_of_philosophers`. Any other philosopher number `N` sits between philosopher number `N - 1` and philosopher number `N + 1`.
 
 **General rules**
 
@@ -45,37 +45,30 @@ a philosopher dies of starvation.
 
 **Rules for the mandatory part**
 
-- [ ] Each philosopher should be a thread.
-- [ ] There is one for between each pair of philosophers. Therefore, if there are several philosophers, each philosopher has a fork on their left side and a fork on their right side. If there is only one philosopher, there should be only one fork on the table.
-- [ ] To prevent philosophers from duplicating forks, you should protect the forks state with a mutex for each of them.
+- [x] Each philosopher should be a thread.
+- [x] There is one for between each pair of philosophers. Therefore, if there are several philosophers, each philosopher has a fork on their left side and a fork on their right side. If there is only one philosopher, there should be only one fork on the table.
+- [x] To prevent philosophers from duplicating forks, you should protect the forks state with a mutex for each of them.
 
 **About the logs of the program**
 
-- [ ] Any state change of a philosopher must be formatted as follows:
+- [x] Any state change of a philosopher must be formatted as follows:
   - timestamp_in_ms X has taken a fork
   - timestamp_in_ms X is eating
   - timestamp_in_ms X is sleeping
   - timestamp_in_ms X is thinking
   - timestamp_in_ms X died
 > Replace timestamp_in_ms with the current timestamp in milliseconds and X with the philosopher number.
-- [ ] A displayed state message should not be mixed up with another message.
-- [ ] A message announcing a philosopher died should be displayed no more than 10 ms after the actual death of the philosopher.
-- [ ] Again, philosophers should avoid dying!
+- [x] A displayed state message should not be mixed up with another message.
+- [x] A message announcing a philosopher died should be displayed no more than 10 ms after the actual death of the philosopher.
+- [x] Again, philosophers should avoid dying!
 
 > The program must not have any data races.
 
 </details>
 
-# Daily Goals
-
-- [ ] is there a mutex to protect that a philo dies and starts eating at the same time ?
-- Des fois quand j'utilise helgrind j'ai as de message de mort. why ?
-
 # To do
-- [ ] Normminette
-- [ ] Remove any reference to monitoring thread
-- [ ] Si j'ai un sleep time INT_MAX le truc quitte sans dead.
-- [ ] 51 800 500 300 5 quitte sans dead.
+- [ ] Fnish checking data races in all cases.
+- [ ] Retest leaks on malloc and struct init failures.
 
 # Tested cases
 
@@ -83,25 +76,25 @@ a philosopher dies of starvation.
 💧	The case has leaks.  
 💢	The case has data races.  
 
-# Correction
+### Correction
 🟩 ⭐ `1 800 200 200` should die  
 🟩 ⭐ `5 800 200 200` should go on forever  _(mine lasts for > 1 minute)_  
 🟩 ⭐ `5 800 200 200 7` simulation should stop after eating 7 times  
 🟩 ⭐ `4 410 200 200` should go on forever   _(mine lasts for > 1 minute)_  
 🟩 ⭐ `4 310 200 100` should die _(dies in ok time)_
 
-# Impairs
+(The higher philo numbers work only in the `BORING` mode, compiling with `-D BORING`)
+
+### Impairs
 🟩 `199 620 200 200 50`  
 🟩 `199 610 200 200 50`  
 🟩 `199 600 200 200 50`  
 
-# Pairs
-🟩 `200 450 200 200 50`
+### Pairs
+🟩 `200 450 200 200 50`  
 🟩 `200 440 200 200 50`  
 🟩 `200 420 200 200 50`  
 🟩 `200 410 200 200 50`
-
-# sleep > eat
 
 # Process for this project
 
@@ -130,29 +123,31 @@ graph TD;
 - [x] Number of philos is <= 0
 - [x] Number of milliseconds is <=0 (= 0 aussi ?)
 - [x] Arguments contain forbidden characters
-- [ ] Argument overflow ( > `MAX_INT`)
-- [ ] Argument underflow (< `MIN_INT`)
+- [x] Argument overflow ( > `MAX_INT`)
+- [x] Argument underflow (< `MIN_INT`)
 
-**Leaks**
-- [ ] Any of the parameters are incorrect
+**Leaks (+ Data races ⭐)**
+- [x] Any of the parameters are incorrect
 - [ ] Malloc failed
   - For the forks
   - For the philo struct array
   - For any of the philo structs in the array
 - [ ] Mutex_init failed
-- [ ] Thread init failed
-- [ ] Any mutex lock/unlock failed
-- [ ] Philo dies
-- [ ] Single philo dies
-- [ ] Odd number of philo dies
+- [ ] Thread init failed  
+~~- [ ] Any mutex lock/unlock failed~~
+- [x] ⭐ Philo dies
+- [x] ⭐ Odd number of philo dies
+- [x] ⭐ Single philo dies
 
 # Notes
+
+> My program has a "visual mode" 🌈 that is used by default, but the basic output setting can be activating by compiling with flag `-D BORING`.
 
 - Philos are basically structures.
 - The program needs to be compiled and linked with special flag: `-pthread` (see [man](http://manpagesfr.free.fr/man/man7/pthreads.7.html))
 - Dans discord ils parlent de `fsanitize=thread`
-- Toujours tester avec `valgrind --tools-lgrind` pour voir les data race
-  - Mais aussi tester avec juste `valgrind` parce que avec `lgrind` les leaks n'apparaissent pas (ou pas pareil)
+- Toujours tester avec `valgrind --tool=helgrind` pour voir les data race
+  - Mais aussi tester avec juste `valgrind` parce que avec `helgrind` les leaks n'apparaissent pas (ou pas pareil)
 - Ne jamais tester le fonctionnement du programme avec `valgrind` par contre, parce que ca met une plombe et que ca chie toutes les perfs. Il sert juste à checker les leaks.
 - During evaluation, it's not asked to test more than 200 philosophers and less than 60/80 seconds.
 - _Hint: try launching philos by even/odd number_
@@ -162,7 +157,9 @@ graph TD;
   - Milliseconds = seconds * 1000
   - Milliseconds = microseconds / 1000 (or microseconds * 0.001)
 
-**Discord tips**
+# Discord tips
+
+<details><summary>(click to see tips)</summary>
 
 > Pour le décalage de création de thread par le main thread tu peux bloquer un mutex dans ton main thread et le débloquer quand ta boucle de création est terminée pour que tous les philos commencent en même temps leur routine. (deso si c'est plus d'actualité)
 
@@ -185,6 +182,8 @@ Quand on rencontre une erreur:
 > Dans ton thread, dès que tu détectes que tu dois exit, tu dois unlock tout ce que tu as lock. C'est le thread qui a lock le mutex qui doit le delock.
 
 > 💅 Il n'y a pas forcement besoin de faire des micro usleep pour verifier si le philo meurt pendant qu'il dort, tu peux verifier avant de lancer le usleep si celui-ci va etre trop lon et que le philo va mourir pendant. Dans ce cas tu fais juste un usleep jusqu'au moment de mourir. Par contre pour verifier si un autre philo est mort entre temps, je ne fais ca qu'au moment de print quelque chose.
+
+</details>
 
 # Research
 
@@ -302,7 +301,7 @@ Quand on rencontre une erreur:
 - [Le dîner des philosophes](https://fr.wikipedia.org/wiki/D%C3%AEner_des_philosophes)
 - [Le problème des philosophes](https://perso.ens-lyon.fr/michael.rao/ASR2/cours_slides_8.pdf)
 - [Plein de concepts intéressants; git amyplant](https://github.com/iciamyplant/Philosophers)
-- 
+
 # Project Timeline
 
 1. Wednesday, May 25th
@@ -315,3 +314,5 @@ Quand on rencontre une erreur:
    - Allocated memory
    - Setup leak cleaning
    - Assigned left/right forks to each philosopher node
+4. Wednesday, June 22nd (it's been a slow month)
+   - Project finished and tested.

@@ -13,13 +13,13 @@
 # **************************************************************************** #
 # VARIABLES
 
-NAME	:= philo
+NAME		:= philo
 
-CFLAGS	:= -Wall -Wextra -Werror
+CFLAGS		:= -Wall -Wextra -Werror
 
-INC_DIR	:= include
-SRC_DIR	:= src
-BIN_DIR	:= bin
+INC_DIR		:= include
+SRC_DIR		:= src
+BIN_DIR		:= bin
 
 # **************************************************************************** #
 # COLORS
@@ -54,8 +54,7 @@ $(NAME): $(OBJ_FILES)
 	@echo "$(GREEN)$(NAME) compiled ✨ $(END_COLOR)"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile | $(BIN_DIR)
-	@$(CC) -D BORING -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
-	@#$(CC) -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
+	@$(CC) -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
 	@echo "$(BLUE)> compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
