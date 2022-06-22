@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philosophers.h"
+#include "philosophers.h"
 
 long int	t_since_last_meal(t_philo *philo)
 {
@@ -22,14 +22,21 @@ long int	t_since_last_meal(t_philo *philo)
 	return (time);
 }
 
-/* Changes state of philo and waits for a set amount of time */
+/* Changes state of philo and checks if philo has enought time left to wait
+ * for the required amount. If it does not, it dies. */
 
 void	change_state(t_philo *philo, char *state, long int time_to_sleep)
 {
 	long int	time_since_last_meal;
 
-	if (philo->is_dead)
+	pthread_mutex_lock(&philo->rules->full_dinners_m);
+	if (philo->is_dead
+		|| philo->rules->full_dinners == philo->rules->nb_of_philos)
+	{
+		pthread_mutex_unlock(&philo->rules->full_dinners_m);
 		return ;
+	}
+	pthread_mutex_unlock(&philo->rules->full_dinners_m);
 	print_status(state, philo);
 	time_since_last_meal = t_since_last_meal(philo);
 	if (time_since_last_meal + time_to_sleep > philo->rules->die_t)
@@ -41,9 +48,7 @@ void	change_state(t_philo *philo, char *state, long int time_to_sleep)
 		print_status(DEAD, philo);
 	}
 	else
-	{
 		opti_sleep(time_to_sleep);
-	}
 }
 
 /* Philo eating routine */

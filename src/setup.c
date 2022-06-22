@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philosophers.h"
+#include "philosophers.h"
 
 /* Allocates memory to my structures, also initializing my philos to NULL to
  * avoid segfaults if the free function is called */
@@ -60,7 +60,6 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 		rules->think_t = rules->eat_t - rules->sleep_t;
 	rules->someone_died = 0;
 	rules->full_dinners = 0;
-	rules->dinner_is_over = 0;
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);
 	if (pthread_mutex_init(&rules->printer_m, NULL) != 0)

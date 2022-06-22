@@ -27,10 +27,11 @@
 #  define SLEEPING "is sleeping"
 #  define THINKING "is thinking"
 #  define DEAD "\033[1;31mdied\033[0m"
-//#  define DEAD "died"
 #  define STATUS "%ld %d %s\n"
 #  define OK_SYMBOL "\033[0;92m"
 # endif
+
+# define INT_MAX 2147483647
 
 /* ########################################################################## */
 /* INCLUDES */
@@ -67,7 +68,6 @@ typedef struct s_rules
 	long int		start_time;
 	int				someone_died;
 	int				full_dinners;
-	int				dinner_is_over;
 	struct s_philo	**philos;
 	pthread_mutex_t	printer_m;
 	pthread_mutex_t	last_meal_m;
@@ -110,7 +110,6 @@ char		*ft_strstr(char *str, char *to_find);
 /* utils_philos.c */
 int			freester(t_rules *rules, int return_value);
 int			print_status(char *status, t_philo *philo);
-void		philo_sleep(t_philo *philo, long int time);
 void		opti_sleep(long int time);
 long int	get_timestamp(t_philo *philo);
 

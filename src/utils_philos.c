@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philosophers.h"
+#include "philosophers.h"
 
 // Frees memory and destroys mutexes/forks if they've been initialized.
 
@@ -46,7 +46,6 @@ int	freester(t_rules *rules, int return_value)
 /* Protects my messages being printed and only prints if nobody died (except for
  * the message that announced the death of a philo) and if all philos are not
  * done eating. */
-// Je pense que je dois mutex someone_died ici aussi
 
 int	print_status(char *status, t_philo *philo)
 {
@@ -55,8 +54,7 @@ int	print_status(char *status, t_philo *philo)
 	pthread_mutex_lock(&philo->rules->someone_died_m);
 	if ((philo->rules->someone_died == 0
 			|| (philo->rules->someone_died == 1
-				&& ft_strstr(status, "died")))
-		&& philo->rules->full_dinners < philo->rules->nb_of_philos)
+				&& ft_strstr(status, "died"))))
 		printf(STATUS, get_timestamp(philo),
 			philo->philo_id, status);
 	pthread_mutex_unlock(&philo->rules->full_dinners_m);
@@ -65,26 +63,7 @@ int	print_status(char *status, t_philo *philo)
 	return (1);
 }
 
-void	philo_sleep(t_philo *philo, long int time)
-{
-	long int	start_time;
-
-	start_time = get_timestamp(philo);
-	pthread_mutex_lock(&philo->rules->full_dinners_m);
-	pthread_mutex_lock(&philo->rules->someone_died_m);
-	while (!philo->rules->someone_died
-		&& (get_timestamp(philo) - start_time) < time
-		&& philo->rules->full_dinners < philo->rules->nb_of_philos)
-	{
-		pthread_mutex_unlock(&philo->rules->full_dinners_m);
-		pthread_mutex_unlock(&philo->rules->someone_died_m);
-		usleep(500);
-		pthread_mutex_lock(&philo->rules->full_dinners_m);
-		pthread_mutex_lock(&philo->rules->someone_died_m);
-	}
-	pthread_mutex_unlock(&philo->rules->full_dinners_m);
-	pthread_mutex_unlock(&philo->rules->someone_died_m);
-}
+/* uleep() the requested timme in increments of 100 microseconds */
 
 void	opti_sleep(long int time)
 {

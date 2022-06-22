@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philosophers.h"
+#include "philosophers.h"
 
 /* Initializes the basic values in each philosopher struct */
-// TODO Replace with the following : rules->philos[i]->philo_id = i + 1;
 
 void	init_philos(t_rules *rules)
 {

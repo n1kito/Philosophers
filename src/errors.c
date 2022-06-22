@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philosophers.h"
+#include "philosophers.h"
 
 /* Prints an error message on stderr. */
 
@@ -31,7 +31,7 @@ int	param_values_check(int argc, char *argv[])
 	i = 1;
 	while (i < argc)
 	{
-		if (ft_atol(argv[i]) <= 0)
+		if (ft_atol(argv[i]) <= 0 || ft_atol(argv[i]) > INT_MAX)
 		{
 			ft_putstr_fd("Error\n", 2);
 			break ;
@@ -40,16 +40,16 @@ int	param_values_check(int argc, char *argv[])
 	}
 	if (i == argc)
 		return (1);
-	if (ft_atol(argv[1]) <= 0)
-		ft_putstr_fd("> ./philo needs at least one philosopher.\n", 2);
-	if (ft_atol(argv[2]) <= 0)
-		ft_putstr_fd("> [time_do_die] can't be negative or 0.\n", 2);
-	if (ft_atol(argv[3]) <= 0)
-		ft_putstr_fd("> [eat_t] can't be negative or 0.\n", 2);
-	if (ft_atol(argv[4]) <= 0)
-		ft_putstr_fd("> [sleep_t] can't be negative or 0.\n", 2);
-	if (argc == 6 && ft_atol(argv[5]) <= 0)
-		ft_putstr_fd("> Philosophers need to eat at least once.\n", 2);
+	if (ft_atol(argv[1]) <= 0 || ft_atol(argv[1]) > INT_MAX)
+		ft_putstr_fd("> [philo_count] needs a positive integer.\n", 2);
+	if (ft_atol(argv[2]) <= 0 || ft_atol(argv[2]) > INT_MAX)
+		ft_putstr_fd("> [time_do_die] needs a positive integer.\n", 2);
+	if (ft_atol(argv[3]) <= 0 || ft_atol(argv[3]) > INT_MAX)
+		ft_putstr_fd("> [eat_t] needs a positive integer.\n", 2);
+	if (ft_atol(argv[4]) <= 0 || ft_atol(argv[4]) > INT_MAX)
+		ft_putstr_fd("> [sleep_t] needs a positive integer.\n", 2);
+	if (argc == 6 && ((ft_atol(argv[5]) <= 0) || ft_atol(argv[5]) > INT_MAX))
+		ft_putstr_fd("> [minimum_meals] needs a positive integer.\n", 2);
 	return (0);
 }
 

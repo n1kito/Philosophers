@@ -74,14 +74,8 @@ a philosopher dies of starvation.
 # To do
 - [ ] Normminette
 - [ ] Remove any reference to monitoring thread
-- [ ] Gérer les overflows dans les arguments
-- [ ] Gérer les underflows dans les arguments
-- [ ] Gérer les min/max int dans les arguments
-- [ ] Improve freester to deal with killing threads & mutexes
-- [ ] Handle leaks when a philo dies
-    - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
-        - [ ] Can't destroy all my mutexes because some of them are probably locked when I exit.
-            - I need to fix this.
+- [ ] Si j'ai un sleep time INT_MAX le truc quitte sans dead.
+- [ ] 51 800 500 300 5 quitte sans dead.
 
 # Tested cases
 

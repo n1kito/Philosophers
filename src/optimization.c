@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philosophers.h"
+#include "philosophers.h"
 
 /* Picks up forks in a certain order depending on whether the philo_id is even
  * or odd. Even philos will pick up their left fork first, odd philos will pick
