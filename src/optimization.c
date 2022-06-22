@@ -25,6 +25,8 @@ void	fork_pickup(t_philo *philo)
 		if (philo->rules->nb_of_philos == 1)
 		{
 			pthread_mutex_unlock(philo->left_fork);
+			opti_sleep(philo->rules->die_t);
+			print_status(DEAD, philo);
 			return ;
 		}
 //		if (philo->right_fork) //TODO PK G MIS CA ?

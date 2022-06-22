@@ -154,7 +154,9 @@ void	*routine(void *philo_tmp)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_tmp;
-	if (philo->philo_id % 2 == 0)
+	if (philo->rules->nb_of_philos % 2 != 0 && philo->philo_id == philo->rules->nb_of_philos && philo->rules->nb_of_philos != 1)
+		opti_sleep(philo->rules->eat_t);
+	if (philo->philo_id % 2 != 0 && philo->rules->nb_of_philos != 1)
 		opti_sleep(philo->rules->eat_t);
 //	pthread_mutex_lock(&philo->rules->philo_init);
 //	pthread_mutex_unlock(&philo->rules->philo_init);
@@ -192,7 +194,7 @@ int	launch_philos(t_rules *rules, pthread_t *monitor)
 	int	philo_count;
 
 	philo_count = (int)rules->nb_of_philos;
-	pthread_mutex_lock(&rules->philo_init);
+//	pthread_mutex_lock(&rules->philo_init);
 	(void)monitor;
 //	pthread_create(monitor, NULL, &check_dead_philo, rules);
 	rules->start_time = get_time();

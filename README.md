@@ -69,16 +69,14 @@ a philosopher dies of starvation.
 # Daily Goals
 
 - [ ] is there a mutex to protect that a philo dies and starts eating at the same time ?
-- `./philo 200 450 200 200 50` fail assez souvent
-- `./philo 199 610 200 200 50` fail et en plus des fois j'ai des messages qui s'affichent apres qu'il dead.
+- Des fois quand j'utilise helgrind j'ai as de message de mort. why ?
 
 # To do
-- [ ] Chopper les cas d'erreur de tous mes mutex
+- [ ] Normminette
+- [ ] Remove any reference to monitoring thread
 - [ ] Gérer les overflows dans les arguments
 - [ ] Gérer les underflows dans les arguments
 - [ ] Gérer les min/max int dans les arguments
-- [ ] `[1]    410627 segmentation fault (core dumped)  ./philo 300 410 200 200 15`
-  - Plus de segfault MAIS j'ai un philo qui meurt. Peut-etre que c'est le monitor qui me bouffe toutes mes ressources ?
 - [ ] Improve freester to deal with killing threads & mutexes
 - [ ] Handle leaks when a philo dies
     - Easy to make a philo die with Valgrind. ` valgrind ./philo 400 210 100 100 5`
@@ -104,10 +102,10 @@ a philosopher dies of starvation.
 🟩 `199 600 200 200 50`  
 
 # Pairs
-🟥 `200 450 200 200 50`  marchait mais marche plus
-🟥 `200 440 200 200 50`  
-🟥 `200 420 200 200 50`  
-🟥 `200 410 200 200 50`  il tient meme pas 5 secondes c'est nimp
+🟩 `200 450 200 200 50`
+🟩 `200 440 200 200 50`  
+🟩 `200 420 200 200 50`  
+🟩 `200 410 200 200 50`
 
 # sleep > eat
 
