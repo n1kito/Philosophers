@@ -44,6 +44,7 @@ int	init_and_assign_forks(t_rules *rules)
 	{
 		if (pthread_mutex_init(rules->forks[i], NULL) != 0)
 			return (print_err("Failed to initiate mutex", 0));
+		rules->initialized_mutexes++;
 		i++;
 	}
 	i = 0;

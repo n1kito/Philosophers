@@ -12,6 +12,21 @@
 
 #include "philosophers.h"
 
+/* Sets philos and forks to NULL to allow for clean freeing process */
+
+static void	init_table(int struct_type, t_rules *rules)
+{
+	int	i;
+
+	i = 0;
+	if (struct_type == 0)
+		while (i < rules->nb_of_philos)
+			rules->forks[i++] = NULL;
+	else if (struct_type == 1)
+		while (i < rules->nb_of_philos)
+			rules->philos[i++] = NULL;
+}
+
 /* Allocates memory to my structures, also initializing my philos to NULL to
  * avoid segfaults if the free function is called */
 
@@ -22,9 +37,11 @@ int	mem_alloc(t_rules *rules)
 	rules->forks = malloc(sizeof(pthread_mutex_t *) * rules->nb_of_philos);
 	if (rules->forks == NULL)
 		return (print_err("Could not allocate memory for fork pointers", 0));
+	init_table(0, rules);
 	rules->philos = malloc(sizeof(t_philo *) * rules->nb_of_philos);
 	if (rules->philos == NULL)
 		return (print_err("Could not allocate memory for philos", 0));
+	init_table(1, rules);
 	i = -1;
 	while (++i < rules->nb_of_philos)
 	{
@@ -33,8 +50,6 @@ int	mem_alloc(t_rules *rules)
 			return (print_err("Could not allocate memory for fork", 0));
 	}
 	while (--i >= 0)
-		rules->philos[i] = NULL;
-	while (++i < rules->nb_of_philos)
 	{
 		rules->philos[i] = malloc(sizeof(t_philo) * rules->nb_of_philos);
 		if (rules->philos[i] == NULL)
@@ -60,6 +75,7 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 		rules->think_t = rules->eat_t - rules->sleep_t;
 	rules->someone_died = 0;
 	rules->full_dinners = 0;
+	rules->initialized_mutexes = 0;
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);
 	if (pthread_mutex_init(&rules->printer_m, NULL) != 0)
@@ -69,8 +85,6 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 	if (pthread_mutex_init(&rules->full_dinners_m, NULL) != 0)
 		return (print_err("Failed to initiate full_dinners_m mutex", 0));
 	if (pthread_mutex_init(&rules->someone_died_m, NULL) != 0)
-		return (print_err("Failed to initiate someone_died_m mutex", 0));
-	if (pthread_mutex_init(&rules->philo_init, NULL) != 0)
 		return (print_err("Failed to initiate someone_died_m mutex", 0));
 	return (1);
 }

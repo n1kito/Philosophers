@@ -68,12 +68,12 @@ typedef struct s_rules
 	long int		start_time;
 	int				someone_died;
 	int				full_dinners;
+	int				initialized_mutexes;
 	struct s_philo	**philos;
 	pthread_mutex_t	printer_m;
 	pthread_mutex_t	last_meal_m;
 	pthread_mutex_t	full_dinners_m;
 	pthread_mutex_t	someone_died_m;
-	pthread_mutex_t	philo_init;
 	pthread_mutex_t	**forks;
 }				t_rules;
 

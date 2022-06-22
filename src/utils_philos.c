@@ -33,8 +33,8 @@ int	freester(t_rules *rules, int return_value)
 		{
 			if (rules->forks[i])
 			{
-				if (pthread_mutex_destroy(rules->forks[i]) != 0)
-					print_err("Could not destroy mutex", 0);
+				if (i < rules->initialized_mutexes)
+					pthread_mutex_destroy(rules->forks[i]);
 				free(rules->forks[i]);
 			}
 		}
