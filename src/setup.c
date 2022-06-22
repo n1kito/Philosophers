@@ -25,24 +25,20 @@ int	mem_alloc(t_rules *rules)
 	rules->philos = malloc(sizeof(t_philo *) * rules->nb_of_philos);
 	if (rules->philos == NULL)
 		return (print_err("Could not allocate memory for philos", 0));
-	i = 0;
-	while (i < rules->nb_of_philos)
+	i = -1;
+	while (++i < rules->nb_of_philos)
 	{
 		rules->forks[i] = malloc(sizeof(pthread_mutex_t) * rules->nb_of_philos);
 		if (rules->forks[i] == NULL)
 			return (print_err("Could not allocate memory for fork", 0));
-		i++;
 	}
-	i = 0;
-	while (i < rules->nb_of_philos)
-		rules->philos[i++] = NULL;
-	i = 0;
-	while (i < rules->nb_of_philos)
+	while (--i >= 0)
+		rules->philos[i] = NULL;
+	while (++i < rules->nb_of_philos)
 	{
 		rules->philos[i] = malloc(sizeof(t_philo) * rules->nb_of_philos);
 		if (rules->philos[i] == NULL)
 			return (print_err("Could not allocate memory for philo", 0));
-		i++;
 	}
 	return (1);
 }
@@ -62,12 +58,9 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 		rules->think_t = 1;
 	else
 		rules->think_t = rules->eat_t - rules->sleep_t;
-//	rules->start_time = get_time(); // moved to launch philos function
 	rules->someone_died = 0;
 	rules->full_dinners = 0;
 	rules->dinner_is_over = 0;
-//	if (rules->start_time == -1)
-//		return (0);
 	if (argc == 6)
 		rules->min_meals = ft_atol(argv[5]);
 	if (pthread_mutex_init(&rules->printer_m, NULL) != 0)

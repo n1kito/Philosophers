@@ -101,17 +101,17 @@ void		init_philos(t_rules *rules);
 int			setup_rules(t_rules *rules, char *argv[], int argc);
 
 /* utils.c */
-void		*check_dead_philo(void *rules_tmp);
 int			ft_putstr_fd(char *str, int fd);
 long int	ft_atol(const char *nptr);
 int			ft_is_digit(char c);
-int			freester(t_rules *rules, int return_value);
 long int	get_time(void);
+char		*ft_strstr(char *str, char *to_find);
+
+/* utils_philos.c */
+int			freester(t_rules *rules, int return_value);
 int			print_status(char *status, t_philo *philo);
 void		philo_sleep(t_philo *philo, long int time);
-long int	get_timestamp(t_philo *philo);
-
 void		opti_sleep(long int time);
-
+long int	get_timestamp(t_philo *philo);
 
 #endif

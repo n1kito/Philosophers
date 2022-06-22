@@ -1,0 +1,103 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_philos.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/22 12:45:58 by mjallada          #+#    #+#             */
+/*   Updated: 2022/06/22 12:46:14 by mjallada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/philosophers.h"
+
+// Frees memory and destroys mutexes/forks if they've been initialized.
+
+int	freester(t_rules *rules, int return_value)
+{
+	int	i;
+
+	i = -1;
+	if (rules->philos)
+	{
+		while (++i < rules->nb_of_philos)
+			if (rules->philos[i])
+				free(rules->philos[i]);
+		free(rules->philos);
+	}
+	i = -1;
+	if (rules->forks)
+	{
+		while (++i < rules->nb_of_philos)
+		{
+			if (rules->forks[i])
+			{
+				if (pthread_mutex_destroy(rules->forks[i]) != 0)
+					print_err("Could not destroy mutex", 0);
+				free(rules->forks[i]);
+			}
+		}
+		free(rules->forks);
+	}
+	return (return_value);
+}
+
+/* Protects my messages being printed and only prints if nobody died (except for
+ * the message that announced the death of a philo) and if all philos are not
+ * done eating. */
+// Je pense que je dois mutex someone_died ici aussi
+
+int	print_status(char *status, t_philo *philo)
+{
+	pthread_mutex_lock(&philo->rules->printer_m);
+	pthread_mutex_lock(&philo->rules->full_dinners_m);
+	pthread_mutex_lock(&philo->rules->someone_died_m);
+	if ((philo->rules->someone_died == 0
+			|| (philo->rules->someone_died == 1
+				&& ft_strstr(status, "died")))
+		&& philo->rules->full_dinners < philo->rules->nb_of_philos)
+		printf(STATUS, get_timestamp(philo),
+			philo->philo_id, status);
+	pthread_mutex_unlock(&philo->rules->full_dinners_m);
+	pthread_mutex_unlock(&philo->rules->someone_died_m);
+	pthread_mutex_unlock(&philo->rules->printer_m);
+	return (1);
+}
+
+void	philo_sleep(t_philo *philo, long int time)
+{
+	long int	start_time;
+
+	start_time = get_timestamp(philo);
+	pthread_mutex_lock(&philo->rules->full_dinners_m);
+	pthread_mutex_lock(&philo->rules->someone_died_m);
+	while (!philo->rules->someone_died
+		&& (get_timestamp(philo) - start_time) < time
+		&& philo->rules->full_dinners < philo->rules->nb_of_philos)
+	{
+		pthread_mutex_unlock(&philo->rules->full_dinners_m);
+		pthread_mutex_unlock(&philo->rules->someone_died_m);
+		usleep(500);
+		pthread_mutex_lock(&philo->rules->full_dinners_m);
+		pthread_mutex_lock(&philo->rules->someone_died_m);
+	}
+	pthread_mutex_unlock(&philo->rules->full_dinners_m);
+	pthread_mutex_unlock(&philo->rules->someone_died_m);
+}
+
+void	opti_sleep(long int time)
+{
+	long int	start_time;
+
+	start_time = get_time();
+	while (get_time() - start_time < time)
+		usleep(100);
+}
+
+/* Returns current timestamp in ms */
+
+long int	get_timestamp(t_philo *philo)
+{
+	return (get_time() - philo->rules->start_time);
+}

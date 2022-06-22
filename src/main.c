@@ -29,7 +29,6 @@ int	main(int argc, char *argv[])
 		pthread_join(rules.philos[i]->philo, NULL);
 		i++;
 	}
-//	pthread_join(monitor, NULL);
 	if (!rules.someone_died && rules.min_meals
 		&& rules.full_dinners == rules.nb_of_philos)
 	{

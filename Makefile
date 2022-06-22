@@ -40,7 +40,8 @@ SRC_FILES   :=	main\
 				optimization\
 				philos\
 				setup\
-				utils
+				utils\
+				utils_philos
 OBJ_FILES	:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 # **************************************************************************** #
