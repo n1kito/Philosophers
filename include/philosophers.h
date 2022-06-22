@@ -26,8 +26,8 @@
 #  define EATING "is eating"
 #  define SLEEPING "is sleeping"
 #  define THINKING "is thinking"
-//#  define DEAD "\033[1;31mdied\033[0m"
-#  define DEAD "died"
+#  define DEAD "\033[1;31mdied\033[0m"
+//#  define DEAD "died"
 #  define STATUS "%ld %d %s\n"
 #  define OK_SYMBOL "\033[0;92m"
 # endif

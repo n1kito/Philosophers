@@ -112,7 +112,10 @@ void	change_state(t_philo *philo, char *state, long int time_to_sleep)
 	{
 //		printf("\033[0;33m%d is gonna die\033[0m\n", philo->philo_id);
 		opti_sleep(philo->rules->die_t - time_since_last_meal);
-		philo->is_dead = 1;
+		pthread_mutex_lock(&philo->rules->someone_died_m);
+		philo->rules->someone_died++;
+		pthread_mutex_unlock(&philo->rules->someone_died_m);
+		print_status(DEAD, philo);
 	}
 	else
 	{
@@ -151,8 +154,8 @@ void	*routine(void *philo_tmp)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_tmp;
-//	if (philo->philo_id % 2 == 0)
-//		opti_sleep(philo->rules->eat_t * 0.9);
+	if (philo->philo_id % 2 == 0)
+		opti_sleep(philo->rules->eat_t);
 //	pthread_mutex_lock(&philo->rules->philo_init);
 //	pthread_mutex_unlock(&philo->rules->philo_init);
 //	if (philo->philo_id % 2 == 0)
@@ -189,11 +192,12 @@ int	launch_philos(t_rules *rules, pthread_t *monitor)
 	int	philo_count;
 
 	philo_count = (int)rules->nb_of_philos;
-//	pthread_mutex_lock(&rules->philo_init);
+	pthread_mutex_lock(&rules->philo_init);
+	(void)monitor;
+//	pthread_create(monitor, NULL, &check_dead_philo, rules);
 	rules->start_time = get_time();
 	if (rules->start_time == -1)
 		return (0);
-	pthread_create(monitor, NULL, &check_dead_philo, rules);
 	i = 0;
 	while (i < philo_count)
 	{
@@ -206,7 +210,7 @@ int	launch_philos(t_rules *rules, pthread_t *monitor)
 		i++;
 	}
 //	philo_sleep(rules->philos[0], rules->eat_t);
-	opti_sleep(rules->eat_t);
+//	opti_sleep(10);
 	i = 0;
 	while (i < philo_count)
 	{

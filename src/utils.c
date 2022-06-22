@@ -162,7 +162,7 @@ int	print_status(char *status, t_philo *philo)
 	pthread_mutex_lock(&philo->rules->printer_m);
 	pthread_mutex_lock(&philo->rules->full_dinners_m);
 	pthread_mutex_lock(&philo->rules->someone_died_m);
-	if ((philo->rules->someone_died == 0 || ft_strstr(status, "died"))
+	if ((philo->rules->someone_died == 0 || (philo->rules->someone_died == 1 && ft_strstr(status, "died")))
 		&& philo->rules->full_dinners < philo->rules->nb_of_philos)
 		printf(STATUS, get_timestamp(philo),
 			philo->philo_id, status);
@@ -181,7 +181,8 @@ void	opti_sleep(long int time)
 
 	start_time = get_time();
 	while (get_time() - start_time < time)
-		usleep(time / 10);
+//		usleep(time / 10);
+		usleep(100);
 }
 
 void	philo_sleep(t_philo *philo, long int time)
