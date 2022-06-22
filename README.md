@@ -71,6 +71,17 @@ a philosopher dies of starvation.
 - [ ] Leaks quand j'ai un fail de create philo.
 - [ ] Fnish checking data races in all cases.
 - [ ] Retest leaks on malloc and struct init failures.
+- [ ] Rajouter cette fonction pour quand j'ai une erreur mais que mes threads sont deja lances
+
+int	print_pthread_err(char *error, int return_value, t_rules *rules)
+{
+pthread_mutex_lock(&rules->printer_m);
+ft_putstr_fd("Error\n> ", 2);
+ft_putstr_fd(error, 2);
+ft_putstr_fd(".\n", 2);
+pthread_mutex_unlock(&rules->printer_m);
+return (return_value);
+}
 
 # Tested cases
 
