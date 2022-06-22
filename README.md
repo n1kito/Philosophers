@@ -67,6 +67,7 @@ a philosopher dies of starvation.
 </details>
 
 # To do
+- [ ] Remove spaces between comments and functions.
 - [ ] Leaks quand j'ai un fail de create philo.
 - [ ] Fnish checking data races in all cases.
 - [ ] Retest leaks on malloc and struct init failures.
