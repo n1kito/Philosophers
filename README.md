@@ -67,6 +67,7 @@ a philosopher dies of starvation.
 </details>
 
 # To do
+- [ ] Leaks quand j'ai un fail de create philo.
 - [ ] Fnish checking data races in all cases.
 - [ ] Retest leaks on malloc and struct init failures.
 
@@ -128,11 +129,11 @@ graph TD;
 
 **Leaks (+ Data races ⭐)**
 - [x] Any of the parameters are incorrect
-- [ ] Malloc failed
-  - For the forks
-  - For the philo struct array
-  - For any of the philo structs in the array
-- [ ] Mutex_init failed
+- [x] Malloc failed
+  - [x] For the forks
+  - [x] For the philo struct array
+  - [x] For any of the philo structs in the array
+- [x] Mutex_init failed
 - [ ] Thread init failed  
 ~~- [ ] Any mutex lock/unlock failed~~
 - [x] ⭐ Philo dies
