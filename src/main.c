@@ -15,20 +15,18 @@
 int	main(int argc, char *argv[])
 {
 	t_rules		rules;
-	pthread_t	monitor;
 	int			i;
+	int			return_code;
 
+	return_code = 0;
 	init_struct(&rules);
 	if (!setup_rules(&rules, argv, argc))
 		return (freester(&rules, 1));
-	if (!launch_philos(&rules, &monitor))
-		return (freester(&rules, 1));
-	i = 0;
-	while (i < rules.nb_of_philos)
-	{
-		pthread_join(rules.philos[i]->philo, NULL);
-		i++;
-	}
+	return_code = launch_philos(&rules);
+	i = -1;
+	while (++i < rules.nb_of_philos)
+		if (pthread_join(rules.philos[i]->philo, NULL))
+			return_code = simulation_error(&rules, "join");
 	if (!rules.someone_died && rules.min_meals
 		&& rules.full_dinners == rules.nb_of_philos)
 	{
@@ -36,5 +34,5 @@ int	main(int argc, char *argv[])
 		printf("Everyone ate \033[1m%ld\033[0;92m time(s).\033[0;39m\n",
 			rules.min_meals);
 	}
-	return (freester(&rules, 0));
+	return (freester(&rules, return_code));
 }

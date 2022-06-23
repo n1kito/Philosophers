@@ -86,7 +86,7 @@ int			param_values_check(int argc, char *argv[]);
 int			param_char_check(int argc, char *argv[]);
 
 /* init.c */
-void		init_struct(t_rules *rules);
+void		init_philos(t_rules *rules);
 int			init_and_assign_forks(t_rules *rules);
 
 /* optimization.c */
@@ -94,10 +94,10 @@ void		fork_pickup(t_philo *philo);
 void		fork_putdown(t_philo *philo);
 
 /* philos.c */
-int			launch_philos(t_rules *rules, pthread_t *monitor);
-void		init_philos(t_rules *rules);
+int			launch_philos(t_rules *rules);
 
 /* setup.c */
+void		init_struct(t_rules *rules);
 int			setup_rules(t_rules *rules, char *argv[], int argc);
 
 /* utils.c */
@@ -112,5 +112,6 @@ int			freester(t_rules *rules, int return_value);
 int			print_status(char *status, t_philo *philo);
 void		opti_sleep(long int time);
 long int	get_timestamp(t_philo *philo);
+int			simulation_error(t_rules *rules, char *error_type);
 
 #endif

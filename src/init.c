@@ -13,7 +13,6 @@
 #include "philosophers.h"
 
 /* Initializes the basic values in each philosopher struct */
-
 void	init_philos(t_rules *rules)
 {
 	int	i;
@@ -32,7 +31,6 @@ void	init_philos(t_rules *rules)
 
 /* Sets up all the forks in the forks array then goes through each philo
  * structure and assigns their pointers to their left/right forks. */
-
 int	init_and_assign_forks(t_rules *rules)
 {
 	int	i;

@@ -58,7 +58,6 @@ int	ft_is_digit(char c)
 }
 
 /* Converts the values of gettimeofday() to milliseconds */
-
 long int	get_time(void)
 {
 	struct timeval	time_struct;

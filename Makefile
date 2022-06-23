@@ -14,7 +14,6 @@
 # VARIABLES
 
 NAME		:= philo
-
 CFLAGS		:= -Wall -Wextra -Werror
 
 INC_DIR		:= include

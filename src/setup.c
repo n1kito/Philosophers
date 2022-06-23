@@ -12,8 +12,7 @@
 
 #include "philosophers.h"
 
-/* Sets philos and forks to NULL to allow for clean freeing process */
-
+/* Sets philos or forks to NULL to allow for clean freeing process */
 static void	init_table(int struct_type, t_rules *rules)
 {
 	int	i;
@@ -29,8 +28,7 @@ static void	init_table(int struct_type, t_rules *rules)
 
 /* Allocates memory to my structures, also initializing my philos to NULL to
  * avoid segfaults if the free function is called */
-
-int	mem_alloc(t_rules *rules)
+static int	mem_alloc(t_rules *rules)
 {
 	int	i;
 
@@ -62,7 +60,6 @@ int	mem_alloc(t_rules *rules)
  * array and individual philosophers. Each philosopher pointer is set to NULL
  * before calling malloc() so I don't try to free an uninitialized value in case
  * of error. */
-
 static int	init_rules(char *argv[], int argc, t_rules *rules)
 {
 	rules->nb_of_philos = ft_atol(argv[1]);
@@ -90,7 +87,6 @@ static int	init_rules(char *argv[], int argc, t_rules *rules)
 }
 
 /* Sets struct elements to NULL, helps avoid segfaults in freeing function */
-
 void	init_struct(t_rules *rules)
 {
 	rules->philos = NULL;

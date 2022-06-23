@@ -13,7 +13,6 @@
 #include "philosophers.h"
 
 /* Prints an error message on stderr. */
-
 int	print_err(char *error, int return_value)
 {
 	ft_putstr_fd("Error\n> ", 2);
@@ -23,7 +22,6 @@ int	print_err(char *error, int return_value)
 }
 
 /* Checks for the value of all program arguments */
-
 int	param_values_check(int argc, char *argv[])
 {
 	int		i;
@@ -55,7 +53,6 @@ int	param_values_check(int argc, char *argv[])
 
 /* Checks that there are no forbidden characters in any of the arguments.
  * The only allowed characters are digits and one '+'/'-' sign. */
-
 int	param_char_check(int argc, char *argv[])
 {
 	int	i;

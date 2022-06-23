@@ -12,7 +12,7 @@
 
 #include "philosophers.h"
 
-long int	t_since_last_meal(t_philo *philo)
+static long int	t_since_last_meal(t_philo *philo)
 {
 	long int	time;
 
@@ -24,8 +24,7 @@ long int	t_since_last_meal(t_philo *philo)
 
 /* Changes state of philo and checks if philo has enought time left to wait
  * for the required amount. If it does not, it dies. */
-
-void	change_state(t_philo *philo, char *state, long int time_to_sleep)
+static void	change_state(t_philo *philo, char *state, long int time_to_sleep)
 {
 	long int	time_since_last_meal;
 
@@ -52,8 +51,7 @@ void	change_state(t_philo *philo, char *state, long int time_to_sleep)
 }
 
 /* Philo eating routine */
-
-void	eating(t_philo *philo)
+static void	eating(t_philo *philo)
 {
 	philo->last_meal = get_time();
 	change_state(philo, EATING, philo->rules->eat_t);
@@ -69,8 +67,7 @@ void	eating(t_philo *philo)
 }
 
 /* Routine that each philo has to follow */
-
-void	*routine(void *philo_tmp)
+static void	*routine(void *philo_tmp)
 {
 	t_philo	*philo;
 
@@ -100,32 +97,28 @@ void	*routine(void *philo_tmp)
 }
 
 /* Starts philos/threads one at a time */
-
-int	launch_philos(t_rules *rules, pthread_t *monitor)
+int	launch_philos(t_rules *rules)
 {
 	int	i;
 	int	philo_count;
+	int	return_value;
 
+	return_value = 0;
 	philo_count = (int)rules->nb_of_philos;
-	(void)monitor;
 	rules->start_time = get_time();
 	if (rules->start_time == -1)
 		return (0);
 	i = -1;
 	while (++i < philo_count)
-	{
 		if ((i + 1) % 2 != 0)
 			if (pthread_create(&rules->philos[i]->philo,
 					NULL, &routine, rules->philos[i]) != 0)
-				return (print_err("Failed to create philo", 0));
-	}
+				return_value = simulation_error(rules, "init");
 	i = -1;
 	while (++i < philo_count)
-	{
 		if ((i + 1) % 2 == 0)
 			if (pthread_create(&rules->philos[i]->philo,
 					NULL, &routine, rules->philos[i]) != 0)
-				return (print_err("Failed to create philo", 0));
-	}
-	return (1);
+				return_value = simulation_error(rules, "init");
+	return (return_value);
 }

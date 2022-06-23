@@ -15,7 +15,6 @@
 /* Picks up forks in a certain order depending on whether the philo_id is even
  * or odd. Even philos will pick up their left fork first, odd philos will pick
  * up their right fork first. */
-
 void	fork_pickup(t_philo *philo)
 {
 	if (philo->philo_id % 2 != 0)
@@ -44,7 +43,6 @@ void	fork_pickup(t_philo *philo)
 /* Puts down forks in a certain order depending on whether the philo_id is even
  * or odd. Odd philos will put down their left fork first, even philos will
  * put down their right fork first. */
-
 void	fork_putdown(t_philo *philo)
 {
 	if (philo->philo_id % 2 != 0)
