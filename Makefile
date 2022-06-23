@@ -6,7 +6,7 @@
 #    By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/26 10:08:44 by mjallada          #+#    #+#              #
-#    Updated: 2022/05/26 10:08:46 by mjallada         ###   ########.fr        #
+#    Updated: 2022/06/23 17:38:39 by mjallada         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,7 @@ $(NAME): $(OBJ_FILES)
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile | $(BIN_DIR)
 	@$(CC) -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
+	@#$(CC) -D BORING -g -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
 	@echo "$(BLUE)> compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):

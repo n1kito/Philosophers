@@ -1,7 +1,8 @@
 <h1 align="center">Philosophers</h1>
 <p align="center">
 <img src="img/header.gif" width="300px" alt="beetlejuice table gif"><br />
-My work on the 42Born2Code <b>Philosophers</b> project.
+My work on the 42Born2Code <b>Philosophers</b> project.<br /><br />
+<a href="https://github.com/JaeSeoKim/badge42"><img src="https://badge42.vercel.app/api/v2/cl4dwkra3004009maahzpjn6g/project/2599987" alt="mjallada's 42 Philosophers Score" /></a>
 </p>
 
 > In this project, you will learn the basics of threading a process.  
@@ -66,36 +67,11 @@ a philosopher dies of starvation.
 
 </details>
 
-# Things to correct:
-- [ ] Program does not automatically stop if a philo dies but the sleep time is super long.
-
-# Tested cases
-
-⭐	The case has also been tested for leaks and data races.  
-💧	The case has leaks.  
-💢	The case has data races.  
-
-### Correction
-🟩 ⭐ `1 800 200 200` should die  
-🟩 ⭐ `5 800 200 200` should go on forever  _(mine lasts for > 1 minute)_  
-🟩 ⭐ `5 800 200 200 7` simulation should stop after eating 7 times  
-🟩 ⭐ `4 410 200 200` should go on forever   _(mine lasts for > 1 minute)_  
-🟩 ⭐ `4 310 200 100` should die _(dies in ok time)_
-
-(The higher philo numbers work only in the `BORING` mode, compiling with `-D BORING`)
-
-### Impairs
-🟩 `199 620 200 200 50`  
-🟩 `199 610 200 200 50`  
-🟩 `199 600 200 200 50`  
-
-### Pairs
-🟩 `200 450 200 200 50`  
-🟩 `200 440 200 200 50`  
-🟩 `200 420 200 200 50`  
-🟩 `200 410 200 200 50`
-
 # Process for this project
+
+> My program has a "visual mode" 🌈 that is used by default, but the basic output setting can be activated by compiling with flag `-D BORING`.
+
+❗ ADD SCREENSHOTS HERE
 
 ```mermaid
 graph TD;
@@ -104,28 +80,76 @@ graph TD;
     C-->A;
 ```
 
-1. Assign NULL to t_rules structure variables that will be malloc'd.
-2. Check and parse arguments
-3. Assign main t_rules variables with corresponding arguments.
-4. Initialize mutex.
+1. Check and parse arguments.
+   - Avoid doing any `malloc()` before checking every argument.
+      - This way if anything is wrong you don't have to handle leaks.
+2. Assign main t_rules variables with corresponding arguments.
+3. Initialize mutex.
+4. Link every philo to their correct `right_fork` and `left_fork`.
 5. Correctly link the t_philo & t_rules structures (every t_philo node is indexed in t_rules, and all t_philos contain a link to rules)
-6. Start routine:
-   1. Philos with uneven ID pick up left fork.
-   2. Philos with uneven ID pick up right fork.
-      - Dans ce cas, comment on gere le dernier filo ? Le #5? Sa fork de droite est prise pas le #1.
-        - On dit que les philos impairs prennent leur fouchette de gauche d'abord, puis celle de droite.
-        - Les philos pairs prennent leur fourchette de droite d'abord, puis celle de gauche.
+6. Create an `opti_sleep()` function that allows to `usleep()` only by short increments and therefore not sleep if another philo has died while one was sleeping.
+   - This avoids your simulation to hang forever after a philo has died in this kind of test: `5 150 100 30000`
+7. Create a `print_status()` function that is protected by a mutex, so different threads that will use it will not be able to use it simultaneously, printing gibberish.
+   - It will also stop printing if someone is dead.
+8. Start `routine()`:
+   1. Philos pick up their forks.
+      - Odd philos pick up left `fork` then right `fork`.
+      - Even philos do the opposite.
+      - If there is only one philo in the simulation, it seems logical that they would pick up one `fork` and, not being able to pick up a second one, would die at `die_t`.
+        - This is handled in the `fork_pickup()` and `routine()` functions.
+   2. The once they have both their `forks`, they start `eating()`, `sleeping` and `thinking`.
+      - This is where I check for dead philos, in the `change_state()` function, which is called everytime a philo has to change its state.
+        - I will print the new state (`x is eating`), but before I sleep I check if the philo has enough time left to sleep the required amount by doing a simple `if (time_since_last_meal + time_to_sleep > philo->rules->die_t)`.
+          - If the philo is too close to death and would not be able to sleep the full amount, it is marked as dead in the main structure and will only sleep until `philo->rules->die_t - time_since_last_meal`.
+   3. If a philo is marked as dead:
+      - The `print_status()` function will stop printing anything, unless `someone_died == 1` (it can be more) and the message has the word `died` in it.
+      - Then all the threads will finish their current routine and won't start it again since they can tell someone died.
+   4. If nobody dies, the routine stops by itself by checking if the current philo has eaten `number_of_times_each_philosopher_must_eat`.
+9. In the main, all threads are `joined` so the program waits for them to finish.
+10. At the very end I check if the number of philos that have eaten `number_of_times_each_philosopher_must_eat` is equal to the number of philosophers in the simulation.
+    - If so, a special message is printed on screen.
+11. How I handled if a `pthread_create` or `pthread_join` failed : I will print an error message on screen and set `someone_died == -1`, but I will *not* stop the program.
+    - This way, the error message is printed, notifying that an `init`/`create` failed, but nothing else will print, and the simulation stop quickly since it `someone_died` is no longer `0`.
+    - **Why do this ?**  
+    Because if I return from my program as soon as one of these fail, I will have leaks since I might exit the program while some threads are still running.
+    - To do this, in my `main()` (for `pthread_join`) and `launch_philos()` (for `pthread_create`), if there is a failure I only store an error code in a local variable (initialized at `0`), and let the `join`/`create` loops run their normal courses. That error code (`0` or `1`) is captured in the main and returned.
+
+# Test cases
+>(tested for leaks and data races)
+
+### Basic tests (correction)
+🟩 `1 800 200 200` should die  
+🟩 `5 800 200 200` should go on forever  _(mine lasts for > 1 minute)_  
+🟩 `5 800 200 200 7` simulation should stop after eating 7 times  
+🟩 `4 410 200 200` should go on forever   _(mine lasts for > 1 minute)_  
+🟩 `4 310 200 100` should die _(dies in ok time)_
+
+(The higher philo numbers work only in the `BORING` mode, compiling with `-D BORING`)
+
+### Specific cases
+🟩 `5 150 100 30000` philo should die and simulation should stop before sleep time is over.
+
+### Impairs
+🟩 `199 620 200 200 50`  
+🟩 `199 610 200 200 50`  
+🟩 `199 600 200 200 50`
+
+### Pairs
+🟩 `200 450 200 200 50`  
+🟩 `200 440 200 200 50`  
+🟩 `200 420 200 200 50`  
+🟩 `200 410 200 200 50`
 
 # Error Checking
 
-**Parsing**
+### Parsing
 - [x] Number of philos is <= 0
 - [x] Number of milliseconds is <=0 (= 0 aussi ?)
 - [x] Arguments contain forbidden characters
 - [x] Argument overflow ( > `MAX_INT`)
 - [x] Argument underflow (< `MIN_INT`)
 
-**Leaks (+ Data races ⭐)**
+### Leaks (+ Data races ⭐)
 - [x] Any of the parameters are incorrect
 - [x] Malloc failed
   - [x] For the forks
@@ -139,8 +163,6 @@ graph TD;
 - [x] ⭐ Single philo dies
 
 # Notes
-
-> My program has a "visual mode" 🌈 that is used by default, but the basic output setting can be activating by compiling with flag `-D BORING`.
 
 - Philos are basically structures.
 - The program needs to be compiled and linked with special flag: `-pthread` (see [man](http://manpagesfr.free.fr/man/man7/pthreads.7.html))
@@ -315,3 +337,5 @@ Quand on rencontre une erreur:
    - Assigned left/right forks to each philosopher node
 4. Wednesday, June 22nd (it's been a slow month)
    - Project finished and tested.
+5. Thursday, June 23rd
+   - Project pushed and validated ✅
