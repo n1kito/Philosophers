@@ -97,7 +97,7 @@ graph TD;
       - Even philos do the opposite.
       - If there is only one philo in the simulation, it seems logical that they would pick up one `fork` and, not being able to pick up a second one, would die at `die_t`.
         - This is handled in the `fork_pickup()` and `routine()` functions.
-   2. The once they have both their `forks`, they start `eating()`, `sleeping` and `thinking`.
+   2. The once they have both their `forks`, they start `eating()`, they put down their forks, then start`sleeping` and `thinking`.
       - This is where I check for dead philos, in the `change_state()` function, which is called everytime a philo has to change its state.
         - I will print the new state (`x is eating`), but before I sleep I check if the philo has enough time left to sleep the required amount by doing a simple `if (time_since_last_meal + time_to_sleep > philo->rules->die_t)`.
           - If the philo is too close to death and would not be able to sleep the full amount, it is marked as dead in the main structure and will only sleep until `philo->rules->die_t - time_since_last_meal`.
@@ -109,7 +109,7 @@ graph TD;
 10. At the very end I check if the number of philos that have eaten `number_of_times_each_philosopher_must_eat` is equal to the number of philosophers in the simulation.
     - If so, a special message is printed on screen.
 11. How I handled if a `pthread_create` or `pthread_join` failed : I will print an error message on screen and set `someone_died == -1`, but I will *not* stop the program.
-    - This way, the error message is printed, notifying that an `init`/`create` failed, but nothing else will print, and the simulation stop quickly since it `someone_died` is no longer `0`.
+    - This way, the error message is printed, notifying that an `init`/`create` failed, but nothing else will print, and the simulation stops quickly since `someone_died` is no longer `0`.
     - **Why do this ?**  
     Because if I return from my program as soon as one of these fail, I will have leaks since I might exit the program while some threads are still running.
     - To do this, in my `main()` (for `pthread_join`) and `launch_philos()` (for `pthread_create`), if there is a failure I only store an error code in a local variable (initialized at `0`), and let the `join`/`create` loops run their normal courses. That error code (`0` or `1`) is captured in the main and returned.
