@@ -66,9 +66,8 @@ a philosopher dies of starvation.
 
 </details>
 
-# To do
-- [ ] Fnish checking data races in all cases.
-- [ ] Retest leaks on malloc and struct init failures.
+# Things to correct:
+- [ ] Program does not automatically stop if a philo dies but the sleep time is super long.
 
 # Tested cases
 

@@ -40,14 +40,14 @@ static void	change_state(t_philo *philo, char *state, long int time_to_sleep)
 	time_since_last_meal = t_since_last_meal(philo);
 	if (time_since_last_meal + time_to_sleep > philo->rules->die_t)
 	{
-		opti_sleep(philo->rules->die_t - time_since_last_meal);
+		opti_sleep(philo->rules->die_t - time_since_last_meal, philo->rules);
 		pthread_mutex_lock(&philo->rules->someone_died_m);
 		philo->rules->someone_died++;
 		pthread_mutex_unlock(&philo->rules->someone_died_m);
 		print_status(DEAD, philo);
 	}
 	else
-		opti_sleep(time_to_sleep);
+		opti_sleep(time_to_sleep, philo->rules);
 }
 
 /* Philo eating routine */
@@ -75,9 +75,9 @@ static void	*routine(void *philo_tmp)
 	if (philo->rules->nb_of_philos % 2 != 0
 		&& philo->philo_id == philo->rules->nb_of_philos
 		&& philo->rules->nb_of_philos != 1)
-		opti_sleep(philo->rules->eat_t);
+		opti_sleep(philo->rules->eat_t, philo->rules);
 	if (philo->philo_id % 2 != 0 && philo->rules->nb_of_philos != 1)
-		opti_sleep(philo->rules->eat_t);
+		opti_sleep(philo->rules->eat_t, philo->rules);
 	pthread_mutex_lock(&philo->rules->someone_died_m);
 	while (!philo->is_dead && philo->rules->someone_died == 0
 		&& philo->nb_meals != philo->rules->min_meals)

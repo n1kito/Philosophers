@@ -60,12 +60,12 @@ int	print_status(char *status, t_philo *philo)
 }
 
 /* uleep() the requested timme in increments of 100 microseconds */
-void	opti_sleep(long int time)
+void	opti_sleep(long int time, t_rules *rules)
 {
 	long int	start_time;
 
 	start_time = get_time();
-	while (get_time() - start_time < time)
+	while (get_time() - start_time < time && rules->someone_died == 0)
 		usleep(100);
 }
 

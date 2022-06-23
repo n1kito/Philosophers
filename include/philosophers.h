@@ -110,7 +110,7 @@ char		*ft_strstr(char *str, char *to_find);
 /* utils_philos.c */
 int			freester(t_rules *rules, int return_value);
 int			print_status(char *status, t_philo *philo);
-void		opti_sleep(long int time);
+void		opti_sleep(long int time, t_rules *rules);
 long int	get_timestamp(t_philo *philo);
 int			simulation_error(t_rules *rules, char *error_type);
 
