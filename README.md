@@ -71,7 +71,7 @@ a philosopher dies of starvation.
 
 > My program has a "visual mode" 🌈 that is used by default, but the basic output setting can be activated by compiling with flag `-D BORING`.
 
-❗ ADD SCREENSHOTS HERE
+<p align="center"><img width="500px" src="img/philosopher_modes.jpg"/></p>
 
 ```mermaid
 graph TD;
