@@ -321,7 +321,7 @@ Quand on rencontre une erreur:
 - [Git barodrig](https://github.com/BastienRodz/philosophers)
 - [Le dîner des philosophes](https://fr.wikipedia.org/wiki/D%C3%AEner_des_philosophes)
 - [Le problème des philosophes](https://perso.ens-lyon.fr/michael.rao/ASR2/cours_slides_8.pdf)
-- [Plein de concepts intéressants; git amyplant](https://github.com/iciamyplant/Philosophers)
+- [Plein de concepts intéressants](https://github.com/iciamyplant/Philosophers)
 
 # Project Timeline
 
