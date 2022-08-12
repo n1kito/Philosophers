@@ -88,7 +88,7 @@ graph TD;
 4. Link every philo to their correct `right_fork` and `left_fork`.
 5. Correctly link the t_philo & t_rules structures (every t_philo node is indexed in t_rules, and all t_philos contain a link to rules)
 6. Create an `opti_sleep()` function that allows to `usleep()` only by short increments and therefore not sleep if another philo has died while one was sleeping.
-   - This avoids your simulation to hang forever after a philo has died in this kind of test: `5 150 100 30000`
+   - This keeps the simulation from hanging after a philo has died in this kind of test: `5 150 100 30000`
 7. Create a `print_status()` function that is protected by a mutex, so different threads that will use it will not be able to use it simultaneously, printing gibberish.
    - It will also stop printing if someone is dead.
 8. Start `routine()`:
@@ -102,7 +102,7 @@ graph TD;
         - I will print the new state (`x is eating`), but before I sleep I check if the philo has enough time left to sleep the required amount by doing a simple `if (time_since_last_meal + time_to_sleep > philo->rules->die_t)`.
           - If the philo is too close to death and would not be able to sleep the full amount, it is marked as dead in the main structure and will only sleep until `philo->rules->die_t - time_since_last_meal`.
    3. If a philo is marked as dead:
-      - The `print_status()` function will stop printing anything, unless `someone_died == 1` (it can be more) and the message has the word `died` in it.
+      - The `print_status()` function will stop printing anything, unless `someone_died >= 1` and the message has the word `died` in it.
       - Then all the threads will finish their current routine and won't start it again since they can tell someone died.
    4. If nobody dies, the routine stops by itself by checking if the current philo has eaten `number_of_times_each_philosopher_must_eat`.
 9. In the main, all threads are `joined` so the program waits for them to finish.
