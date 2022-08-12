@@ -124,7 +124,7 @@ graph TD;
 🟩 `4 410 200 200` should go on forever   _(mine lasts for > 1 minute)_  
 🟩 `4 310 200 100` should die _(dies in ok time)_
 
-(The higher philo numbers work only in the `BORING` mode, compiling with `-D BORING`)
+(The higher philo numbers work better in the `BORING` mode, compiling with `-D BORING`)
 
 ### Specific cases
 🟩 `5 150 100 30000` philo should die and simulation should stop before sleep time is over.
@@ -157,7 +157,7 @@ graph TD;
   - [x] For any of the philo structs in the array
 - [x] Mutex_init failed
 - [x] Thread init failed  
-~~- [ ] Any mutex lock/unlock failed~~
+~~- [ ] Any mutex lock/unlock failed~~ (make the code really really long)
 - [x] ⭐ Philo dies
 - [x] ⭐ Odd number of philo dies
 - [x] ⭐ Single philo dies
@@ -168,9 +168,8 @@ graph TD;
 - The program needs to be compiled and linked with special flag: `-pthread` (see [man](http://manpagesfr.free.fr/man/man7/pthreads.7.html))
 - Dans discord ils parlent de `fsanitize=thread`
 - Toujours tester avec `valgrind --tool=helgrind` pour voir les data race
-  - Mais aussi tester avec juste `valgrind` parce que avec `helgrind` les leaks n'apparaissent pas (ou pas pareil)
+  - Mais aussi tester avec juste `valgrind` parce que avec `helgrind` les leaks n'apparaissent pas
 - Ne jamais tester le fonctionnement du programme avec `valgrind` par contre, parce que ca met une plombe et que ca chie toutes les perfs. Il sert juste à checker les leaks.
-- During evaluation, it's not asked to test more than 200 philosophers and less than 60/80 seconds.
 - _Hint: try launching philos by even/odd number_
 - Keep in mind the first and last philo that are usually trouble.
 - Think about how to check if a philo has died.
