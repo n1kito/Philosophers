@@ -2,7 +2,7 @@
 <p align="center">
 <img src="img/header.gif" width="300px" alt="beetlejuice table gif"><br />
 My work on the 42Born2Code <b>Philosophers</b> project.<br /><br />
-<a href="https://github.com/JaeSeoKim/badge42"><img src="https://badge42.vercel.app/api/v2/cl4dwkra3004009maahzpjn6g/project/2599987" alt="mjallada's 42 Philosophers Score" /></a>
+<img src="https://badge42.vercel.app/api/v2/cl4dwkra3004009maahzpjn6g/project/2599987" alt="my 42 Philosophers Score: 100/100" /></a>
 </p>
 
 > In this project, you will learn the basics of threading a process.  
