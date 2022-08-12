@@ -338,3 +338,5 @@ Quand on rencontre une erreur:
    - Project finished and tested.
 5. Thursday, June 23rd
    - Project pushed and validated ✅
+  
+Note: J'ai mis un peu de temps à finir ce projet, j'ai beaucoup aimé les notions mais le sujet comportait des zones d'ombre légèrement frustrantes dans le contexte d'un projet d'école (ex: "les philosophes ne doivent pas communiquer entre eux", ça veut tout et rien dire).
