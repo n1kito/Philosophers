@@ -108,7 +108,7 @@ graph TD;
 9. In the main, all threads are `joined` so the program waits for them to finish.
 10. At the very end I check if the number of philos that have eaten `number_of_times_each_philosopher_must_eat` is equal to the number of philosophers in the simulation.
     - If so, a special message is printed on screen.
-11. How I handled if a `pthread_create` or `pthread_join` failed : I will print an error message on screen and set `someone_died == -1`, but I will *not* stop the program.
+11. ⚠️ How I handled if a `pthread_create` or `pthread_join` failed (nobody checked for this case during evaluation but it was fun to think of a way to handle it) : I will print an error message on screen and set `someone_died == -1`, but I will *not* stop the program.
     - This way, the error message is printed, notifying that an `init`/`create` failed, but nothing else will print, and the simulation stops quickly since `someone_died` is no longer `0`.
     - **Why do this ?**  
     Because if I return from my program as soon as one of these fail, I will have leaks since I might exit the program while some threads are still running.
