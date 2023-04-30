@@ -169,7 +169,7 @@ graph TD;
 - Dans discord ils parlent de `fsanitize=thread`
 - Toujours tester avec `valgrind --tool=helgrind` pour voir les data race
   - Mais aussi tester avec juste `valgrind` parce que avec `helgrind` les leaks n'apparaissent pas
-- Ne jamais tester le fonctionnement du programme avec `valgrind` par contre, parce que ca met une plombe et que ca chie toutes les perfs. Il sert juste à checker les leaks.
+- Ne jamais tester le fonctionnement du programme avec `valgrind` par contre, parce que ca met une plombe et que ca tue toutes les perfs. Il sert juste à checker les leaks.
 - _Hint: try launching philos by even/odd number_
 - Keep in mind the first and last philo that are usually trouble.
 - Think about how to check if a philo has died.
