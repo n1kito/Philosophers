@@ -156,7 +156,6 @@ graph TD;
   - [x] For any of the philo structs in the array
 - [x] Mutex_init failed
 - [x] Thread init failed  
-~~- [ ] Any mutex lock/unlock failed~~ (make the code really really long)
 - [x] ⭐ Philo dies
 - [x] ⭐ Odd number of philo dies
 - [x] ⭐ Single philo dies
@@ -175,34 +174,6 @@ graph TD;
 - Converting time values:
   - Milliseconds = seconds * 1000
   - Milliseconds = microseconds / 1000 (or microseconds * 0.001)
-
-# Discord tips
-
-<details><summary>(click to see tips)</summary>
-
-> Pour le décalage de création de thread par le main thread tu peux bloquer un mutex dans ton main thread et le débloquer quand ta boucle de création est terminée pour que tous les philos commencent en même temps leur routine. (deso si c'est plus d'actualité)
-
->./philosophers 200 410 200 200 devrait normalement fonctionner si votre philo est correct (ajoutez  | xclip -selection C, ça vous copiera dans le presse-papiers les prints de votre philo)
-(Et oui, même sur les ordis de 42, le 400 410 200 200 passe)
-
-> jai une variable commune a tous les threads qui est is dead, donc quand elle passe a 1, ils sortent de ma fonction routine
-
-> Le pb d'alterner gauche et droite en premier sans usleep c'est qu'avec beaucoup de philos ya de bonne chances que le temps que les derniers philos se lancent il y ai tun decalage droitier gaucher.
-> Perso je devalais de time_to_eat histoire de laisser le temps aux premiers servis de manger.
-
-Quand on a un seul philo, il faut gerer:
-> Oui bah tu lock la seule fork, tu usleep time_to_die, tu unlock la fork et tu die, dans une fonction spécifique dans ta routine
-> En gros `./philo 1 300 100 100` ca donne un truc du genre:  
-> 
-> `0 #1 has taken a fork`  
-> `300 #1 died`
-
-Quand on rencontre une erreur:
-> Dans ton thread, dès que tu détectes que tu dois exit, tu dois unlock tout ce que tu as lock. C'est le thread qui a lock le mutex qui doit le delock.
-
-> 💅 Il n'y a pas forcement besoin de faire des micro usleep pour verifier si le philo meurt pendant qu'il dort, tu peux verifier avant de lancer le usleep si celui-ci va etre trop lon et que le philo va mourir pendant. Dans ce cas tu fais juste un usleep jusqu'au moment de mourir. Par contre pour verifier si un autre philo est mort entre temps, je ne fais ca qu'au moment de print quelque chose.
-
-</details>
 
 # Research
 
@@ -305,7 +276,7 @@ Quand on rencontre une erreur:
         - If the mutex is already locked by the calling thread, the behavior  of pthread_mutex_lock depends on the kind of the mutex. (etc...) ([see man for more](http://www.skrenta.com/rt/man/pthread_mutex_init.3.html))
     - **pthread_mutex_unlock**
         - `int pthread_mutex_unlock(pthread_mutex_t *mutex);`
-        - `pthread_mutex_unlock` unlocks the given mutex. The mutex is assumed to be locked and owned by the  calling  thread  on entrance  to pthread_mutex_unlock.
+        - `pthread_mutex_unlock` unlocks the given mutex. The mutex is assumed to be locked and owned by the calling thread on entrance to pthread_mutex_unlock.
         -  If the mutex is of the ``fast'' kind (etc...) ([see man for more](http://www.skrenta.com/rt/man/pthread_mutex_init.3.html))
 
 </details>
@@ -338,4 +309,4 @@ Quand on rencontre une erreur:
 5. Thursday, June 23rd
    - Project pushed and validated ✅
   
-Note: J'ai mis un peu de temps à finir ce projet, j'ai beaucoup aimé les notions mais le sujet comportait des zones d'ombre légèrement frustrantes dans le contexte d'un projet d'école (ex: "les philosophes ne doivent pas communiquer entre eux", ça veut tout et rien dire).
+Note: J'ai mis un peu de temps à finir ce projet, j'ai beaucoup aimé les notions mais le sujet comportait des zones d'ombre légèrement bloquantes (ex: "les philosophes ne doivent pas communiquer entre eux", veut tout et rien dire).
